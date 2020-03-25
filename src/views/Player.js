@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   margin: 6px 0;
-  width: 280px;
+  width: 400px;
   padding: 10px;
   border-radius: 6px;
   display: flex;
@@ -38,7 +38,7 @@ const Id = styled.div`
 const Player = ({ user }) => {
   return (
     <Container>
-      <Name>{user.name}</Name> <UserName>{user.username}</UserName>
+      <Name>{user.name}</Name><UserName>{user.username}</UserName>
       <Id>Id: {user.id}</Id>
     </Container>
   );

@@ -32,8 +32,13 @@ class Game extends React.Component {
     };
   }
 
+  goToUserPage(userId) {
+    localStorage.setItem("key", userId);
+    this.props.history.push("/home");
+  }
+
   logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('current');
     this.props.history.push('/login');
   }
 
@@ -76,6 +81,15 @@ class Game extends React.Component {
                 return (
                   <PlayerContainer key={user.id}>
                     <Player user={user} />
+
+                    <Button
+                        width="50%"
+                        onClick={() => {
+                          this.goToUserPage(user.id);
+                        }}
+                    >
+                      Profile page
+                    </Button>
                   </PlayerContainer>
                 );
               })}
