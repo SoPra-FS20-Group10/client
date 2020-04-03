@@ -6,22 +6,38 @@ import Player from '../../views/Player';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
+import ChatWindow from "../Overview/ChatWindow";
+import LobbyList from "../Overview/LobbyList";
 
+// TODO: WORK IN PROGRESS!
 
-const Chat = styled.div`
-width: 507px;
-height: 718px;
-left: 65px;
-top: 299px;
-float: left;
-padding: 15px;
-padding-left: 5%;
+const ChatWrapper = styled.div`
+
+margin-top: 10%;
+margin-left: 5%;
+padding: 5%;
+width: 25%;
+height: 400pt; 
+background: grey;
+float:left;
+`;
+
+const LobbyWrapper = styled.div`
+
+margin-top: 10%;
+margin-left: 5%;
+padding: 5%;
+width: 60%;
+height: 400pt; 
+background: grey;
+float:left;
 `;
 
 
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  
  
 `;
 
@@ -68,11 +84,14 @@ class MainPage extends React.Component {
 
                 <h2>MAIN MENU </h2>
 
-                <Chat>
+                <ChatWrapper>
+                    <h2>This would be the chat</h2>
+                </ChatWrapper>
 
-                    <h3>GLOBAL CHAT</h3>
+                <LobbyWrapper>
+                    <LobbyList/>
+                </LobbyWrapper>
 
-                </Chat>
 
 
             </Container>
