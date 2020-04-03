@@ -17,15 +17,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from "./Profile";
 import Leaderboard from "./Leaderboard";
 
+
+
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  width:100%;
+  margin:auto;
 `;
 
 const Users = styled.ul`
   list-style: none;
   padding-left: 0;
 `;
+
+const ButtonContainer = styled.div`
+  width: 33.3%;
+  float:left;
+`;
+
 
 const PlayerContainer = styled.li`
   display: flex;
@@ -91,11 +101,23 @@ class Game extends React.Component {
 
       <Container>
 
-        <Button onClick={this.goToMainPage}>Overview</Button>
-        <Button onClick={this.goToLeaderboard}>Leaderboard</Button>
-        <Button onClick={this.goToProfile}>Profile</Button>
+        <ButtonContainer>
+          <Button variant="secondary" size="lg" block onClick={this.goToMainPage}>
+            Overview
+          </Button>
+          </ButtonContainer>
+        <ButtonContainer>
+          <Button variant="secondary" size="lg" block onClick={this.goToLeaderboard}>
+            Leaderboard
+          </Button>
+        </ButtonContainer>
+        <ButtonContainer>
+          <Button variant="secondary" size="lg" block onClick={this.goToProfile}>
+            Profile
+          </Button>
+        </ButtonContainer>
 
-        {this.currentDisplay()}
+          {this.currentDisplay()}
 
 
       </Container>

@@ -12,7 +12,6 @@ class App extends Component {
     return (
 
       <div class ="bg-image">
-        <Header height={"100"} />
         <AppRouter />
       </div>
 

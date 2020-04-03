@@ -15,12 +15,14 @@ left: 65px;
 top: 299px;
 float: left;
 padding: 15px;
+padding-left: 5%;
 `;
 
 
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+ 
 `;
 
 
