@@ -12,9 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const ButtonContainer = styled.div`
-  width: 50pt;
-float: left;
-margin-left: 60pt;
+
+
 `;
 
 const LobbyContainer = styled.div`
