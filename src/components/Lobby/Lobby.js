@@ -57,7 +57,7 @@ class Lobby extends React.Component{
      componentDidMount() {
 
         this.setState({
-            id:this.props.id
+            lobbyId:this.props.lobbyId
         })
     }
 
@@ -71,8 +71,9 @@ class Lobby extends React.Component{
             // this.props.history.push(`/game/lobby/${this.state.lobbyId}`);
             console.log(this)
             this.props.history.push(
-                {pathname: `/game/lobby/${this.props.id}`}
-                );
+                {pathname: `/game/lobby/${this.state.lobbyId}`,
+                    state: { lobbyId: this.state.lobbyId}
+                });
             // return <LobbyRoom id={this.state.lobbyId}/>
         }
 
