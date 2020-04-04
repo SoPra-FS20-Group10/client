@@ -42,9 +42,6 @@ class LobbyList extends React.Component {
 
                <h2> LOBBY LIST </h2>
 
-
-
-                    // TODO: Dynamically adapting lobby list with variable lobbyID's
                     <Lobby id={1} history={this.props.history}>
                         Lobby1
                     </Lobby>

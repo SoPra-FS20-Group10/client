@@ -8,6 +8,7 @@ import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import ChatWindow from "../Overview/ChatWindow";
 import LobbyList from "../Lobby/LobbyList";
+import Header from "../../views/Header";
 
 // TODO: WORK IN PROGRESS!
 
@@ -58,7 +59,7 @@ class MainPage extends React.Component {
     render() {
         return (
             <Container>
-
+                <Header height={"100"} />
                 <h2>MAIN MENU </h2>
 
                 <ChatWrapper>

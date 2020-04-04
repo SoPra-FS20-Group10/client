@@ -29,7 +29,6 @@ class App extends Component {
     return (
 
         <div>
-
         <AppRouter />
         </div>
 
