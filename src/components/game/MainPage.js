@@ -28,7 +28,7 @@ margin-top: 10%;
 margin-left: 5%;
 width: 60%;
 height: 400pt; 
-background: rgba(255, 0, 0, 0.2);
+background: rgba(77, 77, 77, 0.5);
 float:left;
 `;
 

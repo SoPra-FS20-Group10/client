@@ -21,6 +21,7 @@ const LobbyContainer = styled.div`
 float:left;
 width: 100%;
 background-color: rgb(90, 93, 99);
+
 `;
 
 const Label = styled.label`
@@ -55,9 +56,9 @@ class Lobby extends React.Component{
             <BaseContainer>
 
                 <LobbyContainer>
-               <Label>{this.state.id}</Label>
+               <Label>Lobby ID: {this.state.id}</Label>
                 <view style={{margin: 40}}/>
-                <Label>{this.state.playerCount}/4</Label>
+                <Label>Players: {this.state.playerCount}/4</Label>
                 <view style={{margin: 40}}/>
 
                 <ButtonContainer>
