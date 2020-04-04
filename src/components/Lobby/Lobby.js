@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import * as React from "react";
-import {api, handleError} from "../../../helpers/api";
-import {BaseContainer} from "../../../helpers/layout";
+import {api, handleError} from "../../helpers/api";
+import {BaseContainer} from "../../helpers/layout";
 
 import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import LobbyRoom from "./LobbyRoom";
 /**
  * Lobby Model
  */
@@ -21,25 +22,35 @@ const LobbyContainer = styled.div`
 float:left;
 width: 100%;
 background-color: rgb(90, 93, 99);
-
+height:78pt;
 `;
+
+
 
 const Label = styled.label`
   color: white;
   margin-bottom: 10px;
   text-transform: uppercase;
-  font-size:30pt;
+  font-size:16pt;
   float: left;
-  margin-left: 60pt;
+  margin-left: 20%;
 `;
 
+
+
 class Lobby extends React.Component{
+
     constructor() {
+
         super();
+
         this.state = {
-            id: null,
-            playerCount: 0
+            lobbyId: null,
+            playerCount: 0,
+            maxPlayerCount: 4
         };
+
+        this.goToLobby=this.goToLobby.bind(this)
 
     }
 
@@ -50,6 +61,18 @@ class Lobby extends React.Component{
         })
     }
 
+    goToLobby(){
+
+
+        if (this.state.playerCount >= this.state.maxPlayerCount){
+            return alert("The Lobby is full!");
+        }
+        else{
+            return <LobbyRoom id={this.state.lobbyId}/>
+        }
+
+    }
+
 
     render() {
         return (
@@ -57,12 +80,12 @@ class Lobby extends React.Component{
 
                 <LobbyContainer>
                <Label>Lobby ID: {this.state.id}</Label>
-                <view style={{margin: 40}}/>
+
                 <Label>Players: {this.state.playerCount}/4</Label>
-                <view style={{margin: 40}}/>
+
 
                 <ButtonContainer>
-                <Button variant="secondary" size="sm" block onClick={this.goToProfile}>
+                <Button variant="secondary" size="sm" block onClick={this.goToLobby}>
                    Join
                 </Button>
                     </ButtonContainer>

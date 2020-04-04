@@ -5,7 +5,7 @@ import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Lobby from "../shared/models/Lobby";
+import Lobby from "./Lobby";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -27,7 +27,9 @@ const LobbyContainer = styled.div`
 class LobbyList extends React.Component {
     constructor() {
         super();
-
+        this.state ={
+            LobbyID: null
+        }
     }
 
 
