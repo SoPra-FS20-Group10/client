@@ -57,23 +57,26 @@ class Lobby extends React.Component{
      componentDidMount() {
 
         this.setState({
-            id:this.props.id
+            lobbyId:this.props.lobbyId
         })
     }
 
+    // Join Lobby
+
     async goToLobby(){
 
-
+        // Check if there's space for the player in the lobby
         if (this.state.playerCount >= this.state.maxPlayerCount){
             return alert("The Lobby is full!");
         }
+
+        // Join - Pass lobbyId
         else{
-            // this.props.history.push(`/game/lobby/${this.state.lobbyId}`);
-            console.log(this)
             this.props.history.push(
-                {pathname: `/game/lobby/${this.props.id}`}
-                );
-            // return <LobbyRoom id={this.state.lobbyId}/>
+                {pathname: `/game/lobby/${this.state.lobbyId}`,
+                    state: { lobbyId: this.state.lobbyId}
+                });
+
         }
 
     }
