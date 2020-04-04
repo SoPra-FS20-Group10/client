@@ -40,9 +40,9 @@ const Label = styled.label`
 
 class Lobby extends React.Component{
 
-    constructor() {
+    constructor(props) {
 
-        super();
+        super(props);
 
         this.state = {
             lobbyId: null,
@@ -61,14 +61,19 @@ class Lobby extends React.Component{
         })
     }
 
-    goToLobby(){
+    async goToLobby(){
 
 
         if (this.state.playerCount >= this.state.maxPlayerCount){
             return alert("The Lobby is full!");
         }
         else{
-            return <LobbyRoom id={this.state.lobbyId}/>
+            // this.props.history.push(`/game/lobby/${this.state.lobbyId}`);
+            console.log(this)
+            this.props.history.push(
+                {pathname: `/game/lobby/${this.props.id}`}
+                );
+            // return <LobbyRoom id={this.state.lobbyId}/>
         }
 
     }

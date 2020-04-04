@@ -25,8 +25,8 @@ const LobbyContainer = styled.div`
 
 
 class LobbyRoom extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state={
             lobbyID: null
         }
@@ -44,7 +44,7 @@ class LobbyRoom extends React.Component {
 
             <Container>
 
-                <h2> Lobby ROom </h2>
+                <h2> Lobby Room </h2>
 
 
 

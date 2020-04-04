@@ -25,8 +25,8 @@ const LobbyContainer = styled.div`
 
 
 class LobbyList extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state ={
             LobbyID: null
         }
@@ -44,19 +44,20 @@ class LobbyList extends React.Component {
 
 
 
-                    <Lobby id={1}>
+                    // TODO: Dynamically adapting lobby list with variable lobbyID's
+                    <Lobby id={1} history={this.props.history}>
                         Lobby1
                     </Lobby>
                     <view style={{margin: 40}}/>
-                    <Lobby id={2}>
+                    <Lobby id={2} history={this.props.history}>
                         Lobby2
                     </Lobby>
                     <view style={{margin: 40}}/>
-                    <Lobby id={3}>
+                    <Lobby id={3} history={this.props.history}>
                         Lobby3
                     </Lobby>
                     <view style={{margin: 40}}/>
-                    <Lobby id={4}>
+                    <Lobby id={4} history={this.props.history}>
                         Lobby4
                     </Lobby>
 

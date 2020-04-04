@@ -48,8 +48,8 @@ const PlayerContainer = styled.li`
 
 
 class Game extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showMainPage: true,
       showLeaderboard: false,
@@ -62,23 +62,27 @@ class Game extends React.Component {
 
 
   goToMainPage = () => {
+    this.props.history.push("/game/overview");
 
-    this.setState({showMainPage: true});
-    this.setState({showLeaderboard: false});
-    this.setState({showProfile: false});
+    // this.setState({showMainPage: true});
+    // this.setState({showLeaderboard: false});
+    // this.setState({showProfile: false});
   }
 
   goToLeaderboard = () => {
+    this.props.history.push("/game/leaderboard");
 
-    this.setState({showLeaderboard: true});
-    this.setState({showMainPage: false});
-    this.setState({showProfile: false});
+    // this.setState({showLeaderboard: true});
+    // this.setState({showMainPage: false});
+    // this.setState({showProfile: false});
   }
 
   goToProfile = () => {
-    this.setState({showProfile: true});
-    this.setState({showMainPage: false});
-    this.setState({showLeaderboard: false});
+    // TODO: Redirect with user's ID
+    this.props.history.push(`/game/profile/${1}`);
+    // this.setState({showProfile: true});
+    // this.setState({showMainPage: false});
+    // this.setState({showLeaderboard: false});
   }
 
   currentDisplay(){

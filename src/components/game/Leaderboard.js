@@ -1,19 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
-
 import { withRouter } from 'react-router-dom';
-
-
-
-
 
 class Leaderboard extends React.Component {
     constructor() {
         super();
-
     }
-
 
     render() {
         return (
