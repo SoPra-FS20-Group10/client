@@ -63,21 +63,36 @@ class LobbyRoom extends React.Component {
             lobbyName: this.props.location.state.lobbyName,
             lobbyId: this.props.location.state.lobbyId,
             lobbyPassword: this.props.location.state.lobbyPassword,
-            playerId: this.props.location.state.playerId
+            playerId: this.props.location.state.playerId,
+            playerName: this.props.location.state.playerName
         }
+
+        this.leaveLobby=this.leaveLobby.bind(this);
     }
+
+
 
     componentDidMount() {
 
 
-        console.log(this);
     }
 
     showPlayers(){
 
         return(
-        <PlayerBar playerId={this.state.playerId}/>
+        <PlayerBar playerId={this.state.playerId} playerName={this.state.playerName}/>
         )
+    }
+
+    leaveLobby(){
+
+        this.props.history.push(
+            {pathname: `/game/overview/`,
+                state: {
+                    playerId: this.state.playerId,
+                    playerName: this.state.playerName}
+            });
+
     }
 
 
@@ -109,7 +124,7 @@ class LobbyRoom extends React.Component {
                     <view style={{margin: 40}}/>
 
                     <ButtonContainer2>
-                        <Button variant="dark" size="sm" block >
+                        <Button variant="dark" size="sm" block onClick={this.leaveLobby}>
                             Leave Lobby
                         </Button>
 
