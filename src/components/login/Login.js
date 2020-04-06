@@ -3,31 +3,12 @@ import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
-import {Button} from '../../views/design/Button';
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import InputGroup from 'react-bootstrap/InputGroup'
 
-const FormContainer = styled.div`
-  margin-top: 2em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 300px;
-  justify-content: center;
-`;
-
-const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 60%;
-  height: 375px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
-  transition: opacity 0.5s ease, transform 0.5s ease;
-`;
 
 const InputField = styled.input`
   &::placeholder {
@@ -49,15 +30,51 @@ const Label = styled.label`
   text-transform: uppercase;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-`;
 
 const Title = styled.h2`
   color: white;
-  text-align: center;
+  text-align: left;
+`;
+
+const GameTitle = styled.h1`
+  color: white;
+  font-size: 100px;
+  justify-content: left;
+  text-align: left;
+`;
+
+const LoginWrapper = styled.div`
+    justify-content: center;
+    display: flex;
+    vertical-align: top;
+    text-align: center;
+`;
+
+const Container = styled(BaseContainer)`
+  color: white;
+  // text-align: left;
+  
+  justify-content: center;
+  align: center;
+  margin:10em;
+`;
+
+const Users = styled.ul`
+  list-style: none;
+  padding-left: 0;
+`;
+
+const ButtonContainer = styled.div`
+  width: 10em;
+  float:left;
+`;
+
+
+const PlayerContainer = styled.li`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 /**
@@ -111,6 +128,14 @@ class Login extends React.Component {
         }
     }
 
+    async loginGuest() {
+        // TODO: Do Login as guest
+    }
+
+    async recoverPassword() {
+        // TODO: Do Password Recorvery
+    }
+
     /**
      *  Every time the user enters something in the input field, the state gets updated.
      * @param key (the key of the state for identifying the field that needs to be updated)
@@ -134,50 +159,140 @@ class Login extends React.Component {
 
     render() {
         return (
-            <BaseContainer>
-              <FormContainer>
-                  <Title>Login</Title>
-                  <Form>
-                    <Label>Username</Label>
-                        <InputField
-                            placeholder="Enter here.."
-                            onChange={e => {
-                                this.handleInputChange('username', e.target.value);
-                            }}
-                        />
-                        <Label>password</Label>
-                        <InputField
-                            placeholder="Enter here.."
-                            onChange={e => {
-                                this.handleInputChange('password', e.target.value);
-                            }}
-                        />
-                        <ButtonContainer>
-                            <Button
-                                disabled={!this.state.username || !this.state.password}
-                                width="50%"
-                                onClick={() => {
-                                    this.login();
-                                }}
-                            >
-                                Login
-                            </Button>
+            <Container>
+                <Row>
+                    <Col lg> <GameTitle> SCRABBAR.IO </GameTitle> </Col>
+                </Row>
+                <Row>
+                    <Col lg={4}>
+                        <Form>
+                            <Form.Text>
+                                No statistics will be saved when playing with guest account
+                            </Form.Text>
+                            <Form.Group controlId="formTemporaryUsername">
+                                <Form.Control type="email" placeholder="Enter temporary username"/>
+                            </Form.Group>
 
-                            <view style={{margin: 10}}/>
-
-                            <Button
-                                width="50%"
-                                onClick={() => {
-                                    this.props.history.push("/signUp")
-                                }}
-                            >
-                                Sign up
+                            <Button variant="primary" type="submit" size="lg"
+                                    onClick={() => {
+                                        this.loginGuest();
+                                    }}
+                            >Login as Guest
                             </Button>
-                        </ButtonContainer>
-                    </Form>
-                </FormContainer>
-            </BaseContainer>
+                        </Form>
+                    </Col>
+                </Row>
+                <Row className="justify-content-end">
+                    <Col lg={4}>
+
+                        <Form>
+                            <Form.Group controlId="formUsername">
+                                <Form.Control type="email" placeholder="Enter username"/>
+                            </Form.Group>
+
+                            <Form.Group controlId="formPassword">
+                                <Form.Control type="email" placeholder="Enter password"/>
+                            </Form.Group>
+
+                            <Form.Label
+                                onClick={() => {
+                                    this.recoverPassword();
+                                }}
+                            >Forgot your password?
+                            </Form.Label>{' '}
+
+                            <Button variant="primary" type="submit" size="lg"
+                                    onClick={() => {
+                                        this.login();
+                                    }}
+                            >Login
+                            </Button>{' '}
+
+                            <Button variant="primary" type="submit" size="lg"
+                                    onClick={() => {
+                                        this.props.history.push(
+                                            {pathname: `/signUp`}
+                                        );
+                                    }}
+                            >Register</Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
+
         );
+        // return (
+        // <BaseContainer>
+        //     <GameTitle> SCRABBAR.IO </GameTitle>
+        //     <LoginWrapper>
+        //     <FormContainer>
+        //
+        //       <Title>Guest Login</Title>
+        //       <Form>
+        //         <Label>Username</Label>
+        //             <InputField
+        //                 placeholder="Enter here.."
+        //                 onChange={e => {
+        //                     this.handleInputChange('username', e.target.value);
+        //                 }}
+        //             />
+        //             <ButtonContainer>
+        //                 <Button
+        //                     disabled={!this.state.username || !this.state.password}
+        //                     onClick={() => {
+        //                         this.login();
+        //                     }}
+        //                 >
+        //                     Login
+        //                 </Button>
+        //             </ButtonContainer>
+        //         </Form>
+        //     </FormContainer>
+        //     <FormContainer>
+        //
+        //         <Title>Login</Title>
+        //         <Form>
+        //             <Label>Username</Label>
+        //             <InputField
+        //                 placeholder="Enter here.."
+        //                 onChange={e => {
+        //                     this.handleInputChange('username', e.target.value);
+        //                 }}
+        //             />
+        //             <Label>password</Label>
+        //             <InputField
+        //                 placeholder="Enter here.."
+        //                 onChange={e => {
+        //                     this.handleInputChange('password', e.target.value);
+        //                 }}
+        //             />
+        //             <ButtonContainer>
+        //                 <Button
+        //                     disabled={!this.state.username || !this.state.password}
+        //                     width="50%"
+        //                     onClick={() => {
+        //                         this.login();
+        //                     }}
+        //                 >
+        //                     Login
+        //                 </Button>
+        //
+        //                 <view style={{margin: 10}}/>
+        //
+        //                 <Button
+        //                     width="50%"
+        //                     onClick={() => {
+        //                         this.props.history.push("/signUp")
+        //                     }}
+        //                 >
+        //                     Sign up
+        //                 </Button>
+        //             </ButtonContainer>
+        //         </Form>
+        //     </FormContainer>
+        //     </LoginWrapper>
+        // </BaseContainer>
+        // );
     }
 }
 

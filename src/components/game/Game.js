@@ -14,7 +14,7 @@ import Button from 'react-bootstrap/Button'
 import ToggleButton from 'react-bootstrap/ToggleButton'
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Profile from "./Profile";
+import Profile from "../Profile/Profile";
 import Leaderboard from "./Leaderboard";
 import Header from "../../views/Header";
 
@@ -87,7 +87,6 @@ class Game extends React.Component {
   }
 
   currentDisplay(){
-
     console.log(this.state.showMainPage);
     if (this.state.showMainPage == true){
       return (<MainPage />);
@@ -103,9 +102,26 @@ class Game extends React.Component {
   render() {
 
     return (
-
       <Container>
-        <MainPage/>
+        // {/*<MainPage/>*/}
+        <div className="bg-image"></div>
+        <ButtonContainer>
+          <Button variant="secondary" size="lg" block onClick={this.goToMainPage}>
+            Overview
+          </Button>
+          </ButtonContainer>
+        <ButtonContainer>
+          <Button variant="secondary" size="lg" block onClick={this.goToLeaderboard}>
+            Leaderboard
+          </Button>
+        </ButtonContainer>
+        <ButtonContainer>
+          <Button variant="secondary" size="lg" block onClick={this.goToProfile}>
+            Profile
+          </Button>
+        </ButtonContainer>
+
+          {this.currentDisplay()}
       </Container>
     );
   }

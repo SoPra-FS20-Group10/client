@@ -14,8 +14,8 @@ import {CloseButton} from "react-bootstrap";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
-  
- 
+
+
 `;
 
 const LobbyContainer = styled.div`
@@ -43,11 +43,11 @@ const ButtonContainer2 = styled.div`
 `;
 
 const ButtonContainer3 = styled.div`
-  
+
     float:left;
 `;
 
-const LobbyCreationWrapper = styled.div` 
+const LobbyCreationWrapper = styled.div`
     background-color: white;
 `;
 
@@ -65,7 +65,7 @@ const Label = styled.label`
 `;
 
 const TopBar = styled.div`
- 
+
   background-color: grey;
 
 `;
