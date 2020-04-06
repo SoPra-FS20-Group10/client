@@ -112,9 +112,7 @@ class LobbyRoom extends React.Component {
                         <Button variant="dark" size="sm" block >
                             Leave Lobby
                         </Button>
-                        <Button variant="dark" size="sm" block >
-                            Ready
-                        </Button>
+
                     </ButtonContainer2>
 
 

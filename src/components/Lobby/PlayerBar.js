@@ -51,7 +51,7 @@ class PlayerBar extends React.Component{
         };
 
         this.setReady=this.setReady.bind(this)
-
+        this.readyButton = this.readyButton.bind(this);
     }
 
 
@@ -69,9 +69,19 @@ class PlayerBar extends React.Component{
 
     setReady(){
 
-        this.setState({readyStatus:true})
+        this.state.readyStatus ? this.setState({readyStatus:false}) : this.setState({readyStatus:true})
     }
 
+    readyButton(){
+
+        let button = this.state.readyStatus ? (<Button variant="danger" size="sm" block onClick={this.setReady}>
+            Ready
+        </Button>) : (<Button variant="success" size="sm" block onClick={this.setReady}>
+            Ready
+        </Button>)
+
+        return (button);
+    }
 
     render() {
         return (
@@ -82,14 +92,8 @@ class PlayerBar extends React.Component{
                     <Label>Player Name: {this.state.playerName}</Label>
                     <Label>Player ID: {this.state.playerId}</Label>
 
-                    <Label>Ready Status: {this.state.readyStatus}</Label>
-
-
-
                     <ButtonContainer>
-                        <Button variant="info" size="sm" block onClick={this.setReady}>
-                            Ready
-                        </Button>
+                        {this.readyButton()}
                     </ButtonContainer>
 
                 </PlayerBarContainer>

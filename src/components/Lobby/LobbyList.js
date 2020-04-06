@@ -118,7 +118,7 @@ class LobbyList extends React.Component {
             lobbyPassword: null,
             lobbyName: null,
             playerId: 1,
-            playerName: null
+            playerName: "Kortay"
         }
 
         this.createLobby=this.createLobby.bind(this);
