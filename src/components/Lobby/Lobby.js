@@ -31,7 +31,7 @@ const Label = styled.label`
   color: white;
   margin-bottom: 10px;
   text-transform: uppercase;
-  font-size:16pt;
+  font-size:12pt;
   float: left;
   margin-left: 20%;
 `;
@@ -90,9 +90,11 @@ class Lobby extends React.Component{
 
                 <LobbyContainer>
 
-               <Label>Lobby ID: {this.state.lobbyId}</Label>
+                    <Label>Lobby Name: {this.state.lobbyName}</Label>
 
-                <Label>Players: {this.state.playerCount}/4</Label>
+                    <Label>Lobby ID: {this.state.lobbyId}</Label>
+
+                    <Label>Players: {this.state.playerCount}/4</Label>
 
 
                 <ButtonContainer>
