@@ -21,8 +21,9 @@ const LobbyContainer = styled.div`
 
 float:left;
 width: 100%;
-background-color: rgb(90, 93, 99);
-height:78pt;
+background-color: rgb(90, 93, 99, 0.55);
+margin-top: 10pt;
+margin-bottom: 10pt;
 `;
 
 
@@ -45,9 +46,12 @@ class Lobby extends React.Component{
         super(props);
 
         this.state = {
-            lobbyId: null,
             playerCount: 0,
-            maxPlayerCount: 4
+            maxPlayerCount: 4,
+            playerId: this.props.playerId,
+            playerName: this.props.playerName,
+            lobbyId: this.props.lobbyId,
+            lobbyName: this.props.lobbyName
         };
 
         this.goToLobby=this.goToLobby.bind(this)
@@ -78,7 +82,8 @@ class Lobby extends React.Component{
                     state: { lobbyId: this.state.lobbyId,
                             lobbyPassword: this.state.lobbyPassword,
                             lobbyName: this.state.lobbyName,
-                            playerId: this.state.playerId}
+                            playerId: this.state.playerId,
+                            playerName: this.state.playerName}
                 });
 
         }
@@ -92,15 +97,17 @@ class Lobby extends React.Component{
 
                 <LobbyContainer>
 
-                    <Label>Lobby ID: {this.state.playerId}</Label>
+                    <Label> {this.state.lobbyId}</Label>
 
-                    <Label>Lobby ID: {this.state.lobbyId}</Label>
+                    <Label> {this.state.lobbyName}</Label>
+
+
 
                     <Label>Players: {this.state.playerCount}/4</Label>
 
 
                 <ButtonContainer>
-                <Button variant="secondary" size="sm" block onClick={this.goToLobby}>
+                <Button variant="success" size="sm" block onClick={this.goToLobby}>
                    Join
                 </Button>
                     </ButtonContainer>

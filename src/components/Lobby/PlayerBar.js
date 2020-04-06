@@ -45,9 +45,9 @@ class PlayerBar extends React.Component{
         super(props);
 
         this.state = {
-            playerName: null,
             readyStatus: false,
-            playerId: this.props.playerId
+            playerId: this.props.playerId,
+            playerName: this.props.playerName
         };
 
         this.setReady=this.setReady.bind(this)

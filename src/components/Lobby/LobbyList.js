@@ -118,13 +118,15 @@ class LobbyList extends React.Component {
             lobbyPassword: null,
             lobbyName: null,
             playerId: 1,
-            playerName: "Kortay"
+            playerName: "Kortay",
+            allLobbies: this.fetchLobbies()
         }
 
         this.createLobby=this.createLobby.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.showLobbies = this.showLobbies.bind(this);
+        this.fetchLobbies = this.fetchLobbies.bind(this);
     }
 
     handleOpenModal () {
@@ -133,6 +135,27 @@ class LobbyList extends React.Component {
 
     handleCloseModal () {
         this.setState({ showModal: false });
+    }
+
+    // Get all lobbies
+
+    fetchLobbies = () => {
+
+        let lobbies = new Array();
+        lobbies[0] = new Array("TestLobby1", 1)
+        lobbies[1] = new Array("TestLobby2", 2)
+
+        // TODO: GET all lobbies by Name and ID
+        this.setState({allLobbies: lobbies});
+        console.log(lobbies);
+        console.log(this.state);
+    }
+
+    componentDidMount() {
+
+        // Get all active lobbies
+        this.fetchLobbies();
+        console.log(this.state);
     }
 
     createLobby(){
@@ -159,27 +182,21 @@ class LobbyList extends React.Component {
 
         // TODO: GET Lobbies from Backend and show them here.
 
+
+            let lobbies = new Array();
+            lobbies[0] = new Array("TestLobby1", 1)
+            lobbies[1] = new Array("TestLobby2", 2)
+
+            let listLobbies = lobbies.map((lobby) =>
+                    <Lobby lobbyName={lobby[0]} lobbyId={lobby[1]} playerName={this.state.playerName} playerId={this.state.playerId}  history={this.props.history}/>
+
+                );
+
             return(
                 <LobbyContainer>
+                    {listLobbies}
 
-
-                <Lobby lobbyId={1} history={this.props.history} playerId={this.state.playerId}>
-                    Lobby1
-                </Lobby>
-                <view style={{margin: 40}}/>
-                <Lobby lobbyId={2} history={this.props.history}>
-                    Lobby2
-                </Lobby>
-                <view style={{margin: 40}}/>
-                <Lobby lobbyId={3} history={this.props.history}>
-                    Lobby3
-                </Lobby>
-                <view style={{margin: 40}}/>
-                <Lobby lobbyId={4} history={this.props.history}>
-                    Lobby4
-                </Lobby>
-
-            </LobbyContainer>)
+                </LobbyContainer>)
         }
 
 
@@ -187,6 +204,7 @@ class LobbyList extends React.Component {
     handleInputChange(key, value) {
         this.setState({[key]: value});
     }
+
     render() {
         return (
 
