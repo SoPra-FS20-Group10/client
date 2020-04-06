@@ -44,16 +44,14 @@ const Container = styled(BaseContainer)`
 
 
 class MainPage extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             users: null
         };
     }
 
-    isInLobby = (dataFromLobby) => {
-        alert(dataFromLobby);
-    }
+
 
 
     render() {
@@ -68,7 +66,7 @@ class MainPage extends React.Component {
 
                 <LobbyWrapper>
 
-                    <LobbyList callback={this.isInLobby}/>
+                    <LobbyList/>
                 </LobbyWrapper>
 
 
