@@ -57,7 +57,7 @@ class MainPage extends React.Component {
         return (
             <Container>
 
-                <NavigationBar/>
+
 
                 <ChatWrapper>
                     <h2>This would be the chat</h2>
