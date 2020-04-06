@@ -103,7 +103,6 @@ class Game extends React.Component {
 
     return (
       <Container>
-        // {/*<MainPage/>*/}
         <div className="bg-image"></div>
         <ButtonContainer>
           <Button variant="secondary" size="lg" block onClick={this.goToMainPage}>
