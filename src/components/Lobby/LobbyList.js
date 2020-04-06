@@ -109,8 +109,10 @@ class LobbyList extends React.Component {
     constructor(props) {
         super(props);
         this.state ={
-            LobbyID: null,
-            showModal: false
+            lobbyID: 4,
+            showModal: false,
+            lobbyPassword: null,
+            lobbyName: null
         }
 
         this.createLobby=this.createLobby.bind(this);
@@ -134,14 +136,25 @@ class LobbyList extends React.Component {
         });
 
         // TODO: POST created Lobby to Backend
-        // POST
+        // POST --> Return Free Lobby ID
 
+        // TODO: Backend should return a free lobby id. For now, this is just random.
+        this.setState({lobbyId: 4});
+
+        console.log(this.state);
+
+            this.props.history.push(
+                {pathname: `/game/lobby/${this.state.lobbyID}`,
+                    state: { lobbyId: this.state.lobbyID,
+                            lobbyName: this.state.lobbyName,
+                            lobbyPassword: this.state.lobbyPassword}
+                });
+
+        }
+
+    handleInputChange(key, value) {
+        this.setState({[key]: value});
     }
-
-    handleInputChange(){
-
-    }
-
     render() {
         return (
 

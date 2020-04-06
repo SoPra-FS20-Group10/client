@@ -29,9 +29,9 @@ class LobbyRoom extends React.Component {
         super(props);
 
         this.state = {
-
-            lobbyId: this.props.location.state.lobbyId
-
+            lobbyName: this.props.location.state.lobbyName,
+            lobbyId: this.props.location.state.lobbyId,
+            lobbyPassword: this.props.location.state.lobbyPassword
         }
     }
 
@@ -47,8 +47,12 @@ class LobbyRoom extends React.Component {
 
             <Container>
 
-                <h2> Lobby Room + {this.state.lobbyId}</h2>
+                <h2> Lobby Name: {this.state.lobbyName}</h2>
 
+                <h2> Lobby ID:  {this.state.lobbyId}  </h2>
+                <div> Note: This is currently always set to 4. The Backend should return a free Lobby ID/Slot</div>
+
+                <h3> Lobby Password: {this.state.lobbyPassword}</h3>
 
             </Container>
         );
