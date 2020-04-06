@@ -36,8 +36,6 @@ float:left;
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
-  
- 
 `;
 
 

@@ -86,7 +86,6 @@ class Game extends React.Component {
   }
 
   currentDisplay(){
-
     console.log(this.state.showMainPage);
     if (this.state.showMainPage == true){
       return (<MainPage />);
@@ -102,7 +101,6 @@ class Game extends React.Component {
   render() {
 
     return (
-
       <Container>
         <div className="bg-image"></div>
         <ButtonContainer>
@@ -122,8 +120,6 @@ class Game extends React.Component {
         </ButtonContainer>
 
           {this.currentDisplay()}
-
-
       </Container>
     );
   }
