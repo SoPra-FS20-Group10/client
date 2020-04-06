@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
 import Game from "../../game/Game";
 import Leaderboard from "../../game/Leaderboard";
-import Profile from "../../game/Profile";
+import Profile from "../../Profile/Profile";
 import LobbyRoom from "../../Lobby/LobbyRoom";
 
 const Container = styled.div`
