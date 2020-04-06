@@ -74,7 +74,9 @@ class Lobby extends React.Component{
         else{
             this.props.history.push(
                 {pathname: `/game/lobby/${this.state.lobbyId}`,
-                    state: { lobbyId: this.state.lobbyId}
+                    state: { lobbyId: this.state.lobbyId,
+                            lobbyPassword: this.state.lobbyPassword,
+                            lobbyName: this.state.lobbyName}
                 });
 
         }
@@ -87,7 +89,8 @@ class Lobby extends React.Component{
             <BaseContainer>
 
                 <LobbyContainer>
-               <Label>Lobby ID: {this.state.id}</Label>
+
+               <Label>Lobby ID: {this.state.lobbyId}</Label>
 
                 <Label>Players: {this.state.playerCount}/4</Label>
 
