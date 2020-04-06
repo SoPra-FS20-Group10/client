@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { BaseContainer} from "../../helpers/layout";
 import { api, handleError } from "../../helpers/api";
 import { withRouter} from "react-router-dom";
-import { Button} from "../../views/design/Button";
+import Button from 'react-bootstrap/Button'
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -18,14 +18,14 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60%;
-  height: 375px;
+  width: 20%;
+  // height: 375px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: linear-gradient(rgb(255, 165, 0), rgb(238, 118, 0));
+  // background: linear-gradient(rgb(255, 165, 0), rgb(238, 118, 0));
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
@@ -83,7 +83,7 @@ class Signup extends React.Component {
                 password: this.state.password
             });
 
-            const response = await api.post("/users", requestBody);
+            const response = await api.post("/registration", requestBody);
 
             //Signup successfully worked -> navigate to the route /login
             this.props.history.push(response.data);
@@ -107,9 +107,9 @@ class Signup extends React.Component {
         return (
             <BaseContainer>
                 <FormContainer>
-                    <Title>Sign up</Title>
+                    <Title>Signup</Title>
                     <Form>
-                        <Label>Username</Label>
+                        <Label>Username</Label> {' '}
                         <InputField
                             placeholder="Enter here..."
                             onChange={e => {

@@ -110,6 +110,8 @@ const customStyles = {
     }
 };
 
+// TODO: Functionality behind changing credentials
+// TODO: Fix scaling of charts (when resizing page)
 class Profile extends React.Component {
     constructor() {
         super();
