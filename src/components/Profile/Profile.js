@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import LobbyList from "../Lobby/LobbyList";
 import Button from "react-bootstrap/Button";
 import Chart from "./Chart";
+import NavigationBar from "../../views/NavigationBar";
 
 const StatsWrapper = styled.div`
     margin-top: 5%;
@@ -79,21 +80,7 @@ class Profile extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToMainPage}>
-                        Overview
-                    </Button>
-                </ButtonContainer>
-                <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToLeaderboard}>
-                        Leaderboard
-                    </Button>
-                </ButtonContainer>
-                <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToProfile}>
-                        Profile
-                    </Button>
-                </ButtonContainer>
+                <NavigationBar/>
 
                 {/*TODO: Implement stats overview*/}
                 <StatsWrapper>

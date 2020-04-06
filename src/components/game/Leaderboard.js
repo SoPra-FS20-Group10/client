@@ -5,6 +5,7 @@ import {withRouter} from 'react-router-dom';
 import Button from "react-bootstrap/Button";
 import Table from 'react-bootstrap/Table'
 import Header from "../../views/Header";
+import NavigationBar from "../../views/NavigationBar";
 
 const ButtonContainer = styled.div`
   width: 33.3%;
@@ -101,21 +102,7 @@ class Leaderboard extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToMainPage}>
-                        Overview
-                    </Button>
-                </ButtonContainer>
-                <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToLeaderboard}>
-                        Leaderboard
-                    </Button>
-                </ButtonContainer>
-                <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToProfile}>
-                        Profile
-                    </Button>
-                </ButtonContainer>
+                <NavigationBar/>
 
                 {/*Leaderboard*/}
                 <div>

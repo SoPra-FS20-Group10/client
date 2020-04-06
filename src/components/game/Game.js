@@ -17,6 +17,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from "../Profile/Profile";
 import Leaderboard from "./Leaderboard";
 import Header from "../../views/Header";
+import NavigationBar from "../../views/NavigationBar";
 
 
 
@@ -35,6 +36,7 @@ const Users = styled.ul`
 const ButtonContainer = styled.div`
   width: 33.3%;
   float:left;
+  
 `;
 
 
@@ -104,21 +106,7 @@ class Game extends React.Component {
     return (
       <Container>
         <div className="bg-image"></div>
-        <ButtonContainer>
-          <Button variant="secondary" size="lg" block onClick={this.goToMainPage}>
-            Overview
-          </Button>
-          </ButtonContainer>
-        <ButtonContainer>
-          <Button variant="secondary" size="lg" block onClick={this.goToLeaderboard}>
-            Leaderboard
-          </Button>
-        </ButtonContainer>
-        <ButtonContainer>
-          <Button variant="secondary" size="lg" block onClick={this.goToProfile}>
-            Profile
-          </Button>
-        </ButtonContainer>
+        <NavigationBar/>
 
           {this.currentDisplay()}
       </Container>

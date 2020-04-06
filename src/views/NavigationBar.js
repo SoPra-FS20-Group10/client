@@ -72,19 +72,19 @@ class NavigationBar extends React.Component {
         return (
 
             <Container>
-                <div className="bg-image"></div>
+
                 <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToMainPage}>
+                    <Button variant="outline-warning" size="lg" block onClick={this.goToMainPage}>
                         Overview
                     </Button>
                 </ButtonContainer>
                 <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToLeaderboard}>
+                    <Button variant="outline-warning" size="lg" block onClick={this.goToLeaderboard}>
                         Leaderboard
                     </Button>
                 </ButtonContainer>
                 <ButtonContainer>
-                    <Button variant="secondary" size="lg" block onClick={this.goToProfile}>
+                    <Button variant="outline-warning" size="lg" block onClick={this.goToProfile}>
                         Profile
                     </Button>
                 </ButtonContainer>
