@@ -14,6 +14,7 @@ import PlayerBar from "./PlayerBar";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  margin: 0;
   
  
 `;
@@ -101,15 +102,7 @@ class LobbyRoom extends React.Component {
 
             <Container>
 
-                <h2> Lobby Name: {this.state.lobbyName}</h2>
-
-                <h2> Lobby ID:  {this.state.lobbyId}  </h2>
-                <div> Note: This is currently always set to 4. The Backend should return a free Lobby ID/Slot</div>
-
-                <h3> Lobby Password: {this.state.lobbyPassword}</h3>
-
-
-
+          
 
                 <ChatWrapper>
                     <h2>This would be the chat</h2>
