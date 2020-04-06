@@ -187,11 +187,19 @@ class Login extends React.Component {
 
                         <Form>
                             <Form.Group controlId="formUsername">
-                                <Form.Control type="email" placeholder="Enter username"/>
+                                <Form.Control
+                                    onChange={e => {
+                                        this.handleInputChange('username', e.target.value);
+                                    }}
+                                    type="email" placeholder="Enter username"/>
                             </Form.Group>
 
                             <Form.Group controlId="formPassword">
-                                <Form.Control type="email" placeholder="Enter password"/>
+                                <Form.Control
+                                    onChange={e => {
+                                        this.handleInputChange('password', e.target.value);
+                                    }}
+                                    type="email" placeholder="Enter password"/>
                             </Form.Group>
 
                             <Form.Label
