@@ -118,6 +118,7 @@ class LobbyList extends React.Component {
         this.createLobby=this.createLobby.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.showLobbies = this.showLobbies.bind(this);
     }
 
     handleOpenModal () {
@@ -134,23 +135,46 @@ class LobbyList extends React.Component {
             username: this.state.username,
             lobbyPassword: this.state.lobbyPassword
         });
-
         // TODO: POST created Lobby to Backend
         // POST --> Return Free Lobby ID
-
         // TODO: Backend should return a free lobby id. For now, this is just random.
         this.setState({lobbyId: 4});
-
-        console.log(this.state);
-
             this.props.history.push(
                 {pathname: `/game/lobby/${this.state.lobbyID}`,
                     state: { lobbyId: this.state.lobbyID,
                             lobbyName: this.state.lobbyName,
                             lobbyPassword: this.state.lobbyPassword}
                 });
-
         }
+
+        showLobbies(){
+
+        // TODO: GET Lobbies from Backend and show them here.
+
+            return(
+                <LobbyContainer>
+
+
+                <Lobby lobbyId={1} history={this.props.history}>
+                    Lobby1
+                </Lobby>
+                <view style={{margin: 40}}/>
+                <Lobby lobbyId={2} history={this.props.history}>
+                    Lobby2
+                </Lobby>
+                <view style={{margin: 40}}/>
+                <Lobby lobbyId={3} history={this.props.history}>
+                    Lobby3
+                </Lobby>
+                <view style={{margin: 40}}/>
+                <Lobby lobbyId={4} history={this.props.history}>
+                    Lobby4
+                </Lobby>
+
+            </LobbyContainer>)
+        }
+
+
 
     handleInputChange(key, value) {
         this.setState({[key]: value});
@@ -164,23 +188,8 @@ class LobbyList extends React.Component {
 
                <h2> LOBBY LIST </h2>
 
+                {this.showLobbies()}
 
-
-                    <Lobby lobbyId={1} history={this.props.history}>
-                        Lobby1
-                    </Lobby>
-                    <view style={{margin: 40}}/>
-                    <Lobby lobbyId={2} history={this.props.history}>
-                        Lobby2
-                    </Lobby>
-                    <view style={{margin: 40}}/>
-                    <Lobby lobbyId={3} history={this.props.history}>
-                        Lobby3
-                    </Lobby>
-                    <view style={{margin: 40}}/>
-                    <Lobby lobbyId={4} history={this.props.history}>
-                        Lobby4
-                    </Lobby>
                 <view style={{margin: 40}}/>
 
                 <ButtonContainer2>
