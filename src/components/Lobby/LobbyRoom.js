@@ -14,6 +14,7 @@ import PlayerBar from "./PlayerBar";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  margin: 0;
   
  
 `;
@@ -100,6 +101,7 @@ class LobbyRoom extends React.Component {
         return (
 
             <Container>
+
 
 
                 <ChatWrapper>
