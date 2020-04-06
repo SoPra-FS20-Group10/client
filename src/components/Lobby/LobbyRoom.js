@@ -62,7 +62,8 @@ class LobbyRoom extends React.Component {
         this.state = {
             lobbyName: this.props.location.state.lobbyName,
             lobbyId: this.props.location.state.lobbyId,
-            lobbyPassword: this.props.location.state.lobbyPassword
+            lobbyPassword: this.props.location.state.lobbyPassword,
+            playerId: this.props.location.state.playerId
         }
     }
 
@@ -75,7 +76,7 @@ class LobbyRoom extends React.Component {
     showPlayers(){
 
         return(
-        <PlayerBar/>
+        <PlayerBar playerId={this.state.playerId}/>
         )
     }
 

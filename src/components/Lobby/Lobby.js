@@ -57,7 +57,8 @@ class Lobby extends React.Component{
      componentDidMount() {
 
         this.setState({
-            lobbyId:this.props.lobbyId
+            lobbyId:this.props.lobbyId,
+            playerId: 1
         })
     }
 
@@ -76,7 +77,8 @@ class Lobby extends React.Component{
                 {pathname: `/game/lobby/${this.state.lobbyId}`,
                     state: { lobbyId: this.state.lobbyId,
                             lobbyPassword: this.state.lobbyPassword,
-                            lobbyName: this.state.lobbyName}
+                            lobbyName: this.state.lobbyName,
+                            playerId: this.state.playerId}
                 });
 
         }
@@ -90,7 +92,7 @@ class Lobby extends React.Component{
 
                 <LobbyContainer>
 
-                    <Label>Lobby Name: {this.state.lobbyName}</Label>
+                    <Label>Lobby ID: {this.state.playerId}</Label>
 
                     <Label>Lobby ID: {this.state.lobbyId}</Label>
 

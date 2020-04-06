@@ -47,6 +47,7 @@ class PlayerBar extends React.Component{
         this.state = {
             playerName: null,
             readyStatus: false,
+            playerId: this.props.playerId
         };
 
         this.setReady=this.setReady.bind(this)
@@ -79,6 +80,7 @@ class PlayerBar extends React.Component{
                 <PlayerBarContainer>
 
                     <Label>Player Name: {this.state.playerName}</Label>
+                    <Label>Player ID: {this.state.playerId}</Label>
 
                     <Label>Ready Status: {this.state.readyStatus}</Label>
 

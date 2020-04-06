@@ -108,11 +108,17 @@ const customStyles = {
 class LobbyList extends React.Component {
     constructor(props) {
         super(props);
+
+
+        // Simulates Player ID
+
         this.state ={
             lobbyID: 4,
             showModal: false,
             lobbyPassword: null,
-            lobbyName: null
+            lobbyName: null,
+            playerId: 1,
+            playerName: null
         }
 
         this.createLobby=this.createLobby.bind(this);
@@ -143,7 +149,9 @@ class LobbyList extends React.Component {
                 {pathname: `/game/lobby/${this.state.lobbyID}`,
                     state: { lobbyId: this.state.lobbyID,
                             lobbyName: this.state.lobbyName,
-                            lobbyPassword: this.state.lobbyPassword}
+                            lobbyPassword: this.state.lobbyPassword,
+                            playerName: this.state.playerName,
+                            playerId: this.state.playerId}
                 });
         }
 
@@ -155,7 +163,7 @@ class LobbyList extends React.Component {
                 <LobbyContainer>
 
 
-                <Lobby lobbyId={1} history={this.props.history}>
+                <Lobby lobbyId={1} history={this.props.history} playerId={this.state.playerId}>
                     Lobby1
                 </Lobby>
                 <view style={{margin: 40}}/>
