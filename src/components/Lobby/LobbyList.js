@@ -162,16 +162,22 @@ class LobbyList extends React.Component {
 
         const requestBody = JSON.stringify({
             ownerId: this.state.playerId,
-            lobbyPassword: this.state.lobbyPassword,
-            lobbyName: this.state.lobbyName
+            name: this.state.lobbyName,
+            password: this.state.lobbyPassword
         });
 
+        console.log(requestBody);
         // TODO: POST created Lobby to Backend
         // POST --> Return Free Lobby ID
+        try {
 
-        const response = await api.post("/game/1", requestBody);
-        console.log(response);
+            const response = await api.post("/lobby/2", requestBody);
+            console.log(response);
+        }
 
+        catch(error){
+            alert(error);
+        }
 
         // TODO: Backend should return a free lobby id. For now, this is just random.
         this.setState({lobbyId: 4});
