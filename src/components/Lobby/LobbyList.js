@@ -119,7 +119,7 @@ class LobbyList extends React.Component {
             lobbyName: null,
             playerId: 1,
             playerName: "Kortay",
-            allLobbies: this.fetchLobbies()
+            allLobbies: null
         }
 
         this.createLobby=this.createLobby.bind(this);
@@ -139,23 +139,45 @@ class LobbyList extends React.Component {
 
     // Get all lobbies
 
-    fetchLobbies = () => {
+    async fetchLobbies() {
 
-        let lobbies = new Array();
-        lobbies[0] = new Array("TestLobby1", 1)
-        lobbies[1] = new Array("TestLobby2", 2)
 
-        // TODO: GET all lobbies by Name and ID
-        this.setState({allLobbies: lobbies});
-        console.log(lobbies);
-        console.log(this.state);
+        // TODO: POST created Lobby to Backend
+        // POST --> Return Free Lobby ID
+        try {
+
+            const response = await api.get("/lobby/");
+
+
+            this.setState({allLobbies: response.data})
+
+
+            /*
+            // TODO: Backend should return a free lobby id. For now, this is just random.
+            this.setState({lobbyId: 4});
+            this.props.history.push(
+                {pathname: `/game/lobby/${lobbyId}`,
+                    state: { lobbyId: lobbyId,
+                        lobbyName: this.state.lobbyName,
+                        lobbyPassword: this.state.lobbyPassword,
+                        playerName: this.state.playerName,
+                        playerId: this.state.playerId}
+                });
+*/
+        }
+
+        catch(error){
+            alert(error);
+        }
+
+
     }
 
     componentDidMount() {
 
         // Get all active lobbies
         this.fetchLobbies();
-        console.log(this.state);
+
     }
 
     async createLobby(){
@@ -173,43 +195,57 @@ class LobbyList extends React.Component {
 
             const response = await api.post("/lobby/2", requestBody);
             console.log(response);
+            const lobbyId = response.data;
+            console.log(lobbyId);
+
+            // TODO: Backend should return a free lobby id. For now, this is just random.
+            this.setState({lobbyId: 4});
+            this.props.history.push(
+                {pathname: `/game/lobby/${lobbyId}`,
+                    state: { lobbyId: lobbyId,
+                        lobbyName: this.state.lobbyName,
+                        lobbyPassword: this.state.lobbyPassword,
+                        playerName: this.state.playerName,
+                        playerId: this.state.playerId}
+                });
+
         }
 
         catch(error){
             alert(error);
         }
 
-        // TODO: Backend should return a free lobby id. For now, this is just random.
-        this.setState({lobbyId: 4});
-            this.props.history.push(
-                {pathname: `/game/lobby/${this.state.lobbyID}`,
-                    state: { lobbyId: this.state.lobbyID,
-                            lobbyName: this.state.lobbyName,
-                            lobbyPassword: this.state.lobbyPassword,
-                            playerName: this.state.playerName,
-                            playerId: this.state.playerId}
-                });
         }
 
-        showLobbies(){
+    showLobbies() {
 
-        // TODO: GET Lobbies from Backend and show them here.
+            // TODO: GET Lobbies from Backend and show them here.
 
 
-            let lobbies = new Array();
-            lobbies[0] = new Array("TestLobby1", 1)
-            lobbies[1] = new Array("TestLobby2", 2)
 
-            let listLobbies = lobbies.map((lobby) =>
-                    <Lobby lobbyName={lobby[0]} lobbyId={lobby[1]} playerName={this.state.playerName} playerId={this.state.playerId}  history={this.props.history}/>
+            if (this.state.allLobbies) {
 
+                let lobbies = this.state.allLobbies;
+
+                let listLobbies = lobbies.map((lobby) =>
+
+                    <Lobby lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
+                           playerId={this.state.playerId} history={this.props.history}/>
                 );
+                
+                return (
+                    <LobbyContainer>
+                        {listLobbies}
 
-            return(
-                <LobbyContainer>
-                    {listLobbies}
+                    </LobbyContainer>
+                );
+            } else {
 
-                </LobbyContainer>)
+
+                return (
+                    <h1> Waiting For Lobby Fetching</h1>
+                );
+            }
         }
 
 
