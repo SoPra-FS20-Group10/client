@@ -77,14 +77,25 @@ class Lobby extends React.Component{
 
         // Join - Pass lobbyId
         else{
+
+            try{
+
+            await api.put("/game/" + this.state.playerId);
+
             this.props.history.push(
                 {pathname: `/game/lobby/${this.state.lobbyId}`,
                     state: { lobbyId: this.state.lobbyId,
-                            lobbyPassword: this.state.lobbyPassword,
-                            lobbyName: this.state.lobbyName,
-                            playerId: this.state.playerId,
-                            playerName: this.state.playerName}
+                        lobbyPassword: this.state.lobbyPassword,
+                        lobbyName: this.state.lobbyName,
+                        playerId: this.state.playerId,
+                        playerName: this.state.playerName}
                 });
+            }
+            catch(error){
+                alert("Could not join the lobby.");
+                console.log(error);
+            }
+
 
         }
 

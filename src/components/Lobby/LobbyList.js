@@ -232,7 +232,7 @@ class LobbyList extends React.Component {
                     <Lobby lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
                            playerId={this.state.playerId} history={this.props.history}/>
                 );
-                
+
                 return (
                     <LobbyContainer>
                         {listLobbies}
