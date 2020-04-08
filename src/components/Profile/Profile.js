@@ -113,14 +113,14 @@ const customStyles = {
 // TODO: Functionality behind changing credentials
 // TODO: Fix scaling of charts (when resizing page)
 class Profile extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { // some example data for the profile page
+            playerId: this.props.location.state.playerId,
             // example data for the stat overview
             stats: {id: 1, name: 'HOTCHILIEATER', wins: 1000, winPercentage: '59%', timePlayed: '370h'}
 
         }
-
         this.handleOpenModalName = this.handleOpenModalName.bind(this);
         this.handleCloseModalName = this.handleCloseModalName.bind(this);
         this.handleOpenModalPassword = this.handleOpenModalPassword.bind(this);
@@ -148,7 +148,7 @@ class Profile extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <NavigationBar/>
+                <NavigationBar  playerId={this.state.playerId}/>
 
                 {/*TODO: Implement stats overview*/}
                 <StatsWrapper>

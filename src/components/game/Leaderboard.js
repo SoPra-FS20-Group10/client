@@ -30,9 +30,10 @@ const LeaderboardWrapper = styled.div`
 // TODO: All time, last month, last year....
 // TODO: Make list sortable by enties
 class Leaderboard extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { // just some example data for the leaderboard
+            playerId: this.props.location.state.playerId,
             data: [
                 {id: 1, name: 'HOTCHILIEATER', wins: 1000, winPercentage: '59%', timePlayed: '370h'},
                 {id: 2, name: 'Kortay', wins: 800, winPercentage: '54%', timePlayed: '320h'},
@@ -40,20 +41,6 @@ class Leaderboard extends React.Component {
                 {id: 4, name: 'M3TIS', wins: 420, winPercentage: '53%', timePlayed: '200h'}
             ]
         }
-    }
-
-
-    goToMainPage = () => {
-        this.props.history.push("/game/overview");
-    }
-
-    goToLeaderboard = () => {
-        this.props.history.push("/game/leaderboard");
-    }
-
-    goToProfile = () => {
-        // TODO: Redirect with user's ID
-        this.props.history.push(`/game/profile/${1}`);
     }
 
     renderTableHeader() {
@@ -102,7 +89,7 @@ class Leaderboard extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <NavigationBar/>
+                <NavigationBar playerId={this.state.playerId}/>
 
                 {/*Leaderboard*/}
                 <div>

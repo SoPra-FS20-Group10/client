@@ -54,38 +54,14 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // TODO: Replace placeholder
+      // playerId: this.props.location.state.playerId,
+      playerId: 2,
+
       showMainPage: true,
       showLeaderboard: false,
-      showProfile: false
+      showProfile: false,
     };
-
-
-  }
-
-
-
-  goToMainPage = () => {
-    this.props.history.push("/game/overview");
-
-    // this.setState({showMainPage: true});
-    // this.setState({showLeaderboard: false});
-    // this.setState({showProfile: false});
-  }
-
-  goToLeaderboard = () => {
-    this.props.history.push("/game/leaderboard");
-
-    // this.setState({showLeaderboard: true});
-    // this.setState({showMainPage: false});
-    // this.setState({showProfile: false});
-  }
-
-  goToProfile = () => {
-    // TODO: Redirect with user's ID
-    this.props.history.push(`/game/profile/${1}`);
-    // this.setState({showProfile: true});
-    // this.setState({showMainPage: false});
-    // this.setState({showLeaderboard: false});
   }
 
   currentDisplay(){
@@ -106,8 +82,7 @@ class Game extends React.Component {
     return (
       <Container>
         <div className="bg-image"></div>
-        <NavigationBar/>
-
+        <NavigationBar playerId={this.state.playerId}/>
           {this.currentDisplay()}
       </Container>
     );
