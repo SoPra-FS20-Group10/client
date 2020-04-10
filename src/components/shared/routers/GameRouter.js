@@ -5,6 +5,7 @@ import Game from "../../game/Game";
 import Leaderboard from "../../game/Leaderboard";
 import Profile from "../../Profile/Profile";
 import LobbyRoom from "../../Lobby/LobbyRoom";
+import Board from "../../Board/Board";
 
 const Container = styled.div`
   display: flex;
@@ -30,6 +31,11 @@ class GameRouter extends React.Component {
             render={() => <Leaderboard />}
         />
 
+          <Route
+              exact
+              path={`${this.props.base}/board`}
+              render={() => <Board/>}
+          />
         <Route
             exact
             path={`${this.props.base}/profile/:userId`}
