@@ -121,7 +121,6 @@ class LobbyList extends React.Component {
             allLobbies: null
         }
 
-        console.log(localStorage.getItem("current"));
 
         this.createLobby=this.createLobby.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -147,7 +146,7 @@ class LobbyList extends React.Component {
         // POST --> Return Free Lobby ID
         try {
 
-            const response = await api.get("/lobby/");
+            const response = await api.get("/games/");
 
 
             this.setState({allLobbies: response.data})
@@ -180,7 +179,7 @@ class LobbyList extends React.Component {
         // POST --> Return Free Lobby ID
         try {
 
-            const response = await api.post("/lobby/2", requestBody);
+            const response = await api.post("/games", requestBody);
 
             const lobbyId = response.data;
 

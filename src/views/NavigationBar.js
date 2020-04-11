@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BaseContainer} from "../helpers/layout";
+import {CloseButton} from "react-bootstrap";
 
 
 const Container = styled(BaseContainer)`
@@ -54,6 +55,8 @@ class NavigationBar extends React.Component {
         });
     }
 
+    
+
     render() {
         return (
             <Container>
@@ -72,6 +75,7 @@ class NavigationBar extends React.Component {
                         Profile
                     </Button>
                 </ButtonContainer>
+                <CloseButton onClick={this.logoutUser}/>
             </Container>
         );
     }

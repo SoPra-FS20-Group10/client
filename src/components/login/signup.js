@@ -83,7 +83,7 @@ class Signup extends React.Component {
                 password: this.state.password
             });
 
-            const response = await api.post("/registration", requestBody);
+            const response = await api.post("/users", requestBody);
 
             //Signup successfully worked -> navigate to the route /login
             this.props.history.push(response.data);

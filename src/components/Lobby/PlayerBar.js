@@ -87,9 +87,9 @@ class PlayerBar extends React.Component{
         else {
 
             button = this.state.readyStatus ? (<Button variant="success" size="sm" block onClick={this.setReady} disabled>
-                YOU ARE READY
+                PLAYER READY
             </Button>) : (<Button variant="danger" size="sm" block onClick={this.setReady} disabled>
-                YOU ARE NOT READY
+                PLAYER NOT READY
             </Button>)
         }
         return (button);

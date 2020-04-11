@@ -128,15 +128,32 @@ class LobbyRoom extends React.Component {
 
     }
 
-    leaveLobby(){
+    async leaveLobby(){
 
-        this.props.history.push(
-            {pathname: `/game/overview/`,
-                state: {
-                    playerId: this.state.playerId,
-                    playerName: this.state.playerName}
-            });
+        const requestBody = JSON.stringify({
+            id: localStorage.getItem("current"),
+            username: null,
+            password: null,
+            birthday: null
+        });
 
+try {
+
+    await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"),);
+
+
+    this.props.history.push(
+        {
+            pathname: `/game/overview/`,
+            state: {
+                playerId: this.state.playerId,
+                playerName: this.state.playerName
+            }
+        });
+}
+catch(error){
+    alert(error);
+}
     }
 
     startButton(){

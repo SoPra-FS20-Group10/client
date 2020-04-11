@@ -65,16 +65,9 @@ class Game extends React.Component {
   }
 
   currentDisplay(){
-    console.log(this.state.showMainPage);
-    if (this.state.showMainPage == true){
+
       return (<MainPage />);
-    }
-    else if (this.state.showLeaderboard == true){
-      return (<Leaderboard />);
-    }
-    else{
-      return (<Profile />);
-    }
+
   }
 
   render() {

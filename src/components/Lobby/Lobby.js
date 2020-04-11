@@ -99,7 +99,7 @@ class Lobby extends React.Component{
 
             try{
 
-            await api.put("/lobby/" + this.state.lobbyId, requestBody);
+            await api.put("/games/" + this.state.lobbyId, requestBody);
 
             this.props.history.push(
                 {pathname: `/game/lobby/${this.state.lobbyId}`,
