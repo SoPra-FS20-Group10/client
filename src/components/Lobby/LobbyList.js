@@ -14,8 +14,8 @@ import {CloseButton} from "react-bootstrap";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
-  
- 
+
+
 `;
 
 const LobbyContainer = styled.div`
@@ -43,11 +43,11 @@ const ButtonContainer2 = styled.div`
 `;
 
 const ButtonContainer3 = styled.div`
-  
+
     float:left;
 `;
 
-const LobbyCreationWrapper = styled.div` 
+const LobbyCreationWrapper = styled.div`
     background-color: white;
 `;
 
@@ -65,7 +65,7 @@ const Label = styled.label`
 `;
 
 const TopBar = styled.div`
- 
+
   background-color: grey;
 
 `;
@@ -109,18 +109,19 @@ class LobbyList extends React.Component {
     constructor(props) {
         super(props);
 
-
         // Simulates Player ID
 
         this.state ={
-            lobbyID: 4,
+            lobbyID: null,
             showModal: false,
             lobbyPassword: null,
             lobbyName: null,
-            playerId: 1,
-            playerName: "Kortay",
-            allLobbies: this.fetchLobbies()
+            playerId: localStorage.getItem("current"),
+            playerName: localStorage.getItem("name"),
+            allLobbies: null
         }
+
+        console.log(localStorage.getItem("current"));
 
         this.createLobby=this.createLobby.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -139,64 +140,100 @@ class LobbyList extends React.Component {
 
     // Get all lobbies
 
-    fetchLobbies = () => {
+    async fetchLobbies() {
 
-        let lobbies = new Array();
-        lobbies[0] = new Array("TestLobby1", 1)
-        lobbies[1] = new Array("TestLobby2", 2)
 
-        // TODO: GET all lobbies by Name and ID
-        this.setState({allLobbies: lobbies});
-        console.log(lobbies);
-        console.log(this.state);
+        // TODO: POST created Lobby to Backend
+        // POST --> Return Free Lobby ID
+        try {
+
+            const response = await api.get("/lobby/");
+
+
+            this.setState({allLobbies: response.data})
+        }
+
+        catch(error){
+            alert(error);
+        }
+
+
     }
 
     componentDidMount() {
 
         // Get all active lobbies
         this.fetchLobbies();
-        console.log(this.state);
+
     }
 
-    createLobby(){
+    async createLobby(){
 
         const requestBody = JSON.stringify({
-            username: this.state.username,
-            lobbyPassword: this.state.lobbyPassword
+            ownerId: this.state.playerId,
+            name: this.state.lobbyName,
+            password: this.state.lobbyPassword
         });
+
+
         // TODO: POST created Lobby to Backend
         // POST --> Return Free Lobby ID
-        // TODO: Backend should return a free lobby id. For now, this is just random.
-        this.setState({lobbyId: 4});
+        try {
+
+            const response = await api.post("/lobby/2", requestBody);
+
+            const lobbyId = response.data;
+
+
+            // TODO: Backend should return a free lobby id. For now, this is just random.
+            this.setState({lobbyId: 4});
             this.props.history.push(
-                {pathname: `/game/lobby/${this.state.lobbyID}`,
-                    state: { lobbyId: this.state.lobbyID,
-                            lobbyName: this.state.lobbyName,
-                            lobbyPassword: this.state.lobbyPassword,
-                            playerName: this.state.playerName,
-                            playerId: this.state.playerId}
+                {pathname: `/game/lobby/${lobbyId}`,
+                    state: { lobbyId: lobbyId,
+                        lobbyName: this.state.lobbyName,
+                        lobbyPassword: this.state.lobbyPassword,
+                        playerName: this.state.playerName,
+                        playerId: this.state.playerId,
+                        ownerId: this.state.playerId}
                 });
+
         }
 
-        showLobbies(){
+        catch(error){
+            alert(error);
+        }
 
-        // TODO: GET Lobbies from Backend and show them here.
+        }
+
+    showLobbies() {
+
+            // TODO: GET Lobbies from Backend and show them here.
 
 
-            let lobbies = new Array();
-            lobbies[0] = new Array("TestLobby1", 1)
-            lobbies[1] = new Array("TestLobby2", 2)
 
-            let listLobbies = lobbies.map((lobby) =>
-                    <Lobby lobbyName={lobby[0]} lobbyId={lobby[1]} playerName={this.state.playerName} playerId={this.state.playerId}  history={this.props.history}/>
+            if (this.state.allLobbies) {
 
+                let lobbies = this.state.allLobbies;
+
+                let listLobbies = lobbies.map((lobby) =>
+
+                    <Lobby lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
+                           playerId={this.state.playerId} history={this.props.history}/>
                 );
 
-            return(
-                <LobbyContainer>
-                    {listLobbies}
+                return (
+                    <LobbyContainer>
+                        {listLobbies}
 
-                </LobbyContainer>)
+                    </LobbyContainer>
+                );
+            } else {
+
+
+                return (
+                    <h1> Waiting For Lobby Fetching</h1>
+                );
+            }
         }
 
 

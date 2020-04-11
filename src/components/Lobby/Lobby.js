@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LobbyRoom from "./LobbyRoom";
+import Form from "react-bootstrap/Form";
 /**
  * Lobby Model
  */
@@ -48,22 +49,29 @@ class Lobby extends React.Component{
         this.state = {
             playerCount: 0,
             maxPlayerCount: 4,
-            playerId: this.props.playerId,
-            playerName: this.props.playerName,
+            playerId: localStorage.getItem("current"),
+            playerName: localStorage.getItem("name"),
             lobbyId: this.props.lobbyId,
-            lobbyName: this.props.lobbyName
+            lobbyName: this.props.lobbyName,
+            lobbyPassword: null
         };
 
         this.goToLobby=this.goToLobby.bind(this)
 
     }
 
+
+    handleInputChange(key, value) {
+        this.setState({[key]: value});
+    }
+
      componentDidMount() {
 
         this.setState({
             lobbyId:this.props.lobbyId,
-            playerId: 1
+            ownerId:this.props.ownerId
         })
+
     }
 
     // Join Lobby
@@ -77,14 +85,36 @@ class Lobby extends React.Component{
 
         // Join - Pass lobbyId
         else{
+
+            const requestBody = JSON.stringify({
+                id: localStorage.getItem("current"),
+                password: this.state.lobbyPassword
+            });
+
+
+            console.log("PlayerId and lobbypassword (123): ");
+            console.log(requestBody);
+            console.log("lobbyID: " + this.state.lobbyId);
+
+
+            try{
+
+            await api.put("/lobby/" + this.state.lobbyId, requestBody);
+
             this.props.history.push(
                 {pathname: `/game/lobby/${this.state.lobbyId}`,
                     state: { lobbyId: this.state.lobbyId,
-                            lobbyPassword: this.state.lobbyPassword,
-                            lobbyName: this.state.lobbyName,
-                            playerId: this.state.playerId,
-                            playerName: this.state.playerName}
+                        lobbyPassword: this.state.lobbyPassword,
+                        lobbyName: this.state.lobbyName,
+                        playerId: this.state.playerId,
+                        playerName: this.state.playerName,
+                        ownerId: null}
                 });
+            }
+            catch(error){
+                alert("Could not join the lobby.");
+            }
+
 
         }
 
@@ -101,11 +131,19 @@ class Lobby extends React.Component{
 
                     <Label> {this.state.lobbyName}</Label>
 
+                    <Label> OwnerId: {this.state.ownerId}</Label>
 
 
                     <Label>Players: {this.state.playerCount}/4</Label>
-
-
+<Form>
+                    <Form.Group controlId="formPassword">
+                        <Form.Control
+                            onChange={e => {
+                                this.handleInputChange('lobbyPassword', e.target.value);
+                            }}
+                            type="email" placeholder="Enter password"/>
+                    </Form.Group>
+</Form>
                 <ButtonContainer>
                 <Button variant="success" size="sm" block onClick={this.goToLobby}>
                    Join
@@ -119,3 +157,6 @@ class Lobby extends React.Component{
 
 }
 export default Lobby;
+
+
+
