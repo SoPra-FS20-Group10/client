@@ -57,6 +57,10 @@ class NavigationBar extends React.Component {
 
 
 
+
+
+
+
     render() {
         return (
             <Container>
@@ -75,7 +79,7 @@ class NavigationBar extends React.Component {
                         Profile
                     </Button>
                 </ButtonContainer>
-                <CloseButton onClick={this.logoutUser}/>
+
             </Container>
         );
     }

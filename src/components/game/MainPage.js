@@ -10,6 +10,7 @@ import ChatWindow from "../Overview/ChatWindow";
 import LobbyList from "../Lobby/LobbyList";
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
+import {CloseButton} from "react-bootstrap";
 
 // TODO: WORK IN PROGRESS!
 
@@ -51,14 +52,24 @@ class MainPage extends React.Component {
     }
 
 
+    async logoutUser() {
+        const requestBody = JSON.stringify({
+            userToken: localStorage.getItem("token")
+        });
 
+        try {
+            await api.patch("/users/" + localStorage.getItem("current"), requestBody);
+        }catch(error){
+            alert(error);
+        }
+    }
 
     render() {
         return (
             <Container>
 
 
-
+                <CloseButton onClick={this.logoutUser}/>
                 <ChatWrapper>
                     <h2>This would be the chat</h2>
                 </ChatWrapper>
