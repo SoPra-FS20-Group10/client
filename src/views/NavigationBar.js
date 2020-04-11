@@ -55,7 +55,7 @@ class NavigationBar extends React.Component {
         });
     }
 
-    
+
 
     render() {
         return (

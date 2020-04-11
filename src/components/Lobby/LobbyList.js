@@ -208,7 +208,7 @@ class LobbyList extends React.Component {
 
             // TODO: GET Lobbies from Backend and show them here.
 
-
+            this.fetchLobbies();
 
             if (this.state.allLobbies) {
 
