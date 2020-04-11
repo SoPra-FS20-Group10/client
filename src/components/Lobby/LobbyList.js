@@ -151,7 +151,6 @@ class LobbyList extends React.Component {
 
 
             this.setState({allLobbies: response.data})
-
         }
 
         catch(error){
@@ -194,7 +193,8 @@ class LobbyList extends React.Component {
                         lobbyName: this.state.lobbyName,
                         lobbyPassword: this.state.lobbyPassword,
                         playerName: this.state.playerName,
-                        playerId: this.state.playerId}
+                        playerId: this.state.playerId,
+                        ownerId: this.state.playerId}
                 });
 
         }

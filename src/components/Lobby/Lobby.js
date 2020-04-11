@@ -69,7 +69,7 @@ class Lobby extends React.Component{
 
         this.setState({
             lobbyId:this.props.lobbyId,
-            playerId: this.props.playerId
+            ownerId:this.props.ownerId
         })
 
     }
@@ -87,10 +87,14 @@ class Lobby extends React.Component{
         else{
 
             const requestBody = JSON.stringify({
-                id: this.state.playerId,
-                password: "123"
+                id: localStorage.getItem("current"),
+                password: this.state.lobbyPassword
             });
 
+
+            console.log("PlayerId and lobbypassword (123): ");
+            console.log(requestBody);
+            console.log("lobbyID: " + this.state.lobbyId);
 
 
             try{
@@ -103,7 +107,8 @@ class Lobby extends React.Component{
                         lobbyPassword: this.state.lobbyPassword,
                         lobbyName: this.state.lobbyName,
                         playerId: this.state.playerId,
-                        playerName: this.state.playerName}
+                        playerName: this.state.playerName,
+                        ownerId: null}
                 });
             }
             catch(error){
@@ -126,6 +131,7 @@ class Lobby extends React.Component{
 
                     <Label> {this.state.lobbyName}</Label>
 
+                    <Label> OwnerId: {this.state.ownerId}</Label>
 
 
                     <Label>Players: {this.state.playerCount}/4</Label>

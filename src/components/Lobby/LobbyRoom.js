@@ -66,23 +66,62 @@ class LobbyRoom extends React.Component {
             lobbyPassword: this.props.location.state.lobbyPassword,
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
+            lobbyPlayers: null
         }
 
         this.leaveLobby=this.leaveLobby.bind(this);
+        this.fetchLobbyPlayers=this.fetchLobbyPlayers.bind(this);
     }
 
 
 
     componentDidMount() {
 
+        this.fetchLobbyPlayers();
 
     }
 
+    async fetchLobbyPlayers(){
+
+        try {
+
+            const response = await api.get("/games/" + this.state.lobbyId + "/players");
+            this.setState({lobbyPlayers: response.data})
+
+        }
+        catch(error){
+            alert(error);
+        }
+
+    }
+
+
     showPlayers(){
 
-        return(
-        <PlayerBar playerId={this.state.playerId} playerName={this.state.playerName}/>
-        )
+        if (this.state.lobbyPlayers) {
+
+            let lobbyPlayers = this.state.lobbyPlayers;
+            console.log(lobbyPlayers);
+            let listPlayers = lobbyPlayers.map((player) =>
+
+                <PlayerBar playerId={this.state.playerId} playerName={this.state.playerName}/>
+
+            );
+
+            return (
+                <LobbyContainer>
+                    {listPlayers}
+
+                </LobbyContainer>
+            );
+        } else {
+
+
+            return (
+                <h1> Waiting For Lobby Fetching</h1>
+            );
+        }
+
     }
 
     leaveLobby(){
@@ -93,6 +132,19 @@ class LobbyRoom extends React.Component {
                     playerId: this.state.playerId,
                     playerName: this.state.playerName}
             });
+
+    }
+
+    startButton(){
+
+        // if lobbyowner
+
+        return(<Button variant="dark" size="sm" block onClick={this.leaveLobby}>
+            Leave Lobby
+        </Button>);
+
+
+
 
     }
 
@@ -120,6 +172,9 @@ class LobbyRoom extends React.Component {
                         <Button variant="dark" size="sm" block onClick={this.leaveLobby}>
                             Leave Lobby
                         </Button>
+
+                        {this.startButton}
+
 
                     </ButtonContainer2>
 
