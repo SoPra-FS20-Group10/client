@@ -64,8 +64,8 @@ class LobbyRoom extends React.Component {
             lobbyName: this.props.location.state.lobbyName,
             lobbyId: this.props.location.state.lobbyId,
             lobbyPassword: this.props.location.state.lobbyPassword,
-            playerId: this.props.location.state.playerId,
-            playerName: this.props.location.state.playerName
+            playerId: localStorage.getItem("current"),
+            playerName: localStorage.getItem("name"),
         }
 
         this.leaveLobby=this.leaveLobby.bind(this);

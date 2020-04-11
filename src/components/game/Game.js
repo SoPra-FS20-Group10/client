@@ -56,8 +56,8 @@ class Game extends React.Component {
     this.state = {
       // TODO: Replace placeholder
       // playerId: this.props.location.state.playerId,
-      playerId: 2,
-
+      playerId: localStorage.getItem("current"),
+      playerName: localStorage.getItem("name"),
       showMainPage: true,
       showLeaderboard: false,
       showProfile: false,

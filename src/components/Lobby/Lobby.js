@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LobbyRoom from "./LobbyRoom";
+import Form from "react-bootstrap/Form";
 /**
  * Lobby Model
  */
@@ -48,22 +49,29 @@ class Lobby extends React.Component{
         this.state = {
             playerCount: 0,
             maxPlayerCount: 4,
-            playerId: this.props.playerId,
-            playerName: this.props.playerName,
+            playerId: localStorage.getItem("current"),
+            playerName: localStorage.getItem("name"),
             lobbyId: this.props.lobbyId,
-            lobbyName: this.props.lobbyName
+            lobbyName: this.props.lobbyName,
+            lobbyPassword: null
         };
 
         this.goToLobby=this.goToLobby.bind(this)
 
     }
 
+
+    handleInputChange(key, value) {
+        this.setState({[key]: value});
+    }
+
      componentDidMount() {
 
         this.setState({
             lobbyId:this.props.lobbyId,
-            playerId: 1
+            playerId: this.props.playerId
         })
+
     }
 
     // Join Lobby
@@ -78,9 +86,16 @@ class Lobby extends React.Component{
         // Join - Pass lobbyId
         else{
 
+            const requestBody = JSON.stringify({
+                id: this.state.playerId,
+                password: "123"
+            });
+
+
+
             try{
 
-            await api.put("/game/" + this.state.playerId);
+            await api.put("/lobby/" + this.state.lobbyId, requestBody);
 
             this.props.history.push(
                 {pathname: `/game/lobby/${this.state.lobbyId}`,
@@ -93,7 +108,6 @@ class Lobby extends React.Component{
             }
             catch(error){
                 alert("Could not join the lobby.");
-                console.log(error);
             }
 
 
@@ -115,8 +129,15 @@ class Lobby extends React.Component{
 
 
                     <Label>Players: {this.state.playerCount}/4</Label>
-
-
+<Form>
+                    <Form.Group controlId="formPassword">
+                        <Form.Control
+                            onChange={e => {
+                                this.handleInputChange('lobbyPassword', e.target.value);
+                            }}
+                            type="email" placeholder="Enter password"/>
+                    </Form.Group>
+</Form>
                 <ButtonContainer>
                 <Button variant="success" size="sm" block onClick={this.goToLobby}>
                    Join
