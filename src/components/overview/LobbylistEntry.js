@@ -6,10 +6,10 @@ import {BaseContainer} from "../../helpers/layout";
 import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import LobbyRoom from "./LobbyRoom";
+import LobbyRoom from "../lobby/LobbyPage";
 import Form from "react-bootstrap/Form";
 /**
- * Lobby Model
+ * LobbylistEntry Model
  */
 
 
@@ -40,7 +40,7 @@ const Label = styled.label`
 
 
 
-class Lobby extends React.Component{
+class LobbylistEntry extends React.Component{
 
     constructor(props) {
 
@@ -74,13 +74,13 @@ class Lobby extends React.Component{
 
     }
 
-    // Join Lobby
+    // Join LobbylistEntry
 
     async goToLobby(){
 
         // Check if there's space for the player in the lobby
         if (this.state.playerCount >= this.state.maxPlayerCount){
-            return alert("The Lobby is full!");
+            return alert("The LobbylistEntry is full!");
         }
 
         // Join - Pass lobbyId
@@ -154,7 +154,7 @@ class Lobby extends React.Component{
     }
 
 }
-export default Lobby;
+export default LobbylistEntry;
 
 
 

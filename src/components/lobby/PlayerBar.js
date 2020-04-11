@@ -6,9 +6,9 @@ import {BaseContainer} from "../../helpers/layout";
 import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import LobbyRoom from "./LobbyRoom";
+import LobbyRoom from "./LobbyPage";
 /**
- * Lobby Model
+ * LobbylistEntry Model
  */
 
 

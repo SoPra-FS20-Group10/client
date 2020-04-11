@@ -3,13 +3,13 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
-import Login from "../../login/Login";
-import Signup from "../../login/signup";
-import UserPage from "../../game/UserPage";
+import Login from "../../login/LoginPage";
+import Signup from "../../signup/SignupPage";
+import UserPage from "../Other/UserPage";
 
 /**
  * Main router of your application.
- * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
+ * In the following class, different routes are rendered. In our case, there is a login Route with matches the path "/login"
  * and another Router that matches the route "/game".
  * The main difference between these two routes is the following:
  * /login renders another component without any sub-route

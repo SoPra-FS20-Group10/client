@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
 
 import {withRouter} from 'react-router-dom';
-import LobbyList from "../Lobby/LobbyList";
+import LobbyList from "../overview/Lobbylist";
 import Button from "react-bootstrap/Button";
 import Chart from "./Chart";
 import NavigationBar from "../../views/NavigationBar";
@@ -112,7 +112,7 @@ const customStyles = {
 
 // TODO: Functionality behind changing credentials
 // TODO: Fix scaling of charts (when resizing page)
-class Profile extends React.Component {
+class ProfilePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { // some example data for the profile page
@@ -250,4 +250,4 @@ class Profile extends React.Component {
     }
 }
 
-export default withRouter(Profile);
+export default withRouter(ProfilePage);

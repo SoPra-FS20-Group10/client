@@ -60,7 +60,7 @@ const Title = styled.h2`
   text-align: center;
 `;
 
-class Signup extends React.Component {
+class SignupPage extends React.Component {
 
     constructor() {
         super();
@@ -85,7 +85,7 @@ class Signup extends React.Component {
 
             const response = await api.post("/users", requestBody);
 
-            //Signup successfully worked -> navigate to the route /login
+            //SignupPage successfully worked -> navigate to the route /login
             this.props.history.push(response.data);
         } catch (error) {
             alert(`Something went wrong during the sign up: \n${handleError(error)}`);        }
@@ -161,4 +161,4 @@ class Signup extends React.Component {
     }
 }
 
-export default withRouter(Signup);
+export default withRouter(SignupPage);

@@ -5,10 +5,10 @@ import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import Lobby from "./Lobby";
+import LobbylistEntry from "../overview/LobbylistEntry";
 import Modal from "react-modal";
 import {CloseButton} from "react-bootstrap";
-import LobbyList from "./LobbyList";
+import LobbyList from "../overview/Lobbylist";
 import PlayerBar from "./PlayerBar";
 
 const Container = styled(BaseContainer)`
@@ -56,7 +56,7 @@ const ButtonContainer2 = styled.div`
 
 
 
-class LobbyRoom extends React.Component {
+class LobbyPage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -217,4 +217,4 @@ catch(error){
     }
 }
 
-export default withRouter(LobbyRoom);
+export default withRouter(LobbyPage);

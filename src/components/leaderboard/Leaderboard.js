@@ -91,7 +91,7 @@ class Leaderboard extends React.Component {
                 <div className="bg-image"></div>
                 <NavigationBar playerId={this.state.playerId}/>
 
-                {/*Leaderboard*/}
+                {/*leaderboard*/}
                 <div>
                     <LeaderboardWrapper responsive>
                         <h1 id='title'>Leaderboard</h1>

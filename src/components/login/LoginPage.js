@@ -86,7 +86,7 @@ const PlayerContainer = styled.li`
  * https://reactjs.org/docs/react-component.html
  * @Class
  */
-class Login extends React.Component {
+class LoginPage extends React.Component {
     /**
      * If you don’t initialize the state and you don’t bind methods, you don’t need to implement a constructor for your React component.
      * The constructor for a React component is called before it is mounted (rendered).
@@ -123,7 +123,7 @@ class Login extends React.Component {
             localStorage.setItem("name", user.username);
             localStorage.setItem("token", response.data.token);
 
-            // Login successfully worked --> navigate to the route /game in the GameRouter
+            // LoginPage successfully worked --> navigate to the route /game in the GameRouter
             this.props.history.push("/game");
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
@@ -131,7 +131,7 @@ class Login extends React.Component {
     }
 
     async loginGuest() {
-        // TODO: Do Login as guest
+        // TODO: Do LoginPage as guest
     }
 
     async recoverPassword() {
@@ -237,7 +237,7 @@ class Login extends React.Component {
         //     <LoginWrapper>
         //     <FormContainer>
         //
-        //       <Title>Guest Login</Title>
+        //       <Title>Guest LoginPage</Title>
         //       <Form>
         //         <Label>Username</Label>
         //             <InputField
@@ -253,14 +253,14 @@ class Login extends React.Component {
         //                         this.login();
         //                     }}
         //                 >
-        //                     Login
+        //                     LoginPage
         //                 </Button>
         //             </ButtonContainer>
         //         </Form>
         //     </FormContainer>
         //     <FormContainer>
         //
-        //         <Title>Login</Title>
+        //         <Title>LoginPage</Title>
         //         <Form>
         //             <Label>Username</Label>
         //             <InputField
@@ -284,7 +284,7 @@ class Login extends React.Component {
         //                         this.login();
         //                     }}
         //                 >
-        //                     Login
+        //                     LoginPage
         //                 </Button>
         //
         //                 <view style={{margin: 10}}/>
@@ -310,4 +310,4 @@ class Login extends React.Component {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default withRouter(Login);
+export default withRouter(LoginPage);

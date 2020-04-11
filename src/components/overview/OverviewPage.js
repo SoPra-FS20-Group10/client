@@ -7,15 +7,15 @@ import { Spinner } from '../../views/design/Spinner';
 import { withRouter } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import MainPage from "./MainPage";
+import MainPage from "./Overview";
 
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 import Button from 'react-bootstrap/Button'
 import ToggleButton from 'react-bootstrap/ToggleButton'
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Profile from "../Profile/Profile";
-import Leaderboard from "./Leaderboard";
+import Profile from "../profile/ProfilePage";
+import Leaderboard from "../leaderboard/Leaderboard";
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
 
@@ -50,7 +50,7 @@ const PlayerContainer = styled.li`
 
 
 
-class Game extends React.Component {
+class OverviewPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,7 +74,7 @@ class Game extends React.Component {
 
     return (
       <Container>
-        <div className="bg-image"></div>
+        {/*<div className="bg-image"></div>*/}
         <NavigationBar playerId={this.state.playerId}/>
           {this.currentDisplay()}
       </Container>
@@ -82,4 +82,4 @@ class Game extends React.Component {
   }
 }
 
-export default withRouter(Game);
+export default withRouter(OverviewPage);

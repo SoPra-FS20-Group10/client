@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import { withRouter } from 'react-router-dom';
-import Lobby from "./Lobby";
+import LobbylistEntry from "./LobbylistEntry";
 import Modal from 'react-modal';
 import {InputLabel} from "@material-ui/core";
 
@@ -105,7 +105,7 @@ const customStyles = {
     }
 };
 
-class LobbyList extends React.Component {
+class Lobbylist extends React.Component {
     constructor(props) {
         super(props);
 
@@ -142,8 +142,8 @@ class LobbyList extends React.Component {
     async fetchLobbies() {
 
 
-        // TODO: POST created Lobby to Backend
-        // POST --> Return Free Lobby ID
+        // TODO: POST created LobbylistEntry to Backend
+        // POST --> Return Free LobbylistEntry ID
         try {
 
             const response = await api.get("/games/");
@@ -175,8 +175,8 @@ class LobbyList extends React.Component {
         });
 
 
-        // TODO: POST created Lobby to Backend
-        // POST --> Return Free Lobby ID
+        // TODO: POST created LobbylistEntry to Backend
+        // POST --> Return Free LobbylistEntry ID
         try {
 
             const response = await api.post("/games", requestBody);
@@ -216,8 +216,8 @@ class LobbyList extends React.Component {
 
                 let listLobbies = lobbies.map((lobby) =>
 
-                    <Lobby lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
-                           playerId={this.state.playerId} history={this.props.history}/>
+                    <LobbylistEntry lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
+                                    playerId={this.state.playerId} history={this.props.history}/>
                 );
 
                 return (
@@ -314,4 +314,4 @@ class LobbyList extends React.Component {
     }
 }
 
-export default withRouter(LobbyList);
+export default withRouter(Lobbylist);

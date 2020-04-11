@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
-import Game from "../../game/Game";
-import Leaderboard from "../../game/Leaderboard";
-import Profile from "../../Profile/Profile";
-import LobbyRoom from "../../Lobby/LobbyRoom";
-import Board from "../../Board/Board";
+import Game from "../../overview/OverviewPage";
+import Leaderboard from "../../leaderboard/Leaderboard";
+import Profile from "../../profile/ProfilePage";
+import LobbyRoom from "../../lobby/LobbyPage";
+import Board from "../../game/Board";
 
 const Container = styled.div`
   display: flex;

@@ -6,8 +6,8 @@ import Player from '../../views/Player';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
-import ChatWindow from "../Overview/ChatWindow";
-import LobbyList from "../Lobby/LobbyList";
+import ChatWindow from "./ChatWindow";
+import LobbyList from "./Lobbylist";
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
 import {CloseButton} from "react-bootstrap";
@@ -43,7 +43,7 @@ const Container = styled(BaseContainer)`
 
 
 
-class MainPage extends React.Component {
+class Overview extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -86,4 +86,4 @@ class MainPage extends React.Component {
     }
 }
 
-export default withRouter(MainPage);
+export default withRouter(Overview);

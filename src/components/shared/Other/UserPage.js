@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
-import { Button } from '../../views/design/Button';
+import { BaseContainer } from '../../../helpers/layout';
+import { api, handleError } from '../../../helpers/api';
+import { Button } from '../../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 
 const FormContainer = styled.div`
