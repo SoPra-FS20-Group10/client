@@ -74,12 +74,24 @@ class PlayerBar extends React.Component{
 
     readyButton(){
 
-        let button = this.state.readyStatus ? (<Button variant="danger" size="sm" block onClick={this.setReady}>
-            Ready
-        </Button>) : (<Button variant="success" size="sm" block onClick={this.setReady}>
-            Ready
-        </Button>)
+        let button;
+        const ownPlayerId = localStorage.getItem("current");
 
+        if(this.state.playerId == ownPlayerId){
+            button = this.state.readyStatus ? (<Button variant="success" size="sm" block onClick={this.setReady}>
+                YOU ARE READY
+            </Button>) : (<Button variant="danger" size="sm" block onClick={this.setReady}>
+                YOU ARE NOT READY
+            </Button>)
+        }
+        else {
+
+            button = this.state.readyStatus ? (<Button variant="success" size="sm" block onClick={this.setReady} disabled>
+                YOU ARE READY
+            </Button>) : (<Button variant="danger" size="sm" block onClick={this.setReady} disabled>
+                YOU ARE NOT READY
+            </Button>)
+        }
         return (button);
     }
 
