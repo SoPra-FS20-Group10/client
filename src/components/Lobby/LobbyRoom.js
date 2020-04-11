@@ -102,6 +102,8 @@ class LobbyRoom extends React.Component {
 
     showPlayers(){
 
+        this.fetchLobbyPlayers();
+
         if (this.state.lobbyPlayers) {
 
             let lobbyPlayers = this.state.lobbyPlayers;
