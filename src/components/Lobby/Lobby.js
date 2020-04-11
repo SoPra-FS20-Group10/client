@@ -131,8 +131,6 @@ class Lobby extends React.Component{
 
                     <Label> {this.state.lobbyName}</Label>
 
-                    <Label> OwnerId: {this.state.ownerId}</Label>
-
 
                     <Label>Players: {this.state.playerCount}/4</Label>
 <Form>

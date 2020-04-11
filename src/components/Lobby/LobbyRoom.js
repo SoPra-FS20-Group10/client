@@ -66,11 +66,15 @@ class LobbyRoom extends React.Component {
             lobbyPassword: this.props.location.state.lobbyPassword,
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
-            lobbyPlayers: null
+            lobbyPlayers: null,
+            ownerId: this.props.location.state.ownerId
         }
 
         this.leaveLobby=this.leaveLobby.bind(this);
         this.fetchLobbyPlayers=this.fetchLobbyPlayers.bind(this);
+        this.startButton=this.startButton.bind(this);
+        this.startGame=this.startGame.bind(this);
+        console.log(this.props);
     }
 
 
@@ -104,7 +108,7 @@ class LobbyRoom extends React.Component {
             console.log(lobbyPlayers);
             let listPlayers = lobbyPlayers.map((player) =>
 
-                <PlayerBar playerId={this.state.playerId} playerName={this.state.playerName}/>
+                <PlayerBar playerId={player.id} playerName={player.username}/>
 
             );
 
@@ -137,14 +141,17 @@ class LobbyRoom extends React.Component {
 
     startButton(){
 
-        // if lobbyowner
+        if(this.state.ownerId) {
 
-        return(<Button variant="dark" size="sm" block onClick={this.leaveLobby}>
-            Leave Lobby
-        </Button>);
+            return (<Button variant="success" size="sm" block onClick={this.startGame}>
+                Start Game
+            </Button>);
+        }
+    }
 
+    startGame(){
 
-
+        alert("starting game.");
 
     }
 
@@ -173,7 +180,7 @@ class LobbyRoom extends React.Component {
                             Leave Lobby
                         </Button>
 
-                        {this.startButton}
+                        {this.startButton()}
 
 
                     </ButtonContainer2>

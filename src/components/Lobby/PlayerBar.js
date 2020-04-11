@@ -46,8 +46,8 @@ class PlayerBar extends React.Component{
 
         this.state = {
             readyStatus: false,
-            playerId: localStorage.getItem("current"),
-            playerName: localStorage.getItem("name")
+            playerId: this.props.playerId,
+            playerName: this.props.playerName
         };
 
         this.setReady=this.setReady.bind(this)
