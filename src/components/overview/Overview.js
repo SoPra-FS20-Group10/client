@@ -49,16 +49,27 @@ class Overview extends React.Component {
         this.state = {
             users: null
         };
+
+        this.logoutUser = this.logoutUser.bind(this);
     }
 
 
     async logoutUser() {
         const requestBody = JSON.stringify({
-            userToken: localStorage.getItem("token")
+            token: localStorage.getItem("token")
         });
 
+
+        // Try to logout
         try {
             await api.patch("/users/" + localStorage.getItem("current"), requestBody);
+            //remove local storage items & redirect to login
+            localStorage.removeItem("current");
+            localStorage.removeItem("name");
+            localStorage.removeItem("token");
+            window.location.reload();
+
+
         }catch(error){
             alert(error);
         }
