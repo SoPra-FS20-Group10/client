@@ -5,7 +5,7 @@ import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../login/LoginPage";
 import Signup from "../../signup/SignupPage";
-import UserPage from "../Other/UserPage";
+import OverviewPage from "../../overview/OverviewPage";
 
 /**
  * Main router of your application.
@@ -50,7 +50,7 @@ class AppRouter extends React.Component {
                   path="/home"
                   exact
                   render={() =>(
-                      <UserPage/>
+                      <OverviewPage/>
                   )}
               />
             <Route path="/" exact render={() => <Redirect to={"/game"} />} />

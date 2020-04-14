@@ -9,7 +9,6 @@ import {Line} from "react-chartjs-2";
 import {withRouter} from "react-router-dom";
 import styled from "styled-components";
 import {makeStyles} from "@material-ui/core/styles";
-import Tile from "./Tile";
 import TILES from "../shared/Other/Tiles";
 import PIECE from "../shared/Other/Pieces";
 
@@ -88,8 +87,8 @@ class GameBoard extends Component {
                         backgroundColor: 'white',
                         fontSize: 10,
                         borderRadius: '2pt',
-                        width: '23pt',
-                        height: '23pt',
+                        width: '20pt',
+                        height: '20pt',
                         color: 'black',
                         display: 'flex',
                         justifyContent:'center',
