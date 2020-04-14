@@ -17,6 +17,7 @@ import Profile from "../profile/ProfilePage";
 import Leaderboard from "../leaderboard/LeaderboardPage";
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
+import GameBoard from "./GameBoard";
 
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
@@ -83,10 +84,12 @@ class GamePage extends React.Component {
             showLeaderboard: false,
             showProfile: false,
         };
+
     }
 
     render() {
         return (
+
             <Container>
                 <Row className="justify-content-md-center">
                     <Col className="py-2 px-0"  md="auto" >
@@ -97,7 +100,7 @@ class GamePage extends React.Component {
 
                     <Col  className="p-2" md="auto">
                         <BoardWrapper>
-                            Game Board
+                            <GameBoard></GameBoard>
                         </BoardWrapper>
                         <DeckWrapper>
                             UI-element for the deck
