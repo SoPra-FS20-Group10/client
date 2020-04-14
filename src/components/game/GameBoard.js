@@ -9,39 +9,30 @@ import {Line} from "react-chartjs-2";
 import {withRouter} from "react-router-dom";
 import styled from "styled-components";
 import {makeStyles} from "@material-ui/core/styles";
-
-const Tile = styled.div`
-    margin: 2pt;
-    width: 25pt;
-    height: 25pt;
-    
-    background: white;
-    color: black;
-    justify-content:center;
-    align-items: center;
-    display: flex;
-`;
+import Tile from "./Tile";
+import TILE_TYPE from "../shared/Other/TileTypes";
 
 class GameBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             board: [
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                [TILE_TYPE.TW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TW],
+                [TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.TW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.ST, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TW],
+                [TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT],
+                [TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DW, TILE_TYPE.NT],
+                [TILE_TYPE.TW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TW, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.DL, TILE_TYPE.NT, TILE_TYPE.NT, TILE_TYPE.TW],
+
             ]
         }
     }
@@ -58,7 +49,7 @@ class GameBoard extends Component {
                         <Grid key={i} container justify="center" spacing={0}>
                             {row.map((col, j) =>  (
                                 <Grid key={col} item>
-                                    <Tile >{col}</Tile>
+                                    {Tile(col)}
                                 </Grid>
                             ))}
                         </Grid>
