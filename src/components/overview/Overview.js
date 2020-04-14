@@ -80,7 +80,7 @@ class Overview extends React.Component {
             <Container>
 
 
-                <CloseButton onClick={this.logoutUser}/>
+                <CloseButton onClick={this.logoutUser} style={{color: "white"}}/>
                 <ChatWrapper>
                     <h2>This would be the chat</h2>
                 </ChatWrapper>

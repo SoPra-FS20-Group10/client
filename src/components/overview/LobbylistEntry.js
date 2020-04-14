@@ -92,11 +92,6 @@ class LobbylistEntry extends React.Component{
             });
 
 
-            console.log("PlayerId and lobbypassword (123): ");
-            console.log(requestBody);
-            console.log("lobbyID: " + this.state.lobbyId);
-
-
             try{
 
             await api.put("/games/" + this.state.lobbyId, requestBody);

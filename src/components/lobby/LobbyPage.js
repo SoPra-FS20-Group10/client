@@ -67,13 +67,16 @@ class LobbyPage extends React.Component {
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
             lobbyPlayers: null,
-            ownerId: this.props.location.state.ownerId
+            lobbyPlayerNumber: null,
+            ownerId: this.props.location.state.ownerId,
+            maxPlayerCounter: 4
         }
 
         this.leaveLobby=this.leaveLobby.bind(this);
         this.fetchLobbyPlayers=this.fetchLobbyPlayers.bind(this);
         this.startButton=this.startButton.bind(this);
         this.startGame=this.startGame.bind(this);
+        this.countLobbyPlayers=this.countLobbyPlayers.bind(this);
         console.log(this.props);
     }
 
@@ -91,12 +94,23 @@ class LobbyPage extends React.Component {
 
             const response = await api.get("/games/" + this.state.lobbyId + "/players");
             this.setState({lobbyPlayers: response.data})
-
+            this.countLobbyPlayers();
         }
         catch(error){
             alert(error);
         }
+    }
 
+    countLobbyPlayers(){
+
+        let nrPlayers = this.state.lobbyPlayers.length;
+
+        this.setState({
+
+            lobbyPlayerNumber: nrPlayers
+
+        })
+        console.log(this.state);
     }
 
 
@@ -107,7 +121,7 @@ class LobbyPage extends React.Component {
         if (this.state.lobbyPlayers) {
 
             let lobbyPlayers = this.state.lobbyPlayers;
-            console.log(lobbyPlayers);
+
             let listPlayers = lobbyPlayers.map((player) =>
 
                 <PlayerBar playerId={player.id} playerName={player.username}/>
@@ -168,9 +182,19 @@ class LobbyPage extends React.Component {
         }
     }
 
-    startGame(){
+    async startGame(){
 
-        alert("starting game.");
+
+        if (this.state.lobbyPlayerNumber > this.state.maxPlayerCounter){
+            alert("Too many people in lobby");
+        }
+
+        try{
+            alert("starting game.");
+        }catch(error){
+            alert("error");
+        }
+
 
     }
 
