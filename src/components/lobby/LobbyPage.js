@@ -139,23 +139,23 @@ class LobbyPage extends React.Component {
             birthday: null
         });
 
-try {
+        try {
 
-    await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"),);
+            await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"),);
 
 
-    this.props.history.push(
-        {
-            pathname: `/game/overview/`,
-            state: {
-                playerId: this.state.playerId,
-                playerName: this.state.playerName
-            }
-        });
-}
-catch(error){
-    alert(error);
-}
+            this.props.history.push(
+                {
+                    pathname: `/game/overview/`,
+                    state: {
+                        playerId: this.state.playerId,
+                        playerName: this.state.playerName
+                    }
+                });
+        }
+        catch(error){
+            alert(error);
+        }
     }
 
     startButton(){

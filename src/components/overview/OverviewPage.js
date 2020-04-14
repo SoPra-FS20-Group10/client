@@ -15,7 +15,7 @@ import ToggleButton from 'react-bootstrap/ToggleButton'
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Profile from "../profile/ProfilePage";
-import Leaderboard from "../leaderboard/Leaderboard";
+import Leaderboard from "../leaderboard/LeaderboardPage";
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
 

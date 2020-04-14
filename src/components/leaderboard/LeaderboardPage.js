@@ -29,7 +29,7 @@ const LeaderboardWrapper = styled.div`
 
 // TODO: All time, last month, last year....
 // TODO: Make list sortable by enties
-class Leaderboard extends React.Component {
+class LeaderboardPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { // just some example data for the leaderboard
@@ -108,4 +108,4 @@ class Leaderboard extends React.Component {
     }
 }
 
-export default withRouter(Leaderboard);
+export default withRouter(LeaderboardPage);

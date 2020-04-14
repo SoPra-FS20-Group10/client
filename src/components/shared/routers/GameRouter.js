@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
-import Game from "../../overview/OverviewPage";
-import Leaderboard from "../../leaderboard/Leaderboard";
-import Profile from "../../profile/ProfilePage";
-import LobbyRoom from "../../lobby/LobbyPage";
-import Board from "../../game/Board";
+import OverviewPage from "../../overview/OverviewPage";
+import LeaderboardPage from "../../leaderboard/LeaderboardPage";
+import ProfilePage from "../../profile/ProfilePage";
+import LobbyPage from "../../lobby/LobbyPage";
+import GamePage from "../../game/GamePage";
 
 const Container = styled.div`
   display: flex;
@@ -22,30 +22,30 @@ class GameRouter extends React.Component {
         <Route
           exact
           path={`${this.props.base}/overview`}
-          render={() => <Game />}
+          render={() => <OverviewPage />}
         />
 
         <Route
             exact
             path={`${this.props.base}/leaderboard`}
-            render={() => <Leaderboard />}
+            render={() => <LeaderboardPage />}
         />
 
           <Route
               exact
               path={`${this.props.base}/board`}
-              render={() => <Board/>}
+              render={() => <GamePage/>}
           />
         <Route
             exact
             path={`${this.props.base}/profile/:userId`}
-            render={() => <Profile />}
+            render={() => <ProfilePage />}
         />
 
         <Route
             exact
             path={`${this.props.base}/lobby/:lobbyId`}
-            render={() => <LobbyRoom/>}
+            render={() => <LobbyPage/>}
         />
 
         <Route
