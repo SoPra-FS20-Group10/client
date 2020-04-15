@@ -180,7 +180,7 @@ class ProfilePage extends React.Component {
                 {/*Modal for Name-Popup*/}
                 <Modal
                     isOpen={this.state.showModalName}
-                    contentLabel="Inline Styles Modal Example"
+                    contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
                     <CredentialsPopupWrapper>
@@ -207,7 +207,7 @@ class ProfilePage extends React.Component {
                 {/*Modal for Password-Popup*/}
                 <Modal
                     isOpen={this.state.showModalPassword}
-                    contentLabel="Inline Styles Modal Example"
+                    contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
                     <CredentialsPopupWrapper>

@@ -18,10 +18,12 @@ import Leaderboard from "../leaderboard/LeaderboardPage";
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
 import GameBoard from "./GameBoard";
-
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Container from 'react-bootstrap/Container'
+import {DndProvider} from "react-dnd";
+import Backend from "react-dnd-html5-backend"
+
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -34,7 +36,7 @@ const BoardWrapper = styled.div`
     margin: 0pt;
     padding: 1em;
     width: 500pt;
-    height: 500pt;
+    height: 550pt;
     
     background: rgba(77, 77, 77, 0.5);
     
@@ -91,28 +93,29 @@ class GamePage extends React.Component {
         return (
 
             <Container>
-                <Row className="justify-content-md-center">
-                    <Col className="py-2 px-0"  md="auto" >
-                        <SideWrapper>
-                            UI-elements on the left side
-                        </SideWrapper>
-                    </Col>
 
-                    <Col  className="p-2" md="auto">
-                        <BoardWrapper>
-                            <GameBoard></GameBoard>
-                        </BoardWrapper>
-                        <DeckWrapper>
-                            UI-element for the deck
-                        </DeckWrapper>
-                    </Col>
+                    <Row className="justify-content-md-center">
+                        <Col className="py-2 px-0"  md="auto" >
+                            <SideWrapper>
+                                UI-elements on the left side
+                            </SideWrapper>
+                        </Col>
 
-                    <Col  className="py-2 px-0" md="auto">
-                        <SideWrapper>
-                            UI-elements on the right side
-                        </SideWrapper>
-                    </Col>
-                </Row>
+                        <Col  className="p-2" md="auto">
+                            <BoardWrapper>
+                                <DndProvider backend={Backend}>
+                                <GameBoard/>
+                                </DndProvider>
+                            </BoardWrapper>
+
+                        </Col>
+
+                        <Col  className="py-2 px-0" md="auto">
+                            <SideWrapper>
+                                UI-elements on the right side
+                            </SideWrapper>
+                        </Col>
+                    </Row>
 
             </Container>
 

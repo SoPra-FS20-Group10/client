@@ -12,6 +12,7 @@
     "react-chartjs-2": "^2.9.0",
     "react-chat-elements": "^10.8.0",
     "react-dnd": "^10.0.2",
+    "react-dnd-html5-backend": "^10.0.2",
     "react-dom": "^16.12.0",
     "react-modal": "^3.11.2",
     "react-native-vector-icons": "^6.6.0",
@@ -41,6 +42,7 @@
   ],
   "devDependencies": {
     "@material-ui/core": "^4.9.8",
+    "immutability-helper": "^3.0.2",
     "stream-chat": "^1.7.0",
     "stream-chat-react": "^0.11.6"
   }

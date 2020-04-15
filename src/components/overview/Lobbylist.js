@@ -263,7 +263,7 @@ class Lobbylist extends React.Component {
 
                 <Modal
                     isOpen={this.state.showModal}
-                    contentLabel="Inline Styles Modal Example"
+                    contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
 
