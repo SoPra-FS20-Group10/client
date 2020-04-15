@@ -206,7 +206,7 @@ class LobbyPage extends React.Component {
         }
         else{
 
-            alert("error");
+            try{
                 alert("starting game.");
             }catch(error){
                 alert("error");
