@@ -70,6 +70,7 @@ class LobbyPage extends React.Component {
             lobbyPlayerNumber: null,
             ownerId: this.props.location.state.ownerId,
             maxPlayerCounter: 4,
+            minPlayerCounter: 1,
             isLobbyLeader: false
         }
 
@@ -157,16 +158,13 @@ class LobbyPage extends React.Component {
     async leaveLobby(){
 
         const requestBody = JSON.stringify({
-            id: localStorage.getItem("current"),
-            username: null,
-            password: null,
-            birthday: null
+            token: localStorage.getItem("token"),
         });
 
         try {
 
             // Log out user in backend
-            await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"),);
+            await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), requestBody);
 
 
             this.props.history.push(
@@ -196,10 +194,13 @@ class LobbyPage extends React.Component {
     async startGame(){
 
         let allReady = this.allPlayersReady();
-        console.log(allReady);
+
 
         if (this.state.lobbyPlayerNumber > this.state.maxPlayerCounter){
             alert("Too many people in lobby");
+        }
+        if (this.state.lobbyPlayerNumber < this.state.minPlayerCounter){
+            alert("Not enoguh people in Lobby (at least" + this.state.minPlayerCounter + "required)");
         }
         else if (!allReady){
             alert("Not all players are ready!");
