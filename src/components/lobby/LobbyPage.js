@@ -205,10 +205,24 @@ class LobbyPage extends React.Component {
         else if (!allReady){
             alert("Not all players are ready!");
         }
-        else{
 
+        // If all conditions to start a game are met, start the game and tell the backend.
+        else{
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem("token"),
+            });
             try{
-                alert("starting game.");
+
+                // Start game in backend
+                await api.put("/games/" + this.state.lobbyId, requestBody);
+
+                // Redirect to board
+                this.props.history.push(
+                    {
+                        pathname: `/game/board/`,
+                       
+                    });
+
             }catch(error){
                 alert("error");
             }
