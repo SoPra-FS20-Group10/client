@@ -94,7 +94,7 @@ class LobbylistEntry extends React.Component{
 
             try{
 
-            await api.put("/games/" + this.state.lobbyId, requestBody);
+            await api.put("/games/" + this.state.lobbyId +"/players", requestBody);
 
             this.props.history.push(
                 {pathname: `/game/lobby/${this.state.lobbyId}`,

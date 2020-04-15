@@ -45,9 +45,9 @@ class PlayerBar extends React.Component{
         super(props);
 
         this.state = {
-            readyStatus: false,
+            readyStatus: this.props.readyStatus,
             playerId: this.props.playerId,
-            playerName: this.props.playerName
+            playerName: this.props.playerName,
         };
 
         this.setReady=this.setReady.bind(this)
@@ -62,23 +62,42 @@ class PlayerBar extends React.Component{
 
         this.setState({
             playerName:this.props.playerName,
+            readyStatus:this.props.readyStatus
         })
+
+        setInterval( () => {this.setState({
+            playerName:this.props.playerName,
+            readyStatus:this.props.readyStatus
+        })}, 500);
+
     }
 
 
 
-    setReady(){
+    async setReady(){
 
-        this.state.readyStatus ? this.setState({readyStatus:false}) : this.setState({readyStatus:true})
-    }
+        // this.state.readyStatus == "READY" ? this.setState({readyStatus:"NOT_READY"}) : this.setState({readyStatus:"READY"});
+        const requestBody = JSON.stringify({
+            token: localStorage.getItem("token"),
+
+        });
+        try {
+            await api.put("/players/" + localStorage.getItem("current"), requestBody);
+
+        }catch(error){
+
+        }
+
+        }
 
     readyButton(){
 
         let button;
         const ownPlayerId = localStorage.getItem("current");
-
+        console.log(this.state);
+        console.log(ownPlayerId);
         if(this.state.playerId == ownPlayerId){
-            button = this.state.readyStatus ? (<Button variant="success" size="sm" block onClick={this.setReady}>
+            button = this.state.readyStatus ==="READY" ? (<Button variant="success" size="sm" block onClick={this.setReady}>
                 YOU ARE READY
             </Button>) : (<Button variant="danger" size="sm" block onClick={this.setReady}>
                 YOU ARE NOT READY
@@ -86,7 +105,7 @@ class PlayerBar extends React.Component{
         }
         else {
 
-            button = this.state.readyStatus ? (<Button variant="success" size="sm" block onClick={this.setReady} disabled>
+            button = this.state.readyStatus ==="READY" ? (<Button variant="success" size="sm" block onClick={this.setReady} disabled>
                 PLAYER READY
             </Button>) : (<Button variant="danger" size="sm" block onClick={this.setReady} disabled>
                 PLAYER NOT READY

@@ -52,7 +52,7 @@ const Square = (props) => {
             {isActive ?
 
                 <div>
-                    
+
 
                     <PieceWrapper style={{
                         backgroundColor: 'white',
