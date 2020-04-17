@@ -2,6 +2,7 @@ import React from 'react'
 import { useDrop } from 'react-dnd'
 import styled from "styled-components";
 import ItemTypes from "./ItemTypes";
+import OnBoardLetterBox from "./OnBoardLetterBox";
 const style = {
     backgroundColor: "grey",
     fontSize: 7,
@@ -14,7 +15,7 @@ const style = {
     justifyContent:'center',
     alignItems: 'center',
     textAlign: 'center',
-}
+};
 
 const PieceWrapper = styled.div`
     margin: 2pt;
@@ -31,7 +32,9 @@ function showSquare (props) {
 
     if (props.props.piece != null){
         return (
-            props.props.piece.name
+            <OnBoardLetterBox
+                name={(props.props.piece.name)}
+            />
         )
     }
     else{

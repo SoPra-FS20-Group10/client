@@ -13,7 +13,8 @@ const style = {
     height:"27pt",
     textAlign:"center",
     fontsize:"35pt"
-}
+};
+
 const LetterBox = ({ name, isDropped }) => {
     const [{ opacity }, drag] = useDrag({
         item: { name, type:ItemTypes.TILE },
