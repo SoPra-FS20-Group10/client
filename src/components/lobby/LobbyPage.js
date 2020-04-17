@@ -80,6 +80,8 @@ class LobbyPage extends React.Component {
         this.countLobbyPlayers=this.countLobbyPlayers.bind(this);
         this.checkLobbyLeader=this.checkLobbyLeader.bind(this);
         this.allPlayersReady=this.allPlayersReady.bind(this);
+        this.goToBoard=this.goToBoard.bind(this);
+        this.checkStartGame=this.checkStartGame.bind(this);
 
     }
 
@@ -87,13 +89,11 @@ class LobbyPage extends React.Component {
 
     async componentDidMount() {
 
-
-
         try {
             setInterval(async () => {
                 this.fetchLobbyPlayers();
                 this.checkLobbyLeader();
-
+                this.checkStartGame();
             }, 500);
         } catch(e) {
             console.log(e);
@@ -116,29 +116,19 @@ class LobbyPage extends React.Component {
     countLobbyPlayers(){
 
         let nrPlayers = this.state.lobbyPlayers.length;
-
         this.setState({
-
             lobbyPlayerNumber: nrPlayers
-
         })
     }
 
 
     showPlayers(){
 
-
-
         if (this.state.lobbyPlayers) {
-
             let lobbyPlayers = this.state.lobbyPlayers;
-
             let listPlayers = lobbyPlayers.map((player) =>
-
                 <PlayerBar playerId={player.id} playerName={player.username} readyStatus={player.status}/>
-
             );
-
             return (
                 <LobbyContainer>
                     {listPlayers}
@@ -146,13 +136,10 @@ class LobbyPage extends React.Component {
                 </LobbyContainer>
             );
         } else {
-
-
             return (
                 <h1> Waiting For Lobby Fetching</h1>
             );
         }
-
     }
 
     async leaveLobby(){
@@ -160,17 +147,12 @@ class LobbyPage extends React.Component {
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
         });
-
         const headers = {
             'Authorization': null,
-        }
-
+        };
         try {
-
             // Log out user in backend
             await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
-
-
             this.props.history.push(
                 {
                     pathname: `/game/overview/`,
@@ -198,8 +180,6 @@ class LobbyPage extends React.Component {
     async startGame(){
 
         let allReady = this.allPlayersReady();
-
-
         if (this.state.lobbyPlayerNumber > this.state.maxPlayerCounter){
             alert("Too many people in lobby");
         }
@@ -220,20 +200,12 @@ class LobbyPage extends React.Component {
                 // Start game in backend
                 await api.put("/games/" + this.state.lobbyId, requestBody);
 
-                // Redirect to board
-                this.props.history.push(
-                    {
-                        pathname: `/game/board/`,
-                       
-                    });
+               this.goToBoard();
 
             }catch(error){
                 alert("error");
             }
         }
-
-
-
     }
 
     allPlayersReady (){
@@ -248,6 +220,31 @@ class LobbyPage extends React.Component {
         return allReady;
     }
 
+    // Redirect player to the board
+    async goToBoard(){
+        // Redirect to board
+        this.props.history.push(
+            {
+                pathname: `/game/board/`,
+            });
+    }
+
+    // Check if the game had started, if yes --> redirect the player to the board
+
+    async checkStartGame(){
+
+        let response = await api.get("/games");
+        let currentGames = response.data;
+        currentGames.map((game) =>{
+           if(game.id === this.state.lobbyId){
+               if (game.status === "RUNNING"){
+                   this.goToBoard();
+               }
+           }
+        }
+        );
+    }
+
 
     render() {
 
@@ -257,16 +254,11 @@ class LobbyPage extends React.Component {
 
             <Container>
 
-
-
                 <ChatWrapper>
                     <h2>This would be the chat</h2>
                 </ChatWrapper>
 
                 <LobbyWrapper>
-
-
-
 
                     <h2> Lobby Name: {this.state.lobbyName}</h2>
 
@@ -285,17 +277,9 @@ class LobbyPage extends React.Component {
                                 Start Game
                             </Button>}
 
-
-
                     </ButtonContainer2>
 
-
-
                 </LobbyWrapper>
-
-
-
-
 
             </Container>
         );
