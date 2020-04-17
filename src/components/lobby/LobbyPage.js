@@ -161,10 +161,14 @@ class LobbyPage extends React.Component {
             token: localStorage.getItem("token"),
         });
 
+        const headers = {
+            'Authorization': null,
+        }
+
         try {
 
             // Log out user in backend
-            await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), requestBody);
+            await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
 
 
             this.props.history.push(

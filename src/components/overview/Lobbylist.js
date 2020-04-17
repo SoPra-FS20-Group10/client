@@ -150,11 +150,13 @@ class Lobbylist extends React.Component {
 
 
             this.setState({allLobbies: response.data})
+            return response.data;
         }
 
         catch(error){
             alert(error);
         }
+
 
 
     }
