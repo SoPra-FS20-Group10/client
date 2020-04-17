@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDrag } from 'react-dnd'
 import ItemTypes from "./ItemTypes";
+import PIECE from "../shared/Other/Pieces";
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'black',
@@ -17,7 +18,7 @@ const style = {
 
 const LetterBox = ({ name, isDropped }) => {
     const [{ opacity }, drag] = useDrag({
-        item: { name, type:ItemTypes.TILE },
+        item: { name, type:ItemTypes.PIECE },
         collect: (monitor) => ({
             opacity: monitor.isDragging() ? 0.4 : 1,
         }),

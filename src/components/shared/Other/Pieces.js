@@ -28,6 +28,6 @@ var PIECE = {
     X : {text: 'X', score: 8},
     Y : {text: 'Y', score: 4},
     Z : {text: 'Z', score: 10}
-}
+};
 
 export default PIECE;

@@ -44,7 +44,7 @@ function showSquare (props) {
 
 const Square = (props) => {
     const [{ isOver, canDrop}, drop] = useDrop({
-        accept: [ItemTypes.TILE,ItemTypes.TILE,ItemTypes.TILE],
+        accept: [ItemTypes.PIECE],
         drop: props.onDrop,
         collect: (monitor) => ({
             isOver: monitor.isOver(),

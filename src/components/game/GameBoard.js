@@ -68,13 +68,13 @@ class GameBoard extends React.Component {
                 {accepts: [ItemTypes.TILE, NativeTypes.FILE], lastDroppedItem: null},
             ],
             boxes: [
-                {name: 'W'},
-                {name: 'E'},
-                {name: 'S'},
-                {name: 'Q'},
-                {name: 'C'},
-                {name: 'G'},
-                {name: 'F'},
+                { piece: PIECE.W},
+                { piece: PIECE.E},
+                { piece: PIECE.S},
+                { piece: PIECE.Q},
+                { piece: PIECE.C},
+                { piece: PIECE.G},
+                { piece: PIECE.F},
 
             ],
             droppedBoxNames: [],
@@ -149,10 +149,8 @@ class GameBoard extends React.Component {
 
     handleDrop(i,j , item) {
 
-        const {name} = item;
-        this.setState(
-            update(this.state.droppedBoxNames, name ? {$push: [name]} : {$push: []}),
-        );
+
+        console.log(item);
         let newArray = this.state.board;
         let row = newArray[i];
         let letterBox = row[j];
@@ -191,10 +189,10 @@ class GameBoard extends React.Component {
                 <DeckWrapper>
 
                     <div style={{overflow: 'hidden', clear: 'both', margin:"auto"}}>
-                        {this.state.boxes.map(({name}, index) => (
+                        {this.state.boxes.map(({ piece}, index) => (
                             <LetterBox
-                                name={name}
-                                isDropped={this.isDropped(name, index)}
+                                name={piece.text}
+                                isDropped={this.isDropped(piece.text, index)}
                                 key={index}
                             />
                         ))}
