@@ -1,7 +1,7 @@
 import React, {useState, useCallback, Component} from 'react'
 import { NativeTypes } from 'react-dnd-html5-backend'
 import Square from './Square'
-import Tile from './Tile'
+import LetterBox from './LetterBox'
 import ItemTypes from './ItemTypes'
 import update from 'immutability-helper'
 import TILES from "../shared/Other/Tiles";
@@ -114,7 +114,7 @@ class GameBoard extends React.Component {
                 justifyContent:'center',
                 alignItems: 'center',
                 textAlign: 'center'
-            }} lastDroppedItem={null}
+            }}
             >
                 {!props.piece ?
                     // if there is no letter on the tile, the tile itself will be rendered
@@ -142,23 +142,27 @@ class GameBoard extends React.Component {
     }
 
     isDropped(boxName) {
+
+
         return this.state.droppedBoxNames.indexOf(boxName) > -1
     }
 
-    handleDrop(index, item) {
-        const {name} = item
+    handleDrop(i,j , item) {
+
+        const {name} = item;
         this.setState(
             update(this.state.droppedBoxNames, name ? {$push: [name]} : {$push: []}),
-        )
-        this.setState(
-            update(this.state.dustbins, {
-                [index]: {
-                    lastDroppedItem: {
-                        $set: item,
-                    },
-                },
-            }),
-        )
+        );
+        let newArray = this.state.board;
+        let row = newArray[i];
+        let letterBox = row[j];
+        letterBox.piece = item;
+        this.setState({
+            board: newArray,
+        });
+
+        console.log(this.state.board);
+
     }
 
 
@@ -175,7 +179,7 @@ class GameBoard extends React.Component {
                             <Grid key={i} container justify="center" spacing={0}>
                                 {row.map((col, j) =>  (
                                     <Grid key={col} item>
-                                        <Square props={col}/>
+                                        <Square props={col} row={i} column={j} onDrop={(item) => this.handleDrop(i, j, item)}/>
                                     </Grid>
                                 ))}
                             </Grid>
@@ -188,10 +192,9 @@ class GameBoard extends React.Component {
 
                     <div style={{overflow: 'hidden', clear: 'both', margin:"auto"}}>
                         {this.state.boxes.map(({name}, index) => (
-                            <Tile
+                            <LetterBox
                                 name={name}
-
-                                isDropped={this.isDropped(name)}
+                                isDropped={this.isDropped(name, index)}
                                 key={index}
                             />
                         ))}

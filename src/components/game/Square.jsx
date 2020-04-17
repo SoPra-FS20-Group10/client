@@ -27,19 +27,31 @@ const PieceWrapper = styled.div`
     align-items: center;
     display: flex;
 `;
+function showSquare (props) {
+
+    if (props.props.piece != null){
+        return (
+            props.props.piece.name
+        )
+    }
+    else{
+        return (props.props.type.text)
+    }
+}
 
 const Square = (props) => {
-    const [{ isOver, canDrop }, drop] = useDrop({
+    const [{ isOver, canDrop}, drop] = useDrop({
         accept: [ItemTypes.TILE,ItemTypes.TILE,ItemTypes.TILE],
-        drop: () => ({name:"Square"}),
+        drop: props.onDrop,
         collect: (monitor) => ({
             isOver: monitor.isOver(),
             canDrop: monitor.canDrop(),
         }),
     });
 
-    const isActive = isOver && canDrop;
 
+
+    const isActive = isOver && canDrop;
     let backgroundColor = props.props.type.color;
     if (isActive) {
         backgroundColor = props.props.type.color
@@ -72,7 +84,7 @@ const Square = (props) => {
                     </div>
                 : <div>
 
-                    {props.piece ? "P" : props.props.type.text}
+                    {showSquare(props)}
 
                 </div>
 

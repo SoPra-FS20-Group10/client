@@ -14,7 +14,7 @@ const style = {
     textAlign:"center",
     fontsize:"35pt"
 }
-const Tile = ({ name, isDropped }) => {
+const LetterBox = ({ name, isDropped }) => {
     const [{ opacity }, drag] = useDrag({
         item: { name, type:ItemTypes.TILE },
         collect: (monitor) => ({
@@ -27,4 +27,4 @@ const Tile = ({ name, isDropped }) => {
         </div>
     )
 }
-export default Tile
+export default LetterBox
