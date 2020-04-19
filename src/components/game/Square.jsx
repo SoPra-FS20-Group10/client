@@ -30,10 +30,12 @@ const PieceWrapper = styled.div`
 `;
 function showSquare (props) {
 
-    if (props.props.piece != null){
+
+
+    if (props.props.piece != null && props.props.piece != undefined){
         return (
             <OnBoardLetterBox
-                name={(props.props.piece.name)}
+                piece={(props.props.piece)}
             />
         )
     }
@@ -43,6 +45,8 @@ function showSquare (props) {
 }
 
 const Square = (props) => {
+
+
     const [{ isOver, canDrop}, drop] = useDrop({
         accept: [ItemTypes.PIECE],
         drop: props.onDrop,

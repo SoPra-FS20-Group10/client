@@ -141,25 +141,25 @@ class GameBoard extends React.Component {
         );
     }
 
-    isDropped(boxName) {
+    isDropped(piece) {
 
 
-        return this.state.droppedBoxNames.indexOf(boxName) > -1
+        return this.state.droppedBoxNames.indexOf(piece.text) > -1
     }
 
+// Update board state when letter is dropped
     handleDrop(i,j , item) {
 
-
         console.log(item);
+
         let newArray = this.state.board;
         let row = newArray[i];
         let letterBox = row[j];
-        letterBox.piece = item;
+        letterBox.piece = item.piece;
         this.setState({
             board: newArray,
         });
 
-        console.log(this.state.board);
 
     }
 
@@ -191,8 +191,8 @@ class GameBoard extends React.Component {
                     <div style={{overflow: 'hidden', clear: 'both', margin:"auto"}}>
                         {this.state.boxes.map(({ piece}, index) => (
                             <LetterBox
-                                name={piece.text}
-                                isDropped={this.isDropped(piece.text, index)}
+                                piece={piece}
+                                isDropped={this.isDropped(piece, index)}
                                 key={index}
                             />
                         ))}
