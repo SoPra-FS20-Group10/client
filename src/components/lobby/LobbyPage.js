@@ -223,9 +223,13 @@ class LobbyPage extends React.Component {
     // Redirect player to the board
     async goToBoard(){
         // Redirect to board
+
+        localStorage.setItem("currentGame", this.state.lobbyId);
+
         this.props.history.push(
             {
                 pathname: `/game/board/`,
+                gameId: this.state.lobbyId
             });
     }
 

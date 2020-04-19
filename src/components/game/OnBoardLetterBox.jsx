@@ -28,8 +28,6 @@ const Points = styled.div`
 
 const OnBoardLetterBox = (props) => {
 
-    console.log(props);
-
     return (
         <div style={{ ...style }}>
            {props.piece.text}

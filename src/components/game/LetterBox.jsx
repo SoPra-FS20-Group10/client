@@ -38,8 +38,6 @@ const LetterBox = ({piece, isDropped}) => {
         }),
     });
 
-    console.log(piece);
-
     return (
         <div ref={drag} style={{...style, opacity}}>
             {isDropped ? <s>{piece.text}</s> : piece.text}

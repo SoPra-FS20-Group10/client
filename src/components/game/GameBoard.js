@@ -52,12 +52,13 @@ const DeckWrapper = styled.div`
 class GameBoard extends React.Component {
 
     constructor(props) {
+
         super(props);
         this.handleDrop=this.handleDrop.bind(this);
         this.isDropped=this.isDropped.bind(this);
         this.drawTile=this.drawTile.bind(this);
         this.state = {
-
+            gameId: localStorage.getItem("currentGame"),
             dustbins: [
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
@@ -150,8 +151,8 @@ class GameBoard extends React.Component {
 // Update board state when letter is dropped
     handleDrop(i,j , item) {
 
-        console.log(item);
-
+        console.log(localStorage.getItem("current"));
+        console.log(this.state.gameId);
         let newArray = this.state.board;
         let row = newArray[i];
         let letterBox = row[j];
