@@ -24,6 +24,8 @@ import Container from 'react-bootstrap/Container'
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend"
 import ScoreBoard from "./ScoreBoard";
+import Modal from "react-modal";
+import {CloseButton} from "react-bootstrap";
 
 
 // const Container = styled(BaseContainer)`
@@ -48,15 +50,15 @@ const BoardWrapper = styled.div`
 `;
 
 const SideWrapper = styled.div`
-    margin: 0pt;
+    margin: 10pt;
     padding: 1em;
     width: 150pt;
     height: 100%;
     
     background: rgba(77, 77, 77, 0.5);
     
+    
     color: white;
-    display: flex;
     align-items: center;
     justify-content: center;
 `;
@@ -73,11 +75,24 @@ const DeckWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
+const customStyles = {
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)',
+        padding               : "0pt",
+        width                 : "55%"
+    }
+};
 class GamePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+
+            showModal: false,
             // TODO: Replace placeholder
             // playerId: this.props.location.state.playerId,
             playerId: localStorage.getItem("current"),
@@ -86,8 +101,20 @@ class GamePage extends React.Component {
             showLeaderboard: false,
             showProfile: false,
         };
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
 
     }
+
+
+    handleOpenModal () {
+        this.setState({ showModal: true });
+    }
+
+    handleCloseModal () {
+        this.setState({ showModal: false });
+    }
+
 
     render() {
         return (
@@ -112,10 +139,33 @@ class GamePage extends React.Component {
 
                         <Col  className="py-2 px-0" md="auto">
                             <SideWrapper>
-                                <ScoreBoard/>
+                                <Row>
+                                    <Col className="py-2 px-0">
+                                        <ScoreBoard/>
+                                    </Col>
+                                </Row>
+
+                                <Row>
+                                    <Col>
+
+                                        <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
+                                            Swap
+                                        </Button>
+                                    </Col>
+                                </Row>
                             </SideWrapper>
                         </Col>
                     </Row>
+
+                <Modal
+                    isOpen={this.state.showModal}
+                    contentLabel="Inline Styles Modal GameBoard"
+                    style={customStyles}
+                >
+                <h1>Here comes the piece exchanging interface</h1>
+                    <CloseButton onClick={this.handleCloseModal}/>
+                </Modal>
+
 
             </Container>
 

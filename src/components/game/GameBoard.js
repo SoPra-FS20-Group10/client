@@ -10,6 +10,9 @@ import Grid from "@material-ui/core/Grid";
 import styled from "styled-components";
 import {withRouter} from "react-router-dom";
 import Col from "react-bootstrap/Col";
+import {CloseButton} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Modal from "react-modal";
 
 const PieceWrapper = styled.div`
     margin: 2pt;
@@ -47,6 +50,7 @@ const DeckWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `;
+
 
 
 class GameBoard extends React.Component {
