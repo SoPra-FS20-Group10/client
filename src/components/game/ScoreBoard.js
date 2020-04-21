@@ -51,6 +51,7 @@ const Score = styled.label`
     justify-content: center;
 `;
 
+
 const Username = styled.label`
     padding-top: 5pt;
     margin: 0pt;
@@ -67,6 +68,37 @@ const Username = styled.label`
 `;
 
 
+const UsernameHighlighted = styled.label`
+    padding-top: 5pt;
+    margin: 0pt;
+    width: 100%;
+    
+    font-size: 20px;
+    
+    background: rgba(150, 150, 150, 0.9);
+    
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ScoreHighlighted = styled.label`
+    padding-bottom: 5pt;
+    margin: 0pt;
+    width: 100%;
+    
+    font-size: 10px;
+    
+    background: rgba(150, 150, 150, 0.9);
+    
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+// TODO: Sort playerlist by score
 class ScoreBoard extends React.Component {
     constructor(props) {
         super(props);
@@ -75,6 +107,8 @@ class ScoreBoard extends React.Component {
             readyStatus: this.props.readyStatus,
             playerId: this.props.playerId,
             playerName: this.props.playerName,
+            // TODO: Get current player's id from backend
+            currentPlayerId: 1
         };
 
     }
@@ -93,14 +127,14 @@ class ScoreBoard extends React.Component {
 
     async fetchPlayers() {
         // TODO: Remove test-setup
-        let mode = "teing";
+        let mode = "testing";
         if (mode == "testing") {
             this.setState({
                 players: [
-                    {username: "User1", score: 10},
-                    {username: "User2", score: 6},
-                    {username: "User3", score: 4},
-                    {username: "User4", score: 2}
+                    {username: "User1", score: 10, id: 1},
+                    {username: "User2", score: 6, id: 2},
+                    {username: "User3", score: 4, id: 3},
+                    {username: "User4", score: 2, id: 4}
                 ]
             })
         } else {
@@ -125,18 +159,30 @@ class ScoreBoard extends React.Component {
                     <div>
                         {this.state.players.map(player => {
                             return (
-                                <div key={player.id}>
-                                    <Row>
-                                        <Username> {player.username}</Username>
-                                    </Row>
-                                    <Row className='text-center'>
-                                        <Score>Points: {player.score}</Score>
-                                    </Row>
-
-                                </div>
 
 
-                            );
+                                this.state.currentPlayerId == player.id ? (
+                                    <div key={player.id}>
+                                        <Row>
+                                            <UsernameHighlighted> {player.username}</UsernameHighlighted>
+                                        </Row>
+                                        <Row className='text-center'>
+                                            <ScoreHighlighted>Points: {player.score}</ScoreHighlighted>
+                                        </Row>
+                                    </div>
+                                ) : (
+                                    <div key={player.id}>
+                                        <Row>
+                                            <Username> {player.username}</Username>
+                                        </Row>
+                                        <Row className='text-center'>
+                                            <Score>Points: {player.score}</Score>
+                                        </Row>
+                                    </div>
+                                )
+
+                            )
+                                ;
                         })}</div>
                 )}
             </Container>
