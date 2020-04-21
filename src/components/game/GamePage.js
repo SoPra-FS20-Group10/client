@@ -23,6 +23,7 @@ import Row from 'react-bootstrap/Row'
 import Container from 'react-bootstrap/Container'
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend"
+import ScoreBoard from "./ScoreBoard";
 
 
 // const Container = styled(BaseContainer)`
@@ -45,7 +46,6 @@ const BoardWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
 
 const SideWrapper = styled.div`
     margin: 0pt;
@@ -112,7 +112,7 @@ class GamePage extends React.Component {
 
                         <Col  className="py-2 px-0" md="auto">
                             <SideWrapper>
-                                UI-elements on the right side
+                                <ScoreBoard/>
                             </SideWrapper>
                         </Col>
                     </Row>
