@@ -1,3 +1,5 @@
+/*
+
 import React, {useState, useCallback, Component} from 'react'
 import { NativeTypes } from 'react-dnd-html5-backend'
 import Square from './Square'
@@ -212,3 +214,4 @@ class GameBoard extends React.Component {
 
 
 export default withRouter(GameBoard);
+*/

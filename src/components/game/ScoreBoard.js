@@ -104,11 +104,8 @@ class ScoreBoard extends React.Component {
         super(props);
         this.state = {
             players: null,
-            readyStatus: this.props.readyStatus,
-            playerId: this.props.playerId,
-            playerName: this.props.playerName,
-            // TODO: Get current player's id from backend
-            currentPlayerId: 1
+
+            gameId: this.props.gameId,
         };
 
     }
@@ -126,25 +123,17 @@ class ScoreBoard extends React.Component {
     }
 
     async fetchPlayers() {
-        // TODO: Remove test-setup
-        let mode = "testing";
-        if (mode == "testing") {
+        try {
+            let response = await api.get("/games/" + this.state.gameId + "/players/");
+
+            let players = response.data;
+
             this.setState({
-                players: [
-                    {username: "User1", score: 10, id: 1},
-                    {username: "User2", score: 6, id: 2},
-                    {username: "User3", score: 4, id: 3},
-                    {username: "User4", score: 2, id: 4}
-                ]
+                players: players,
             })
-        } else {
-            try {
-                const response = await api.get("/games/" + localStorage.getItem("currentGame") + "/players");
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                this.setState({players: response.data})
-            } catch (error) {
-                alert(error);
-            }
+
+        }catch(error){
+            console.log(error);
         }
     }
 
