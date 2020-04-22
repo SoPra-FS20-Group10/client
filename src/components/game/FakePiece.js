@@ -9,6 +9,7 @@ const style = {
     padding: "3pt",
     marginRight: '1.5rem',
     marginBottom: '1.5rem',
+    cursor: 'move',
     float: 'left',
     width: "27pt",
     height:"27pt",
@@ -29,19 +30,14 @@ const Points = styled.div`
     float: right;
 `;
 
-const LetterBox = ({piece, isDropped}) => {
-    const [{opacity}, drag] = useDrag({
-        item: {piece, type: ItemTypes.PIECE},
-        collect: (monitor) => ({
-            opacity: monitor.isDragging() ? 0.4 : 1,
-        }),
-    });
+const FakePiece = ({piece}) => {
+
 
     return (
-        <div ref={drag} style={{...style, opacity}}>
-            {isDropped ? <s>{piece.text}</s> : piece.text}
+        <div style={{...style}}>
+           {piece.text}
             <Points>{piece.score}</Points>
         </div>
     )
 };
-export default LetterBox
+export default FakePiece
