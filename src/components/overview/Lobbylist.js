@@ -70,6 +70,13 @@ const TopBar = styled.div`
 
 `;
 
+const ListContainer = styled.div`
+
+  overflow-y: scroll;
+  max-height:310pt;
+
+`;
+
 const InputField = styled.input`
   &::placeholder {
     color: grey;
@@ -251,9 +258,9 @@ class Lobbylist extends React.Component {
 
 
                <h2> LOBBY LIST </h2>
-
+<ListContainer>
                 {this.showLobbies()}
-
+</ListContainer>
                 <view style={{margin: 40}}/>
 
                 <ButtonContainer2>
