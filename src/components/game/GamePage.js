@@ -56,17 +56,23 @@ const BoardWrapper = styled.div`
 `;
 
 const SideWrapper = styled.div`
-    margin: 10pt;
+    
     padding: 1em;
     width: 150pt;
     height: 100%;
     
     background: rgba(77, 77, 77, 0.5);
-    
+    position:relative;
     
     color: white;
     align-items: center;
     justify-content: center;
+`;
+
+const PlayerButtons = styled.div`
+    
+    position: absolute;
+    bottom: -470pt;
 `;
 
 const DeckWrapper = styled.div`
@@ -304,7 +310,9 @@ class GamePage extends React.Component {
                     <Row className="justify-content-md-center">
                         <Col className="py-2 px-0"  md="auto" >
                             <SideWrapper>
-                                UI-elements on the left side
+                                <div>Stones left: {10}</div>
+
+                                <div>Played Words</div>
                             </SideWrapper>
                         </Col>
 
@@ -356,13 +364,14 @@ class GamePage extends React.Component {
 
                                 <Row>
                                     <Col>
-
+                                    <PlayerButtons>
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
                                             Swap
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.getBoard}>
                                             Test Button to get Board
                                         </Button>
+                                    </PlayerButtons>
                                     </Col>
                                 </Row>
                             </SideWrapper>
