@@ -32,7 +32,8 @@ import LetterBox from "./LetterBox";
 import ItemTypes from "./ItemTypes";
 import PIECE from "../shared/Other/Pieces";
 import TILES from "../shared/Other/Tiles";
-
+import Form from "react-bootstrap/Form";
+import FakePiece from "./FakePiece";
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -113,15 +114,17 @@ const TileWrapper = styled.div`
 
 
 const customStyles = {
-    content : {
-        top                   : '50%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)',
-        padding               : "0pt",
-        width                 : "55%"
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: "0pt",
+        width: "55%",
+        color: 'white',
+        background: 'rgba(77, 77, 77, 0.5)'
     }
 };
 
@@ -151,42 +154,222 @@ class GamePage extends React.Component {
                 {accepts: [ItemTypes.TILE, NativeTypes.FILE], lastDroppedItem: null},
             ],
             boxes: [
-                { piece: PIECE.W},
-                { piece: PIECE.E},
-                { piece: PIECE.S},
-                { piece: PIECE.Q},
-                { piece: PIECE.C},
-                { piece: PIECE.G},
-                { piece: PIECE.F},
+                {piece: PIECE.W},
+                {piece: PIECE.E},
+                {piece: PIECE.S},
+                {piece: PIECE.Q},
+                {piece: PIECE.C},
+                {piece: PIECE.G},
+                {piece: PIECE.F},
 
             ],
             droppedBoxNames: [],
             board: [
-                [{piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.ST}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}],
-                [{piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
+                [{piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.TL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DW
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DW
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.TL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.ST}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.TL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DL}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DW
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DW
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.TL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.TL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.DW}, {piece: null, type: TILES.NT}],
+                [{piece: null, type: TILES.TW}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.DL}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}, {
+                    piece: null,
+                    type: TILES.NT
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {
+                    piece: null,
+                    type: TILES.DL
+                }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
             ],
 
         };
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
-        this.handleDrop=this.handleDrop.bind(this);
-        this.isDropped=this.isDropped.bind(this);
-        this.drawTile=this.drawTile.bind(this);
-        this.getBoard=this.getBoard.bind(this);
-        this.getPlayers=this.getPlayers.bind(this);
+        this.handleDrop = this.handleDrop.bind(this);
+        this.isDropped = this.isDropped.bind(this);
+        this.drawTile = this.drawTile.bind(this);
+        this.getBoard = this.getBoard.bind(this);
+        this.getPlayers = this.getPlayers.bind(this);
 
     }
 
@@ -196,19 +379,20 @@ class GamePage extends React.Component {
             setInterval(async () => {
                 this.getPlayers();
             }, 500);
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
 
 
-    handleOpenModal () {
-        this.setState({ showModal: true });
+    handleOpenModal() {
+        this.setState({showModal: true});
     }
 
-    handleCloseModal () {
-        this.setState({ showModal: false });
+    handleCloseModal() {
+        this.setState({showModal: false});
     }
+
     drawTile(props) {
 
         return (
@@ -221,7 +405,7 @@ class GamePage extends React.Component {
                 height: '27pt',
                 color: 'white',
                 display: 'flex',
-                justifyContent:'center',
+                justifyContent: 'center',
                 alignItems: 'center',
                 textAlign: 'center'
             }}
@@ -238,7 +422,7 @@ class GamePage extends React.Component {
                         height: '20pt',
                         color: 'black',
                         display: 'flex',
-                        justifyContent:'center',
+                        justifyContent: 'center',
                         alignItems: 'center',
                         textAlign: 'center'
                     }}
@@ -258,7 +442,7 @@ class GamePage extends React.Component {
     }
 
 // Update board state when letter is dropped
-    handleDrop(i,j , item) {
+    handleDrop(i, j, item) {
 
         console.log(localStorage.getItem("current"));
         console.log(this.state.gameId);
@@ -273,7 +457,7 @@ class GamePage extends React.Component {
 
     }
 
-    async getPlayers(){
+    async getPlayers() {
         try {
             let response = await api.get("/games/" + this.state.gameId + "/players/");
 
@@ -283,87 +467,88 @@ class GamePage extends React.Component {
                 players: players,
             })
 
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
 
 
-        }
+    }
 
     async getBoard() {
 
-                let response = api.get("/games/" + this.state.gameId);
-                console.log(this.state.gameId);
-                console.log(response);
+        let response = api.get("/games/" + this.state.gameId);
+        console.log(this.state.gameId);
+        console.log(response);
 
-        let response2 = api.get("/games/" + this.state.gameId +"/players/" + localStorage.getItem("current"));
+        let response2 = api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current"));
         console.log(response2);
-            }
+    }
 
     render() {
 
-        const { board } = this.state;
+        const {board} = this.state;
 
 
         return (
             <Container>
-                    <Row className="justify-content-md-center">
-                        <Col className="py-2 px-0"  md="auto" >
-                            <SideWrapper>
-                                <div>Stones left: {10}</div>
+                <Row className="justify-content-md-center">
+                    <Col className="py-2 px-0" md="auto">
+                        <SideWrapper>
+                            <div>Stones left: {10}</div>
 
-                                <div>Played Words</div>
-                            </SideWrapper>
-                        </Col>
+                            <div>Played Words</div>
+                        </SideWrapper>
+                    </Col>
 
-                        <Col  className="p-2" md="auto">
-                            <BoardWrapper>
-                                <DndProvider backend={Backend}>
-                                    <div>
-                                        <Grid container className="flex-grow-1" spacing={0}>
+                    <Col className="p-2" md="auto">
+                        <BoardWrapper>
+                            <DndProvider backend={Backend}>
+                                <div>
+                                    <Grid container className="flex-grow-1" spacing={0}>
 
-                                            {board.map((row, i) => (
-                                                <Grid item xs={12}>
-                                                    <Grid key={i} container justify="center" spacing={0}>
-                                                        {row.map((col, j) =>  (
-                                                            <Grid key={col} item>
-                                                                <Square props={col} row={i} column={j} onDrop={(item) => this.handleDrop(i, j, item)}/>
-                                                            </Grid>
-                                                        ))}
-                                                    </Grid>
+                                        {board.map((row, i) => (
+                                            <Grid item xs={12}>
+                                                <Grid key={i} container justify="center" spacing={0}>
+                                                    {row.map((col, j) => (
+                                                        <Grid key={col} item>
+                                                            <Square props={col} row={i} column={j}
+                                                                    onDrop={(item) => this.handleDrop(i, j, item)}/>
+                                                        </Grid>
+                                                    ))}
                                                 </Grid>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+
+
+                                    <DeckWrapper>
+
+                                        <div style={{overflow: 'hidden', clear: 'both', margin: "auto"}}>
+                                            {this.state.boxes.map(({piece}, index) => (
+                                                <LetterBox
+                                                    piece={piece}
+                                                    isDropped={this.isDropped(piece, index)}
+                                                    key={index}
+                                                />
                                             ))}
-                                        </Grid>
+                                        </div>
+                                    </DeckWrapper>
+                                </div>
+                            </DndProvider>
+                        </BoardWrapper>
 
+                    </Col>
 
-                                        <DeckWrapper>
+                    <Col className="py-2 px-0" md="auto">
+                        <SideWrapper>
+                            <Row>
+                                <Col className="py-2 px-0">
+                                    <ScoreBoard gameId={this.state.gameId}/>
+                                </Col>
+                            </Row>
 
-                                            <div style={{overflow: 'hidden', clear: 'both', margin:"auto"}}>
-                                                {this.state.boxes.map(({ piece}, index) => (
-                                                    <LetterBox
-                                                        piece={piece}
-                                                        isDropped={this.isDropped(piece, index)}
-                                                        key={index}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </DeckWrapper>
-                                    </div>
-                                </DndProvider>
-                            </BoardWrapper>
-
-                        </Col>
-
-                        <Col  className="py-2 px-0" md="auto">
-                            <SideWrapper>
-                                <Row>
-                                    <Col className="py-2 px-0">
-                                        <ScoreBoard gameId={this.state.gameId} />
-                                    </Col>
-                                </Row>
-
-                                <Row>
-                                    <Col>
+                            <Row>
+                                <Col>
                                     <PlayerButtons>
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
                                             Swap
@@ -372,18 +557,35 @@ class GamePage extends React.Component {
                                             Test Button to get Board
                                         </Button>
                                     </PlayerButtons>
-                                    </Col>
-                                </Row>
-                            </SideWrapper>
-                        </Col>
-                    </Row>
+                                </Col>
+                            </Row>
+                        </SideWrapper>
+                    </Col>
+                </Row>
 
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
-                <h1>Here comes the piece exchanging interface</h1>
+
+
+                    <Form>
+                        {this.state.boxes.map(({piece}, index) => (
+                            <Form.Group>
+                                <FakePiece
+                                    piece={piece}
+                                    key={index}
+                                />
+                                <Form.Check/>
+                            </Form.Group>
+                        ))}
+
+                    </Form>
+
+
+
+
                     <CloseButton onClick={this.handleCloseModal}/>
                 </Modal>
             </Container>
