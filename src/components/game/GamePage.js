@@ -57,6 +57,20 @@ const BoardWrapper = styled.div`
     justify-content: center;
 `;
 
+const FormGroup = styled.div`
+    margin: 0pt;
+    padding: 1em;
+    width: 500pt;
+    height: 550pt;
+    
+    background: rgba(77, 77, 77, 0.5);
+    
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
 const SideWrapper = styled.div`
     
     padding: 1em;
@@ -122,8 +136,10 @@ const customStyles = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        padding: "0pt",
-        width: "55%",
+        padding: "10pt",
+        overflow: "none",
+        height: "60pt",
+
         color: 'white',
         background: 'rgba(77, 77, 77, 0.5)'
     }
@@ -567,19 +583,39 @@ class GamePage extends React.Component {
                     contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
+
                     <Form>
                         {this.state.boxes.map(({piece}, index) => (
-                            <Form.Group>
+                            <Form.Group style={{
+                                float: "left"
+                            }
+
+                            }>
                                 <FakePiece
                                     piece={piece}
                                     key={index}
                                 />
-                                <Form.Check/>
+                                <Form.Check
+                                style={{
+
+                                    position: "relative",
+                                    left: "-21pt",
+                                    top: "28pt"
+
+                                }}/>
                             </Form.Group>
                         ))}
 
                     </Form>
-                    <CloseButton onClick={this.handleCloseModal}/>
+
+                        <Button variant="success" size="sm"  onClick={this.handleCloseModal}>
+                            Exchange
+                        </Button>
+                    <view style={{margin: 140}}/>
+                        <Button variant="danger" size="sm"  onClick={this.handleCloseModal}>
+                            Cancel
+                        </Button>
+
                 </Modal>
             </Container>
         );
