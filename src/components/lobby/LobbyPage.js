@@ -196,14 +196,15 @@ class LobbyPage extends React.Component {
                 token: localStorage.getItem("token"),
             });
             try{
-
+                console.log(this.state.lobbyId);
                 // Start game in backend
                 await api.put("/games/" + this.state.lobbyId, requestBody);
 
                this.goToBoard();
 
             }catch(error){
-                alert("error");
+                console.log(error);
+                alert(error);
             }
         }
     }

@@ -387,6 +387,7 @@ class GamePage extends React.Component {
         this.drawTile = this.drawTile.bind(this);
         this.getBoard = this.getBoard.bind(this);
         this.getPlayers = this.getPlayers.bind(this);
+        this.getPlayerStones = this.getPlayerStones.bind(this);
 
     }
 
@@ -395,6 +396,7 @@ class GamePage extends React.Component {
         try {
             setInterval(async () => {
                 this.getPlayers();
+                this.getPlayerStones()
             }, 5000);
         } catch (e) {
             console.log(e);
@@ -409,6 +411,29 @@ class GamePage extends React.Component {
     handleCloseModal() {
         this.setState({showModal: false});
     }
+
+    async getPlayerStones(){
+
+        try{
+            let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
+            console.log(response);
+            let playerStonesList = response.data;
+            let playerStonesBag = [];
+            playerStonesList.map((stone, index) => {
+                playerStonesBag[index] = {piece: {text:stone.symbol, id:stone.id, score:stone.value}}
+
+            });
+            console.log(playerStonesBag);
+
+            this.setState({
+                boxes: playerStonesBag,
+            })
+        }catch(error){
+            console.log(error);
+        }
+
+    }
+
 
     drawTile(props) {
 
@@ -568,7 +593,7 @@ class GamePage extends React.Component {
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
                                             Swap
                                         </Button>
-                                        <Button variant="dark" size="sm" block onClick={this.getBoard}>
+                                        <Button variant="dark" size="sm" block onClick={this.getPlayerStones}>
                                             Test Button to get Board
                                         </Button>
                                     </PlayerButtons>
