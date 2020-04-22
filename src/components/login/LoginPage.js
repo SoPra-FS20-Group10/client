@@ -204,6 +204,23 @@ class LoginPage extends React.Component {
                                     type="email" placeholder="Enter password"/>
                             </Form.Group>
 
+                            <div>
+                                <Button variant="primary" type="submit" size="lg"
+                                        onClick={() => {
+                                            this.login();
+                                        }}
+                                >Login
+                                </Button>{' '}
+
+                                <Button variant="primary" type="submit" size="lg"
+                                        onClick={() => {
+                                            this.props.history.push(
+                                                {pathname: `/signUp`}
+                                            );
+                                        }}
+                                >Register</Button>
+                            </div>
+
                             <Form.Label
                                 onClick={() => {
                                     this.recoverPassword();
@@ -211,20 +228,6 @@ class LoginPage extends React.Component {
                             >Forgot your password?
                             </Form.Label>{' '}
 
-                            <Button variant="primary" type="submit" size="lg"
-                                    onClick={() => {
-                                        this.login();
-                                    }}
-                            >Login
-                            </Button>{' '}
-
-                            <Button variant="primary" type="submit" size="lg"
-                                    onClick={() => {
-                                        this.props.history.push(
-                                            {pathname: `/signUp`}
-                                        );
-                                    }}
-                            >Register</Button>
                         </Form>
                     </Col>
                 </Row>

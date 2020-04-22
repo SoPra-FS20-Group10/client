@@ -118,9 +118,7 @@ class GamePage extends React.Component {
 
     render() {
         return (
-
             <Container>
-
                     <Row className="justify-content-md-center">
                         <Col className="py-2 px-0"  md="auto" >
                             <SideWrapper>
@@ -165,10 +163,7 @@ class GamePage extends React.Component {
                 <h1>Here comes the piece exchanging interface</h1>
                     <CloseButton onClick={this.handleCloseModal}/>
                 </Modal>
-
-
             </Container>
-
         );
     }
 }

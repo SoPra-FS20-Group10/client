@@ -66,7 +66,6 @@ class SignupPage extends React.Component {
         super();
         this.state = {
             username: null,
-            name: null,
             password: null
         };
     }
@@ -79,7 +78,6 @@ class SignupPage extends React.Component {
         try {
             const requestBody = JSON.stringify({
                 username: this.state.username,
-                name: this.state.name,
                 password: this.state.password
             });
 
@@ -117,14 +115,6 @@ class SignupPage extends React.Component {
                             }}
                         />
 
-                        <Label>Name</Label>
-                        <InputField
-                            placeholder="Enter here..."
-                            onChange={e => {
-                                this.handleInputChange("name", e.target.value);
-                            }}
-                        />
-
                         <Label>Password</Label>
                         <InputField
                             placeholder="Enter here..."
@@ -134,7 +124,7 @@ class SignupPage extends React.Component {
                         />
                         <ButtonContainer>
                             <Button
-                                disabled={!this.state.username || !this.state.name || !this.state.password}
+                                disabled={!this.state.username || !this.state.password}
                                 width="50%"
                                 onClick={() => {
                                     this.signup();
