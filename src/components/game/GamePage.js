@@ -496,7 +496,7 @@ class GamePage extends React.Component {
             board: newArray,
         });
 
-
+        console.log(this.state.board);
     }
 
     async getPlayers() {
@@ -524,12 +524,23 @@ class GamePage extends React.Component {
 
         let response2 = api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current"));
         console.log(response2);
+
+        //todo: Convert 1d board to 2d board
+
+        let boardArray = this.state.board;
+
+        response2.map((tile, index) => {
+
+            let column = index % 15;
+            let row = Math.floor(index/15);
+            boardArray[row][column] = tile;
+        })
+
     }
 
     render() {
 
         const {board} = this.state;
-
 
         return (
             <Container>
