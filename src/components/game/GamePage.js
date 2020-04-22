@@ -280,6 +280,8 @@ class GamePage extends React.Component {
         }catch(error){
             console.log(error);
         }
+
+
         }
 
     async getBoard() {
@@ -348,7 +350,7 @@ class GamePage extends React.Component {
                             <SideWrapper>
                                 <Row>
                                     <Col className="py-2 px-0">
-                                        <ScoreBoard/>
+                                        <ScoreBoard gameId={this.state.gameId} />
                                     </Col>
                                 </Row>
 
