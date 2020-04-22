@@ -124,6 +124,8 @@ class GamePage extends React.Component {
         super(props);
         this.state = {
 
+
+            players: null,
             showModal: false,
             // TODO: Replace placeholder
             // playerId: this.props.location.state.playerId,
@@ -177,7 +179,20 @@ class GamePage extends React.Component {
         this.handleDrop=this.handleDrop.bind(this);
         this.isDropped=this.isDropped.bind(this);
         this.drawTile=this.drawTile.bind(this);
+        this.getBoard=this.getBoard.bind(this);
+        this.getPlayers=this.getPlayers.bind(this);
 
+    }
+
+
+    componentDidMount() {
+        try {
+            setInterval(async () => {
+                this.getPlayers();
+            }, 500);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
 
@@ -252,6 +267,31 @@ class GamePage extends React.Component {
 
     }
 
+    async getPlayers(){
+        try {
+            let response = await api.get("/games/" + this.state.gameId + "/players/");
+
+            let players = response.data;
+
+            this.setState({
+                players: players,
+            })
+
+        }catch(error){
+            console.log(error);
+        }
+        }
+
+    async getBoard() {
+
+                let response = api.get("/games/" + this.state.gameId);
+                console.log(this.state.gameId);
+                console.log(response);
+
+        let response2 = api.get("/games/" + this.state.gameId +"/players/" + localStorage.getItem("current"));
+        console.log(response2);
+            }
+
     render() {
 
         const { board } = this.state;
@@ -317,6 +357,9 @@ class GamePage extends React.Component {
 
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
                                             Swap
+                                        </Button>
+                                        <Button variant="dark" size="sm" block onClick={this.getBoard}>
+                                            Test Button to get Board
                                         </Button>
                                     </Col>
                                 </Row>
