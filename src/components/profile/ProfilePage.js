@@ -9,15 +9,27 @@ import Chart from "./Chart";
 import NavigationBar from "../../views/NavigationBar";
 import {CloseButton} from "react-bootstrap";
 import Modal from "react-modal";
+import {api} from "../../helpers/api";
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 
-const StatsWrapper = styled.div`
-    margin-top: 5%;
+const NameWrapper = styled.div`
+    margin-top: 2%;
+    margin-bottom: 1em;
     margin-left: 5%;
-    padding: 5%;
-    width: 90%;
-    height: 100pt; 
+    padding: 2%;
     background: grey;
     float:left;
+    text-align:left;
+`;
+
+const StatsWrapper = styled.div`
+    margin-left: 5%;
+    padding: 2%;
+    width: 90%;
+    background: grey;
+    float:left;
+    text-align:left;
 `;
 
 const GraphWrapper = styled.div`
@@ -47,10 +59,15 @@ const Container = styled(BaseContainer)`
     width:100%;
     margin:auto;
 `;
+//
+// const ButtonContainer = styled.div`
+//     width: 33.3%;
+// `;
 
 const ButtonContainer = styled.div`
-    width: 33.3%;
+    padding-top: 10pt;
 `;
+
 
 const ButtonContainer3 = styled.div`
     margin-top: 2%;
@@ -97,6 +114,18 @@ const InputFieldWrapper = styled.div`
 
 `;
 
+
+const LobbyCreationWrapper = styled.div`
+    background-color: white;
+`;
+
+const MyInputLabel = styled.div`
+
+    margin-top: 10pt;
+    margin-bottom: 10pt;
+    text-align: center;
+`;
+
 const customStyles = {
     content: {
         top: '50%',
@@ -116,15 +145,71 @@ class ProfilePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { // some example data for the profile page
-            playerId: this.props.location.state.playerId,
+            // playerId: this.props.location.state.playerId,
+            userId: Number(localStorage.getItem("current")),
+            userName: localStorage.getItem("name"),
+
+            overallScore: null,
+            playedGames: null,
+            playtime: null,
+            winPercentage: null,
+            wonGames: null,
+
+
             // example data for the stat overview
-            stats: {id: 1, name: 'HOTCHILIEATER', wins: 1000, winPercentage: '59%', timePlayed: '370h'}
+            stats: {id: 1, name: 'HOTCHILIEATER', wins: 1000, winPercentage: '59%', timePlayed: '370h'},
+
+            tempPwA: null,
+            tempPwB: null,
+            tempUsername: null,
 
         }
+        this.fetchUser();
         this.handleOpenModalName = this.handleOpenModalName.bind(this);
         this.handleCloseModalName = this.handleCloseModalName.bind(this);
         this.handleOpenModalPassword = this.handleOpenModalPassword.bind(this);
         this.handleCloseModalPassword = this.handleCloseModalPassword.bind(this);
+
+        this.changePassword = this.changePassword.bind(this);
+        this.changeName = this.changeName.bind(this);
+
+    }
+
+    async componentDidMount() {
+
+        try {
+            setInterval(async () => {
+                this.fetchUser();
+            }, 10000);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+    async fetchUser(){
+        try {
+
+            const response = await api.get("/users/" + this.state.userId);
+            console.log(response)
+
+            this.setState({userName: response.data.username})
+            this.setState({overallScore: response.data.overallScore})
+            this.setState({playedGames: response.data.playedGames})
+            this.setState({playtime: response.data.playtime})
+            this.setState({winPercentage: response.data.winPercentage})
+            this.setState({wonGames: response.data.wonGames})
+
+            console.log(this)
+
+            // this.countLobbyPlayers();
+        }
+        catch(error){
+            alert(error);
+        }
+    }
+
+
+    handleInputChange(key, value) {
+        this.setState({[key]: value});
     }
 
     handleOpenModalName() {
@@ -150,20 +235,46 @@ class ProfilePage extends React.Component {
                 <div className="bg-image"></div>
                 <NavigationBar  playerId={this.state.playerId}/>
 
+                {/*Username*/}
+                <NameWrapper>{this.state.userName}'s Profile</NameWrapper>
+
                 {/*TODO: Implement stats overview*/}
                 <StatsWrapper>
-                    <h1> Here are some stats</h1>
+                    <Row>
+                        <Col>Overall Score</Col>
+                        <Col>{this.state.overallScore} </Col>
+                    </Row>
+
+                    <Row>
+                        <Col># Played Games</Col>
+                        <Col>{this.state.playedGames} </Col>
+                    </Row>
+
+                    <Row>
+                        <Col>Playtime</Col>
+                        <Col>{this.state.playtime} </Col>
+                    </Row>
+
+                    <Row>
+                        <Col>Win-%</Col>
+                        <Col>{this.state.winPercentage} </Col>
+                    </Row>
+
+                    <Row>
+                        <Col># Won Games</Col>
+                        <Col>{this.state.wonGames} </Col>
+                    </Row>
                 </StatsWrapper>
 
-                {/*TODO: Refine Chart view*/}
-                <GraphWrapper>
-                    <Chart></Chart>
-                </GraphWrapper>
+                {/*/!*TODO: Refine Chart view*!/*/}
+                {/*<GraphWrapper>*/}
+                {/*    <Chart></Chart>*/}
+                {/*</GraphWrapper>*/}
 
-                {/*TODO: Implement match-history view*/}
-                <MatchHistoryWrapper>
-                    <h1> Here is the match history</h1>
-                </MatchHistoryWrapper>
+                {/*/!*TODO: Implement match-history view*!/*/}
+                {/*<MatchHistoryWrapper>*/}
+                {/*    <h1> Here is the match history</h1>*/}
+                {/*</MatchHistoryWrapper>*/}
 
 
                 {/*Buttons for editing credentials*/}
@@ -198,7 +309,9 @@ class ProfilePage extends React.Component {
                         </InputFieldWrapper>
                     </CredentialsPopupWrapper>
                     <ButtonContainer>
-                        <Button variant="dark" size="sm" block onClick={this.changeName()}>
+                        <Button
+                            disabled={!this.state.tempUsername}
+                            variant="dark" size="sm" block onClick={this.changeName}>
                             Save Changes
                         </Button>
                     </ButtonContainer>
@@ -219,34 +332,66 @@ class ProfilePage extends React.Component {
                             <InputField
                                 placeholder="New Password"
                                 onChange={e => {
-                                    this.handleInputChange('tempUsername', e.target.value);
+                                    this.handleInputChange('tempPwA', e.target.value);
                                 }}/>
                         </InputFieldWrapper>
                         <InputFieldWrapper>
                             <InputField
                                 placeholder="Repeat Password"
                                 onChange={e => {
-                                    this.handleInputChange('tempUsername', e.target.value);
+                                    this.handleInputChange('tempPwB', e.target.value);
                                 }}/>
                         </InputFieldWrapper>
                     </CredentialsPopupWrapper>
                     <ButtonContainer>
-                        <Button variant="dark" size="sm" block onClick={this.changePassword()}>
+                        <Button
+                            disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null}
+                            variant="dark" size="sm" block onClick={this.changePassword}>
                             Save Changes
                         </Button>
                     </ButtonContainer>
+
                 </Modal>
 
             </Container>
         );
     }
 
-    changeName() {
+    async changeName() {
+        const requestBody = JSON.stringify({
+            id: Number(localStorage.getItem("current")),
+            username: this.state.tempUsername,
+            password: null,
+            birthday: null
+        });
 
+        try {
+            await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
+            this.fetchUser();
+            this.handleCloseModalName();
+        }catch(error){
+            alert(error);
+        }
     }
 
-    changePassword() {
 
+
+
+    async changePassword() {
+        const requestBody = JSON.stringify({
+            id: Number(localStorage.getItem("current")),
+            username: null,
+            password: this.state.tempPwA,
+            birthday: null
+        });
+
+        try {
+            await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
+            this.fetchUser();
+            this.handleCloseModalPassword();
+        }catch(error){
+            alert(error);
+        }
     }
 }
 
