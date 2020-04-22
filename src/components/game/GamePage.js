@@ -32,6 +32,8 @@ import LetterBox from "./LetterBox";
 import ItemTypes from "./ItemTypes";
 import PIECE from "../shared/Other/Pieces";
 import TILES from "../shared/Other/Tiles";
+import FakePiece from "./FakePiece";
+import Form from "react-bootstrap/Form";
 
 
 // const Container = styled(BaseContainer)`
@@ -121,7 +123,9 @@ const customStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         padding: "0pt",
-        width: "55%"
+        width: "55%",
+        color: 'white',
+        background: 'rgba(77, 77, 77, 0.5)'
     }
 };
 
@@ -563,7 +567,18 @@ class GamePage extends React.Component {
                     contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
-                    <h1>Here comes the piece exchanging interface</h1>
+                    <Form>
+                        {this.state.boxes.map(({piece}, index) => (
+                            <Form.Group>
+                                <FakePiece
+                                    piece={piece}
+                                    key={index}
+                                />
+                                <Form.Check/>
+                            </Form.Group>
+                        ))}
+
+                    </Form>
                     <CloseButton onClick={this.handleCloseModal}/>
                 </Modal>
             </Container>
