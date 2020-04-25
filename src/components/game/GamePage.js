@@ -34,6 +34,7 @@ import PIECE from "../shared/Other/Pieces";
 import TILES from "../shared/Other/Tiles";
 import FakePiece from "./FakePiece";
 import Form from "react-bootstrap/Form";
+import Piece from "../shared/models/Piece";
 
 
 // const Container = styled(BaseContainer)`
@@ -401,6 +402,7 @@ class GamePage extends React.Component {
         } catch (e) {
             console.log(e);
         }
+        console.log(this.state.board);
     }
 
 
@@ -504,12 +506,9 @@ class GamePage extends React.Component {
             this.setState({
                 players: players,
             })
-
         } catch (error) {
             console.log(error);
         }
-
-
     }
 
     async getBoard() {
@@ -518,6 +517,7 @@ class GamePage extends React.Component {
 
         let board = response.data;
         let newBoard = this.oneDimToTwoDim(board);
+        this.initBoard(newBoard);
         console.log(newBoard);
         this.setState({
 
@@ -526,6 +526,31 @@ class GamePage extends React.Component {
         console.log(this.state.board);
 
     }
+
+    initBoard(board){
+
+        console.log(this.state.board);
+        // create board
+        let newBoard = this.state.board;
+
+        board.map((col, i) => {
+            board.map((tile, j) => {
+                let letter = new Piece(tile);
+
+                if(letter.text == null) {
+                    newBoard[i][j].piece = null;
+                }else {
+                    newBoard[i][j].piece = {text: letter.text, id: letter.id, score: letter.score};
+                }
+                });
+        });
+
+        this.setState({
+            board:newBoard,
+        })
+        console.log(this.state.board);
+        }
+
 
     oneDimToTwoDim(board){
         let newBoard = new Array(15);
