@@ -389,6 +389,7 @@ class GamePage extends React.Component {
         this.getBoard = this.getBoard.bind(this);
         this.getPlayers = this.getPlayers.bind(this);
         this.getPlayerStones = this.getPlayerStones.bind(this);
+        this.initBoard=this.initBoard.bind(this);
 
     }
 
@@ -397,12 +398,13 @@ class GamePage extends React.Component {
         try {
             setInterval(async () => {
                 this.getPlayers();
-                this.getPlayerStones()
+
             }, 5000);
         } catch (e) {
             console.log(e);
         }
         console.log(this.state.board);
+        this.getPlayerStones();
     }
 
 
@@ -415,7 +417,6 @@ class GamePage extends React.Component {
     }
 
     async getPlayerStones(){
-
         try{
             let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
             let playerStonesList = response.data;
@@ -429,9 +430,12 @@ class GamePage extends React.Component {
         }catch(error){
             console.log(error);
         }
-
     }
 
+    removeStone(){
+        console.log(this.state.boxes);
+
+    }
 
     drawTile(props) {
 
@@ -477,15 +481,28 @@ class GamePage extends React.Component {
 
     isDropped(piece) {
 
+        return this.state.droppedBoxNames.indexOf(piece.text) > -1;
 
-        return this.state.droppedBoxNames.indexOf(piece.text) > -1
     }
 
 // Update board state when letter is dropped
     handleDrop(i, j, item) {
 
-        console.log(localStorage.getItem("current"));
-        console.log(this.state.gameId);
+        //get current letters
+        let currentPieces = this.state.boxes;
+        currentPieces.map((letter, index) => {
+
+            console.log(letter.piece.text);
+            console.log(item);
+            if(letter.piece.text === item.piece.text){
+                currentPieces.splice(index,1);
+            }
+        });
+
+        this.setState({
+           boxes:currentPieces,
+        });
+
         let newArray = this.state.board;
         let row = newArray[i];
         let letterBox = row[j];
@@ -494,7 +511,6 @@ class GamePage extends React.Component {
             board: newArray,
         });
 
-        console.log(this.state.board);
     }
 
     async getPlayers() {
@@ -507,7 +523,7 @@ class GamePage extends React.Component {
                 players: players,
             })
         } catch (error) {
-            console.log(error);
+
         }
     }
 
@@ -518,18 +534,16 @@ class GamePage extends React.Component {
         let board = response.data;
         let newBoard = this.oneDimToTwoDim(board);
         this.initBoard(newBoard);
-        console.log(newBoard);
+
         this.setState({
 
-        })
+        });
 
-        console.log(this.state.board);
 
     }
 
     initBoard(board){
 
-        console.log(this.state.board);
         // create board
         let newBoard = this.state.board;
 
@@ -548,7 +562,7 @@ class GamePage extends React.Component {
         this.setState({
             board:newBoard,
         })
-        console.log(this.state.board);
+
         }
 
 
