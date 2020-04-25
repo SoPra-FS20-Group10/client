@@ -35,6 +35,7 @@ import TILES from "../shared/Other/Tiles";
 import FakePiece from "./FakePiece";
 import Form from "react-bootstrap/Form";
 import Piece from "../shared/models/Piece";
+import {logChatPromiseExecution} from "stream-chat";
 
 
 // const Container = styled(BaseContainer)`
@@ -161,7 +162,10 @@ class GamePage extends React.Component {
             showMainPage: true,
             showLeaderboard: false,
             showProfile: false,
+            check: [false, false, false, false, false, false, false],
             gameId: localStorage.getItem("currentGame"),
+            checkBoxes: [{checked: false}, {checked: true}, {checked: false},
+                {checked: false}, {checked: false}, {checked: false}, {checked: false}],
             dustbins: [
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
@@ -382,15 +386,17 @@ class GamePage extends React.Component {
 
         };
         this.handleOpenModal = this.handleOpenModal.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleCloseModalAbort = this.handleCloseModalAbort.bind(this);
+        this.handleCloseModalExchange = this.handleCloseModalExchange.bind(this);
         this.handleDrop = this.handleDrop.bind(this);
         this.isDropped = this.isDropped.bind(this);
         this.drawTile = this.drawTile.bind(this);
         this.getBoard = this.getBoard.bind(this);
-        this.testPutStone = this.testPutStone.bind(this);
         this.getPlayers = this.getPlayers.bind(this);
         this.getPlayerStones = this.getPlayerStones.bind(this);
-        this.initBoard=this.initBoard.bind(this);
+        this.initBoard = this.initBoard.bind(this);
+        this.exchangePieces = this.exchangePieces.bind(this);
+
 
     }
 
@@ -399,42 +405,48 @@ class GamePage extends React.Component {
         try {
             setInterval(async () => {
                 this.getPlayers();
-
+                this.getPlayerStones();
             }, 5000);
         } catch (e) {
             console.log(e);
         }
         console.log(this.state.board);
-        this.getPlayerStones();
+        // this.getPlayerStones();
     }
 
 
     handleOpenModal() {
-        this.setState({showModal: true});
+        this.setState({showModal: true, check: [false, false, false, false, false, false, false]});
     }
 
-    handleCloseModal() {
-        this.setState({showModal: false});
+    handleCloseModalAbort() {
+        this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
 
-    async getPlayerStones(){
-        try{
-            let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
+    async handleCloseModalExchange() {
+        this.exchangePieces();
+        this.getPlayerStones();
+        this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
+    }
+
+    async getPlayerStones() {
+        try {
+            let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
             let playerStonesList = response.data;
             let playerStonesBag = [];
             playerStonesList.map((stone, index) => {
-                playerStonesBag[index] = {piece: {text:stone.symbol, id:stone.id, score:stone.value}}
+                playerStonesBag[index] = {piece: {text: stone.symbol, id: stone.id, score: stone.value}}
             });
             this.setState({
                 boxes: playerStonesBag,
             })
             console.log(this.state.boxes)
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
 
-    removeStone(){
+    removeStone() {
         console.log(this.state.boxes);
 
     }
@@ -496,13 +508,13 @@ class GamePage extends React.Component {
 
             console.log(letter.piece.text);
             console.log(item);
-            if(letter.piece.text === item.piece.text){
-                currentPieces.splice(index,1);
+            if (letter.piece.text === item.piece.text) {
+                currentPieces.splice(index, 1);
             }
         });
 
         this.setState({
-           boxes:currentPieces,
+            boxes: currentPieces,
         });
 
         let newArray = this.state.board;
@@ -537,28 +549,12 @@ class GamePage extends React.Component {
         let newBoard = this.oneDimToTwoDim(board);
         this.initBoard(newBoard);
 
-        this.setState({
-
-        });
+        this.setState({});
 
 
     }
 
-    async testPutStone() {
-        const requestBody = JSON.stringify({
-            token: localStorage.getItem("token"),
-            stoneIds: [178]
-        });
-        try {
-            await api.put("/games/" + this.state.gameId + "/players/"+this.state.playerId+"/bag?action=exchange", requestBody);
-
-        }catch(error){
-            alert("Could not put the pieces.");
-        }
-    }
-
-
-    initBoard(board){
+    initBoard(board) {
 
         // create board
         let newBoard = this.state.board;
@@ -567,22 +563,22 @@ class GamePage extends React.Component {
             board.map((tile, j) => {
                 let letter = new Piece(tile);
 
-                if(letter.text == null) {
+                if (letter.text == null) {
                     newBoard[i][j].piece = null;
-                }else {
+                } else {
                     newBoard[i][j].piece = {text: letter.text, id: letter.id, score: letter.score};
                 }
-                });
+            });
         });
 
         this.setState({
-            board:newBoard,
+            board: newBoard,
         })
 
-        }
+    }
 
 
-    oneDimToTwoDim(board){
+    oneDimToTwoDim(board) {
         let newBoard = new Array(15);
 
         // Loop to create 2D array using 1D array
@@ -591,14 +587,45 @@ class GamePage extends React.Component {
         }
         board.map((tile, index) => {
             let column = index % 15;
-            let row = Math.floor(index/15);
+            let row = Math.floor(index / 15);
             newBoard[row][column] = tile;
         });
         return newBoard;
     }
 
-    async endTurn(){
+    async endTurn() {
         // end turn, push all changes to the backend and draw stones
+    }
+
+    handleChange(key, event) {
+        let s = this.state.check;
+        s[key] = event.target.checked;
+        this.setState({check: s});
+        console.log(this.state.check)
+    }
+
+    async exchangePieces() {
+        for (let i = 0; i < this.state.check.length; i++) {
+            if (this.state.check[i]) {
+                let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
+                let playerStonesList = response.data;
+                let playerStonesBag = [];
+                playerStonesList.map((stone, index) => {
+                    playerStonesBag[index] = {piece: {text: stone.symbol, id: stone.id, score: stone.value}}
+                });
+
+                const requestBody = JSON.stringify({
+                    token: localStorage.getItem("token"),
+                    stoneIds: [playerStonesBag[i].piece.id]
+                });
+                try {
+                    await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
+
+                } catch (error) {
+                    alert("Could not put the pieces.");
+                }
+            }
+        }
     }
 
     render() {
@@ -694,32 +721,31 @@ class GamePage extends React.Component {
                             <Form.Group style={{
                                 float: "left"
                             }
-
                             }>
                                 <FakePiece
                                     piece={piece}
                                     key={index}
                                 />
                                 <Form.Check
-                                style={{
+                                    onChange={this.handleChange.bind(this, index)}
+                                    style={{
 
-                                    position: "relative",
-                                    left: "-21pt",
-                                    top: "28pt"
-
-                                }}/>
+                                        position: "relative",
+                                        left: "-21pt",
+                                        top: "28pt"
+                                    }}/>
                             </Form.Group>
                         ))}
 
                     </Form>
 
-                        <Button variant="success" size="sm"  onClick={this.handleCloseModal}>
-                            Exchange
-                        </Button>
+                    <Button variant="success" size="sm" onClick={this.handleCloseModalExchange}>
+                        Exchange
+                    </Button>
                     <view style={{margin: 140}}/>
-                        <Button variant="danger" size="sm"  onClick={this.handleCloseModal}>
-                            Cancel
-                        </Button>
+                    <Button variant="danger" size="sm" onClick={this.handleCloseModalAbort}>
+                        Cancel
+                    </Button>
 
                 </Modal>
             </Container>
