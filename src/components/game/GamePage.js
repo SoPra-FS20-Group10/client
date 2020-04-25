@@ -581,6 +581,10 @@ class GamePage extends React.Component {
         return newBoard;
     }
 
+    async endTurn(){
+        // end turn, push all changes to the backend and draw stones
+    }
+
     render() {
 
         const {board} = this.state;
@@ -644,6 +648,9 @@ class GamePage extends React.Component {
                             <Row>
                                 <Col>
                                     <PlayerButtons>
+                                        <Button variant="dark" size="sm" block onClick={this.endTurn}>
+                                            End Turn
+                                        </Button>
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
                                             Swap
                                         </Button>
