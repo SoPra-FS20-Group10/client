@@ -387,6 +387,7 @@ class GamePage extends React.Component {
         this.isDropped = this.isDropped.bind(this);
         this.drawTile = this.drawTile.bind(this);
         this.getBoard = this.getBoard.bind(this);
+        this.testPutStone = this.testPutStone.bind(this);
         this.getPlayers = this.getPlayers.bind(this);
         this.getPlayerStones = this.getPlayerStones.bind(this);
 
@@ -426,6 +427,7 @@ class GamePage extends React.Component {
             this.setState({
                 boxes: playerStonesBag,
             })
+            console.log(this.state.boxes)
         }catch(error){
             console.log(error);
         }
@@ -526,6 +528,20 @@ class GamePage extends React.Component {
         console.log(this.state.board);
 
     }
+
+    async testPutStone() {
+        const requestBody = JSON.stringify({
+            token: localStorage.getItem("token"),
+            stoneIds: [178]
+        });
+        try {
+            await api.put("/games/" + this.state.gameId + "/players/"+this.state.playerId+"/bag?action=exchange", requestBody);
+
+        }catch(error){
+            alert("Could not put the pieces.");
+        }
+    }
+
 
     initBoard(board){
 
@@ -635,6 +651,9 @@ class GamePage extends React.Component {
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.getBoard}>
                                             Test Button to get Board
+                                        </Button>
+                                        <Button variant="dark" size="sm" block onClick={this.testPutStone}>
+                                            Test Button to get Bag
                                         </Button>
                                     </PlayerButtons>
                                 </Col>
