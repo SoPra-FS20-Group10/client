@@ -416,15 +416,11 @@ class GamePage extends React.Component {
 
         try{
             let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
-            console.log(response);
             let playerStonesList = response.data;
             let playerStonesBag = [];
             playerStonesList.map((stone, index) => {
                 playerStonesBag[index] = {piece: {text:stone.symbol, id:stone.id, score:stone.value}}
-
             });
-            console.log(playerStonesBag);
-
             this.setState({
                 boxes: playerStonesBag,
             })
@@ -518,24 +514,32 @@ class GamePage extends React.Component {
 
     async getBoard() {
 
-        let response = api.get("/games/" + this.state.gameId);
-        console.log(this.state.gameId);
-        console.log(response);
+        let response = await api.get("/games/" + this.state.gameId);
 
-        let response2 = api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current"));
-        console.log(response2);
+        let board = response.data;
+        let newBoard = this.oneDimToTwoDim(board);
+        console.log(newBoard);
+        this.setState({
 
-        //todo: Convert 1d board to 2d board
-
-        let boardArray = this.state.board;
-
-        response2.map((tile, index) => {
-
-            let column = index % 15;
-            let row = Math.floor(index/15);
-            boardArray[row][column] = tile;
         })
 
+        console.log(this.state.board);
+
+    }
+
+    oneDimToTwoDim(board){
+        let newBoard = new Array(15);
+
+        // Loop to create 2D array using 1D array
+        for (let i = 0; i < newBoard.length; i++) {
+            newBoard[i] = new Array(15);
+        }
+        board.map((tile, index) => {
+            let column = index % 15;
+            let row = Math.floor(index/15);
+            newBoard[row][column] = tile;
+        });
+        return newBoard;
     }
 
     render() {
@@ -604,7 +608,7 @@ class GamePage extends React.Component {
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
                                             Swap
                                         </Button>
-                                        <Button variant="dark" size="sm" block onClick={this.getPlayerStones}>
+                                        <Button variant="dark" size="sm" block onClick={this.getBoard}>
                                             Test Button to get Board
                                         </Button>
                                     </PlayerButtons>
