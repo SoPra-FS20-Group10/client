@@ -573,7 +573,7 @@ class GamePage extends React.Component {
     }
 
     getPieceById(id){
-        
+
         return this.state.pieceBag[id];
 
     }
@@ -674,7 +674,7 @@ class GamePage extends React.Component {
         });
 
         this.setState({
-           boxes:currentPieces,
+            boxes:currentPieces,
         });
 
         let newArray = this.state.board;
@@ -744,14 +744,14 @@ class GamePage extends React.Component {
                 }else {
                     newBoard[i][j].piece = {text: letter.text, id: letter.id, score: letter.score};
                 }
-                });
+            });
         });
 
         this.setState({
             board:newBoard,
         })
 
-        }
+    }
 
 
     oneDimToTwoDim(board){
@@ -873,25 +873,25 @@ class GamePage extends React.Component {
                                     key={index}
                                 />
                                 <Form.Check
-                                style={{
+                                    style={{
 
-                                    position: "relative",
-                                    left: "-21pt",
-                                    top: "28pt"
+                                        position: "relative",
+                                        left: "-21pt",
+                                        top: "28pt"
 
-                                }}/>
+                                    }}/>
                             </Form.Group>
                         ))}
 
                     </Form>
 
-                        <Button variant="success" size="sm"  onClick={this.handleCloseModal}>
-                            Exchange
-                        </Button>
+                    <Button variant="success" size="sm"  onClick={this.handleCloseModal}>
+                        Exchange
+                    </Button>
                     <view style={{margin: 140}}/>
-                        <Button variant="danger" size="sm"  onClick={this.handleCloseModal}>
-                            Cancel
-                        </Button>
+                    <Button variant="danger" size="sm"  onClick={this.handleCloseModal}>
+                        Cancel
+                    </Button>
 
                 </Modal>
             </Container>

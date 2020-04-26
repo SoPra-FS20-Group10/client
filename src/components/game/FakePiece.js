@@ -3,6 +3,7 @@ import { useDrag } from 'react-dnd'
 import ItemTypes from "./ItemTypes";
 import PIECE from "../shared/Other/Pieces";
 import styled from "styled-components";
+import {logChatPromiseExecution} from "stream-chat";
 const style = {
     border: '1px dashed gray',
     backgroundColor: 'black',
