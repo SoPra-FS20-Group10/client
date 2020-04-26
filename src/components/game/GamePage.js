@@ -35,6 +35,7 @@ import TILES from "../shared/Other/Tiles";
 import FakePiece from "./FakePiece";
 import Form from "react-bootstrap/Form";
 import Piece from "../shared/models/Piece";
+import PieceBag from "./PieceBag";
 
 
 // const Container = styled(BaseContainer)`
@@ -379,6 +380,7 @@ class GamePage extends React.Component {
                     type: TILES.DL
                 }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
             ],
+            pieceBag: null,
 
         };
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -391,6 +393,8 @@ class GamePage extends React.Component {
         this.getPlayers = this.getPlayers.bind(this);
         this.getPlayerStones = this.getPlayerStones.bind(this);
         this.initBoard=this.initBoard.bind(this);
+        this.initPieceBag=this.initPieceBag.bind(this);
+        this.getPieceById=this.getPieceById.bind(this);
 
     }
 
@@ -404,10 +408,175 @@ class GamePage extends React.Component {
         } catch (e) {
             console.log(e);
         }
-        console.log(this.state.board);
         this.getPlayerStones();
+        this.initPieceBag();
     }
 
+    // Initializing a bag with all the letters (lookup)
+    initPieceBag() {
+
+        let pieceBag = [];
+        let id = 0;
+        for (let i = 0; i < 10; i++) {
+            let piece = new Piece({id: id, text: PIECE.A.text, score: PIECE.A.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.B.text, score: PIECE.B.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.C.text, score: PIECE.C.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 5; i++) {
+            let piece = new Piece({id: id, text: PIECE.D.text, score: PIECE.D.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 13; i++) {
+            let piece = new Piece({id: id, text: PIECE.E.text, score: PIECE.E.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.F.text, score: PIECE.F.score});
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 4; i++) {
+            let piece = new Piece({id: id, text: PIECE.G.text, score: PIECE.G.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.H.text, score: PIECE.H.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 10; i++) {
+            let piece = new Piece({id: id, text: PIECE.I.text, score: PIECE.I.score})
+            pieceBag.push(piece);
+            id++;
+        }
+        {
+            let piece = new Piece({id: id, text: PIECE.J.text, score: PIECE.J.score})
+            pieceBag.push(piece);
+            id++;
+        }
+        {
+            let piece = new Piece({id: id, text: PIECE.K.text, score: PIECE.K.score})
+            pieceBag.push(piece);
+            id++;}
+
+        for (let i = 0; i < 5; i++) {
+            let piece = new Piece({id: id, text: PIECE.L.text, score: PIECE.L.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.M.text, score: PIECE.M.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 7; i++) {
+            let piece = new Piece({id: id, text: PIECE.N.text, score: PIECE.N.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 9; i++) {
+            let piece = new Piece({id: id, text: PIECE.O.text, score: PIECE.O.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.P.text, score: PIECE.P.score})
+            pieceBag.push(piece);
+            id++;
+        }
+        {
+            let piece = new Piece({id: id, text: PIECE.Q.text, score: PIECE.Q.score})
+            pieceBag.push(piece);
+            id++;
+        }
+        for (let i = 0; i < 7; i++) {
+            let piece = new Piece({id: id, text: PIECE.R.text, score: PIECE.R.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 5; i++) {
+            let piece = new Piece({id: id, text: PIECE.S.text, score: PIECE.S.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 7; i++) {
+            let piece = new Piece({id: id, text: PIECE.T.text, score: PIECE.T.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 5; i++) {
+            let piece = new Piece({id: id, text: PIECE.U.text, score: PIECE.U.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.V.text, score: PIECE.V.score})
+            pieceBag.push(piece);
+            id++;
+        }
+
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id: id, text: PIECE.W.text, score: PIECE.W.score})
+            pieceBag.push(piece);
+            id++;
+        }
+        {
+            let piece = new Piece({id: id, text: PIECE.X.text, score: PIECE.X.score})
+            pieceBag.push(piece);
+            id++;
+        }
+        for (let i = 0; i < 3; i++) {
+            let piece = new Piece({id:id,text:PIECE.Y.text, score:PIECE.Y.score})
+            pieceBag.push(piece);
+            id++;
+        }
+        {
+            let piece = new Piece({id: id, text: PIECE.Z.text, score: PIECE.Z.score})
+            pieceBag.push(piece);
+        }
+
+        this.setState({
+
+            pieceBag:pieceBag,
+
+        }, () => {
+            console.log(this.state)});
+    }
+
+    getPieceById(id){
+        
+        return this.state.pieceBag[id];
+
+    }
 
     handleOpenModal() {
         this.setState({showModal: true});
@@ -422,13 +591,18 @@ class GamePage extends React.Component {
             let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
             let playerStonesList = response.data;
             let playerStonesBag = [];
+            let pieceBag = this.state.pieceBag;
+
+
             playerStonesList.map((stone, index) => {
-                playerStonesBag[index] = {piece: {text:stone.symbol, id:stone.id, score:stone.value}}
+                let piece =this.getPieceById(stone.id);
+
+                playerStonesBag[index] = {piece: {id:piece.id, score:piece.score, text:piece.text}}
             });
             this.setState({
                 boxes: playerStonesBag,
-            })
-            console.log(this.state.boxes)
+            });
+
         }catch(error){
             console.log(error);
         }
@@ -494,8 +668,6 @@ class GamePage extends React.Component {
         let currentPieces = this.state.boxes;
         currentPieces.map((letter, index) => {
 
-            console.log(letter.piece.text);
-            console.log(item);
             if(letter.piece.text === item.piece.text){
                 currentPieces.splice(index,1);
             }
@@ -547,10 +719,10 @@ class GamePage extends React.Component {
     async testPutStone() {
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
-            stoneIds: [178]
+            stoneIds: [136]
         });
         try {
-            await api.put("/games/" + this.state.gameId + "/players/"+this.state.playerId+"/bag?action=exchange", requestBody);
+            await api.put("/games/" + this.state.gameId + "/players/"+localStorage.getItem("current")+"/exchange", requestBody);
 
         }catch(error){
             alert("Could not put the pieces.");
