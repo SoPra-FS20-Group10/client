@@ -35,6 +35,7 @@ import TILES from "../shared/Other/Tiles";
 import FakePiece from "./FakePiece";
 import Form from "react-bootstrap/Form";
 import Piece from "../shared/models/Piece";
+import {logChatPromiseExecution} from "stream-chat";
 import PieceBag from "./PieceBag";
 
 
@@ -162,6 +163,9 @@ class GamePage extends React.Component {
             showMainPage: true,
             showLeaderboard: false,
             showProfile: false,
+            check: [false, false, false, false, false, false, false],
+            checkBoxes: [{checked: false}, {checked: true}, {checked: false},
+                {checked: false}, {checked: false}, {checked: false}, {checked: false}],
             gameId: localStorage.getItem("currentGame"),
             dustbins: [
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
@@ -384,7 +388,6 @@ class GamePage extends React.Component {
 
         };
         this.handleOpenModal = this.handleOpenModal.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleDrop = this.handleDrop.bind(this);
         this.isDropped = this.isDropped.bind(this);
         this.drawTile = this.drawTile.bind(this);
@@ -395,7 +398,9 @@ class GamePage extends React.Component {
         this.initBoard=this.initBoard.bind(this);
         this.initPieceBag=this.initPieceBag.bind(this);
         this.getPieceById=this.getPieceById.bind(this);
-
+        this.handleCloseModalAbort = this.handleCloseModalAbort.bind(this);
+        this.handleCloseModalExchange = this.handleCloseModalExchange.bind(this);
+        this.exchangePieces = this.exchangePieces.bind(this);
     }
 
 
@@ -582,10 +587,9 @@ class GamePage extends React.Component {
         this.setState({showModal: true});
     }
 
-    handleCloseModal() {
-        this.setState({showModal: false});
+    handleCloseModalAbort() {
+        this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
-
     async getPlayerStones(){
         try{
             let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
@@ -612,6 +616,8 @@ class GamePage extends React.Component {
         console.log(this.state.boxes);
 
     }
+
+
 
     drawTile(props) {
 
@@ -773,6 +779,44 @@ class GamePage extends React.Component {
         // end turn, push all changes to the backend and draw stones
     }
 
+    //pieceexchange
+
+    handleChange(key, event) {
+        let s = this.state.check;
+        s[key] = event.target.checked;
+        this.setState({check: s});
+        console.log(this.state.check)
+    }
+
+    async exchangePieces() {
+        for (let i = 0; i < this.state.check.length; i++) {
+            if (this.state.check[i]) {
+                let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
+                let playerStonesList = response.data;
+                let playerStonesBag = [];
+                playerStonesList.map((stone, index) => {
+                    playerStonesBag[index] = {piece: {text: stone.symbol, id: stone.id, score: stone.value}}
+                });
+
+                const requestBody = JSON.stringify({
+                    token: localStorage.getItem("token"),
+                    stoneIds: [playerStonesBag[i].piece.id]
+                });
+                try {
+                    await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
+
+                } catch (error) {
+                    alert("Could not put the pieces.");
+                }
+            }
+        }
+    }
+    async handleCloseModalExchange() {
+        this.exchangePieces();
+        this.getPlayerStones();
+        this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
+    }
+
     render() {
 
         const {board} = this.state;
@@ -873,6 +917,7 @@ class GamePage extends React.Component {
                                     key={index}
                                 />
                                 <Form.Check
+                                    onChange={this.handleChange.bind(this, index)}
                                     style={{
 
                                         position: "relative",
@@ -885,11 +930,11 @@ class GamePage extends React.Component {
 
                     </Form>
 
-                    <Button variant="success" size="sm"  onClick={this.handleCloseModal}>
+                    <Button variant="success" size="sm"  onClick={this.handleCloseModalExchange}>
                         Exchange
                     </Button>
                     <view style={{margin: 140}}/>
-                    <Button variant="danger" size="sm"  onClick={this.handleCloseModal}>
+                    <Button variant="danger" size="sm"  onClick={this.handleCloseModalAbort}>
                         Cancel
                     </Button>
 
