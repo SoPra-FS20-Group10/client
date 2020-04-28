@@ -583,15 +583,13 @@ class GamePage extends React.Component {
     async getPlayerStones() {
         try {
             let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
+            console.log(response);
             let playerStonesList = response.data;
             let playerStonesBag = [];
-            let pieceBag = this.state.pieceBag;
-
 
             playerStonesList.map((stone, index) => {
-                let piece = this.getPieceById(stone.id);
 
-                playerStonesBag[index] = {piece: {id: piece.id, score: piece.score, text: piece.text}}
+                playerStonesBag[index] = {piece: {id: stone.id, score: stone.value, text: stone.symbol}}
             });
             this.setState({
                 boxes: playerStonesBag,
@@ -684,10 +682,13 @@ class GamePage extends React.Component {
         //get current letters the user had in his bag (1d Array)
         let currentPieces = this.state.boxes;
         currentPieces.map((letter, index) => {
+            console.log(letter.piece);
+            console.log(item.piece);
             if (letter.piece.id === item.piece.id) {
                 // The 1d index for the backend
                 let indexInOneDimension = this.toOneDimension(i, j);
                 this.placeLetter(letter.piece, indexInOneDimension);
+                console.log("splicing");
                 currentPieces.splice(index, 1);
             }
         });
@@ -721,14 +722,16 @@ class GamePage extends React.Component {
     }
 
     async getBoard() {
-        console.log(this.state.board);
-        let response = await api.get("/games/" + this.state.gameId);
+        console.log(this.state.boxes);
+       /* let response = await api.get("/games/" + this.state.gameId);
 
         let board = response.data;
         let newBoard = this.oneDimToTwoDim(board);
         this.initBoard(newBoard);
         this.setState({});
         console.log(this.state.board);
+        */
+
     }
 
 
