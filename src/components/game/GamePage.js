@@ -153,7 +153,8 @@ class GamePage extends React.Component {
         super(props);
         this.state = {
 
-
+            placedLetters: [],
+            placedLettersCoordinates: [],
             players: null,
             showModal: false,
             // TODO: Replace placeholder
@@ -401,6 +402,8 @@ class GamePage extends React.Component {
         this.handleCloseModalAbort = this.handleCloseModalAbort.bind(this);
         this.handleCloseModalExchange = this.handleCloseModalExchange.bind(this);
         this.exchangePieces = this.exchangePieces.bind(this);
+        this.placeLetter=this.placeLetter.bind(this);
+        this.endTurn=this.endTurn.bind(this);
     }
 
 
@@ -667,14 +670,39 @@ class GamePage extends React.Component {
 
     }
 
+    placeLetter(piece, index){
+
+        let placedLetters = this.state.placedLetters;
+        let placedLettersCoordinates = this.state.placedLettersCoordinates;
+
+        placedLetters.push(piece);
+        placedLettersCoordinates.push(index);
+
+        this.setState({
+            placedLetters:placedLetters,
+            placedLettersCoordinates: placedLettersCoordinates
+        });
+        console.log(this.state);
+    }
+
+    // Helper function to get 1d Array index from 2d Array indexes
+    toOneDimension(i,j){
+        return i*j;
+    }
+
+
 // Update board state when letter is dropped
     handleDrop(i, j, item) {
 
-        //get current letters
+        //get current letters the user had in his bag (1d Array)
         let currentPieces = this.state.boxes;
         currentPieces.map((letter, index) => {
 
             if(letter.piece.text === item.piece.text){
+
+                // The 1d index for the backend
+                let indexInOneDimension = this.toOneDimension(i,j);
+                this.placeLetter(letter.piece, indexInOneDimension);
                 currentPieces.splice(index,1);
             }
         });
@@ -722,6 +750,8 @@ class GamePage extends React.Component {
 
     }
 
+
+    //TODO: Still needed?
     async testPutStone() {
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
@@ -777,6 +807,18 @@ class GamePage extends React.Component {
 
     async endTurn(){
         // end turn, push all changes to the backend and draw stones
+
+        console.log("Ending turn");
+        const requestBody = JSON.stringify({
+            token: localStorage.getItem("token"),
+            stoneIds: this.state.placedLetters,
+            coordinates: this.state.placedLettersCoordinates
+        });
+        try {
+            await api.put("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), requestBody);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     //pieceexchange
