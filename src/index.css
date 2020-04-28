@@ -42,13 +42,20 @@ th {
 }
 
 /*Table entry with uneven index*/
-tr.a{
+tr.light{
   background: rgba(150, 150, 150, 0.5);
   color: white;
 }
 
 /*Table entry with even index*/
-tr.b{
+tr.dark{
   background: rgba(100, 100, 100, 0.5);;
   color: white;
+}
+
+/*Table entry for winner on endscreen*/
+tr.winner{
+  background: rgba(0, 255, 0, 0.8);;
+  color: white;
+  padding: 5pt;
 }

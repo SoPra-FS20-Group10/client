@@ -51,9 +51,9 @@ const BoardWrapper = styled.div`
     padding: 1em;
     width: 500pt;
     height: 550pt;
-    
+
     background: rgba(77, 77, 77, 0.5);
-    
+
     color: white;
     display: flex;
     align-items: center;
@@ -65,9 +65,9 @@ const FormGroup = styled.div`
     padding: 1em;
     width: 500pt;
     height: 550pt;
-    
+
     background: rgba(77, 77, 77, 0.5);
-    
+
     color: white;
     display: flex;
     align-items: center;
@@ -75,21 +75,21 @@ const FormGroup = styled.div`
 `;
 
 const SideWrapper = styled.div`
-    
+
     padding: 1em;
     width: 150pt;
     height: 100%;
-    
+
     background: rgba(77, 77, 77, 0.5);
     position:relative;
-    
+
     color: white;
     align-items: center;
     justify-content: center;
 `;
 
 const PlayerButtons = styled.div`
-    
+
     position: absolute;
     bottom: -470pt;
 `;
@@ -98,9 +98,9 @@ const DeckWrapper = styled.div`
     margin-top:8pt;
     padding: 1em;
     height: 52pt;
-    
+
     background: rgba(77, 77, 77, 0.5);
-    
+
     color: white;
     display: flex;
     align-items: center;
@@ -110,7 +110,7 @@ const PieceWrapper = styled.div`
     margin: 2pt;
     width: 27pt;
     height: 27pt;
-    
+
     background: white;
     color: black;
     justify-content:center;
@@ -122,7 +122,7 @@ const TileWrapper = styled.div`
     margin: 2pt;
     width: 27pt;
     height: 27pt;
-   
+
     background: white;
     color: black;
     justify-content:center;
@@ -168,6 +168,7 @@ class GamePage extends React.Component {
             checkBoxes: [{checked: false}, {checked: true}, {checked: false},
                 {checked: false}, {checked: false}, {checked: false}, {checked: false}],
             gameId: localStorage.getItem("currentGame"),
+            check: [false, false, false, false, false, false, false],
             dustbins: [
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
@@ -411,7 +412,7 @@ class GamePage extends React.Component {
         try {
             setInterval(async () => {
                 this.getPlayers();
-
+                this.getPlayerStones();
             }, 5000);
         } catch (e) {
             console.log(e);
@@ -573,7 +574,6 @@ class GamePage extends React.Component {
         }
 
         this.setState({
-
             pieceBag:pieceBag,
 
         }, () => {
@@ -581,7 +581,6 @@ class GamePage extends React.Component {
     }
 
     getPieceById(id){
-
         return this.state.pieceBag[id];
 
     }
@@ -593,6 +592,13 @@ class GamePage extends React.Component {
     handleCloseModalAbort() {
         this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
+
+    async handleCloseModalExchange() {
+        this.exchangePieces();
+        this.getPlayerStones();
+        this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
+    }
+
     async getPlayerStones(){
         try{
             let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
@@ -805,6 +811,45 @@ class GamePage extends React.Component {
         return newBoard;
     }
 
+    handleChange(key, event) {
+        let s = this.state.check;
+        s[key] = event.target.checked;
+        this.setState({check: s});
+        // console.log(this.state.check)
+    }
+
+    async exchangePieces() {
+        let exchangeIndices = [];
+        let stoneIds = [];
+        for (let i = 0; i < this.state.check.length; i++) {
+            if (this.state.check[i]) {
+                exchangeIndices.push({index: i, id: this.state.boxes[i].piece.id});
+                stoneIds.push(this.state.boxes[i].piece.id)
+            }
+        }
+        // console.log(exchangeIndices)
+        // let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
+        // let playerStonesList = response.data;
+        // let playerStonesBag = [];
+        // playerStonesList.map((stone, index) => {
+        //     playerStonesBag[index] = {piece: {text: stone.symbol, id: stone.id, score: stone.value}}
+        // });
+        //
+        const requestBody = JSON.stringify({
+            token: localStorage.getItem("token"),
+            stoneIds: stoneIds
+        });
+
+        try {
+            await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
+
+        } catch (error) {
+            alert("Could not put the pieces.");
+        }
+
+        await this.getPlayerStones();
+    }
+
     async endTurn(){
         // end turn, push all changes to the backend and draw stones
 
@@ -961,10 +1006,10 @@ class GamePage extends React.Component {
                                 <Form.Check
                                     onChange={this.handleChange.bind(this, index)}
                                     style={{
-
                                         position: "relative",
                                         left: "-21pt",
                                         top: "28pt"
+
 
                                     }}/>
                             </Form.Group>

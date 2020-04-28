@@ -104,7 +104,6 @@ class ScoreBoard extends React.Component {
         super(props);
         this.state = {
             players: null,
-
             gameId: this.props.gameId,
         };
 
@@ -125,9 +124,7 @@ class ScoreBoard extends React.Component {
     async fetchPlayers() {
         try {
             let response = await api.get("/games/" + this.state.gameId + "/players/");
-
             let players = response.data;
-
             this.setState({
                 players: players,
             })
