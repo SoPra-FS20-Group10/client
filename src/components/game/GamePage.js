@@ -1,23 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import {BaseContainer} from '../../helpers/layout';
-import {api, handleError} from '../../helpers/api';
-import Player from '../../views/Player';
-import {Spinner} from '../../views/design/Spinner';
+import {api} from '../../helpers/api';
 import {withRouter} from 'react-router-dom';
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 import Button from 'react-bootstrap/Button'
-import ToggleButton from 'react-bootstrap/ToggleButton'
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Profile from "../profile/ProfilePage";
-import Leaderboard from "../leaderboard/LeaderboardPage";
-import Header from "../../views/Header";
-import NavigationBar from "../../views/NavigationBar";
-import GameBoard from "./GameBoard";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Container from 'react-bootstrap/Container'
@@ -25,7 +12,6 @@ import {DndProvider} from "react-dnd";
 import Backend, {NativeTypes} from "react-dnd-html5-backend"
 import ScoreBoard from "./ScoreBoard";
 import Modal from "react-modal";
-import {CloseButton} from "react-bootstrap";
 import Grid from "@material-ui/core/Grid";
 import Square from "./Square";
 import LetterBox from "./LetterBox";
@@ -35,8 +21,6 @@ import TILES from "../shared/Other/Tiles";
 import FakePiece from "./FakePiece";
 import Form from "react-bootstrap/Form";
 import Piece from "../shared/models/Piece";
-import {logChatPromiseExecution} from "stream-chat";
-import PieceBag from "./PieceBag";
 
 
 // const Container = styled(BaseContainer)`
@@ -168,7 +152,6 @@ class GamePage extends React.Component {
             checkBoxes: [{checked: false}, {checked: true}, {checked: false},
                 {checked: false}, {checked: false}, {checked: false}, {checked: false}],
             gameId: localStorage.getItem("currentGame"),
-            check: [false, false, false, false, false, false, false],
             dustbins: [
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
@@ -678,10 +661,11 @@ class GamePage extends React.Component {
 
     placeLetter(piece, index){
 
+        console.log(index);
         let placedLetters = this.state.placedLetters;
         let placedLettersCoordinates = this.state.placedLettersCoordinates;
 
-        placedLetters.push(piece);
+        placedLetters.push(piece.id);
         placedLettersCoordinates.push(index);
 
         this.setState({
@@ -693,7 +677,7 @@ class GamePage extends React.Component {
 
     // Helper function to get 1d Array index from 2d Array indexes
     toOneDimension(i,j){
-        return i*j;
+        return i * 15 + (j % 15);
     }
 
 
@@ -703,9 +687,7 @@ class GamePage extends React.Component {
         //get current letters the user had in his bag (1d Array)
         let currentPieces = this.state.boxes;
         currentPieces.map((letter, index) => {
-
-            if(letter.piece.text === item.piece.text){
-
+            if(letter.piece.id === item.piece.id){
                 // The 1d index for the backend
                 let indexInOneDimension = this.toOneDimension(i,j);
                 this.placeLetter(letter.piece, indexInOneDimension);
@@ -859,6 +841,8 @@ class GamePage extends React.Component {
             stoneIds: this.state.placedLetters,
             coordinates: this.state.placedLettersCoordinates
         });
+
+        console.log(requestBody);
         try {
             await api.put("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), requestBody);
         } catch (error) {
