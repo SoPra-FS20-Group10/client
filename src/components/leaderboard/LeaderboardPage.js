@@ -21,10 +21,13 @@ const Container = styled(BaseContainer)`
 
 
 const LeaderboardWrapper = styled.div`
+    border-radius: 4pt;
     margin-top: 10%;
+    padding-bottom:4pt;
     margin: 10%;
     background: rgba(77, 77, 77, 0.5);
     float:center;
+    padding-bottom:4pt;
 `;
 
 // TODO: All time, last month, last year....
@@ -58,7 +61,7 @@ class LeaderboardPage extends React.Component {
                     return (
                         // <tr  class='text-white' key={id}>
 
-                        <tr className='a' key={id}>
+                        <tr className='dark' key={id}>
                             <td>{id}</td>
                             <td>{name}</td>
                             <td>{wins}</td>
@@ -69,7 +72,7 @@ class LeaderboardPage extends React.Component {
                     )
                 } else {
                     return (
-                        <tr className='b' key={id}>
+                        <tr className='light' key={id}>
                             <td>{id}</td>
                             <td>{name}</td>
                             <td>{wins}</td>

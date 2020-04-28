@@ -15,30 +15,31 @@ import {CloseButton} from "react-bootstrap";
 // TODO: WORK IN PROGRESS!
 
 const ChatWrapper = styled.div`
-
-margin-top: 10%;
-margin-left: 5%;
-padding: 5%;
-width: 25%;
-height: 400pt; 
-background: grey;
-float:left;
+    border-radius: 4pt;
+    margin-top: 10%;
+    margin-left: 5%;
+    padding: 5%;
+    width: 25%;
+    height: 400pt; 
+    background: grey;
+    float:left;
 `;
 
 const LobbyWrapper = styled.div`
-
-margin-top: 10%;
-margin-left: 5%;
-width: 60%;
-height: 400pt; 
-background: rgba(77, 77, 77, 0.5);
-float:left;
+    border-radius: 4pt;
+    margin-top: 10%;
+    margin-left: 5%;
+    width: 60%;
+    height: 400pt; 
+    background: rgba(77, 77, 77, 0.5);
+    float:left;
 `;
 
 
 const Container = styled(BaseContainer)`
-  color: white;
-  text-align: center;
+    border-radius: 4pt;
+    color: white;
+    text-align: center;
 `;
 
 

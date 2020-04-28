@@ -11,32 +11,31 @@ import {CloseButton} from "react-bootstrap";
 import LobbyList from "../overview/Lobbylist";
 
 const Container = styled(BaseContainer)`
-  color: white;
-  text-align: center;
-  margin: 0;
-  
- 
+    color: white;
+    text-align: center;
+    margin: 0;
 `;
 
 const ChatWrapper = styled.div`
-
-margin-top: 10%;
-margin-left: 5%;
-padding: 5%;
-width: 25%;
-height: 400pt; 
-background: grey;
-float:left;
+    border-radius: 4pt;
+    border-radius: 4pt;
+    margin-top: 10%;
+    margin-left: 5%;
+    padding: 5%;
+    width: 25%;
+    height: 400pt; 
+    background: grey;
+    float:left;
 `;
 
 const PlayerWrapper = styled.div`
-
-margin-top: 10%;
-margin-left: 5%;
-width: 60%;
-height: 400pt; 
-background: rgba(77, 77, 77, 0.5);
-float:left;
+    border-radius: 4pt;
+    margin-top: 10%;
+    margin-left: 5%;
+    width: 60%;
+    height: 400pt; 
+    background: rgba(77, 77, 77, 0.5);
+    float:left;
 `;
 
 const ButtonContainer = styled.div`
@@ -67,11 +66,11 @@ class EndScreenPage extends React.Component {
     }
 
     // comparator for sorting players by score
-    compare( a, b ) {
-        if ( a.score > b.score ){
+    compare(a, b) {
+        if (a.score > b.score) {
             return -1;
         }
-        if ( a.score < b.score ){
+        if (a.score < b.score) {
             return 1;
         }
         return 0;

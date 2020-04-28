@@ -32,14 +32,14 @@ class GameRouter extends React.Component {
                     render={() => <LeaderboardPage/>}
                 />
 
-                // TODO: ID or not?
+                {/*// TODO: ID or not?*/}
                 <Route
                     exact
                     path={`${this.props.base}/board`}
                     render={() => <GamePage/>}
                 />
 
-                // TODO: ID or not?
+                {/*// TODO: ID or not?*/}
                 <Route
                     exact
                     path={`${this.props.base}/endscreen`}
