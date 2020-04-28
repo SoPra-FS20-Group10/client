@@ -24,7 +24,7 @@ import Piece from "../shared/models/Piece";
 import CompletedWords from "./CompletedWords";
 import PieceCounter from "./PieceCounter";
 import {Pie} from "react-chartjs-2";
-
+import {Scrollbars} from 'react-custom-scrollbars';
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -866,11 +866,18 @@ class GamePage extends React.Component {
 
                             <div>Played Words</div>
 
-                            <Row>
-                                <Col className="py-2 px-0">
-                                    <CompletedWords gameId={this.state.gameId}/>
-                                </Col>
-                            </Row>
+                            <Scrollbars
+                                // This will activate auto-height
+                                autoHeight
+                                autoHeightMin={550}
+                                autoHeightMax={600}
+                                renderTrackVertical={this.renderTrackVertical}
+                                renderThumbVertical={this.renderThumbVertical}
+                                style={{overflow: 'hidden'}}
+                            >
+                                <CompletedWords gameId={this.state.gameId}/>
+                            </Scrollbars>
+
                         </SideWrapper>
                     </Col>
 

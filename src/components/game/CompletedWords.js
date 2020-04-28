@@ -11,37 +11,11 @@ import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const ScoreBoardEntryWrapper = styled.div`
-    margin: 0pt;
-    padding: 1em;
-    width: 100%;
-    
-    background: rgba(77, 77, 77, 0.7);
-    
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-const ScoreBoardWrapper = styled.div`
-    margin: 0pt;
-    padding: 1em;
-    width: 100%;
-    
-    background: rgba(77, 77, 77, 0.7);
-    
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
 
-const Score = styled.label`
-    padding-bottom: 5pt;
+const WordsWrapper = styled.div`
+    border-radius: 4pt;
     margin: 0pt;
     width: 100%;
-    
-    font-size: 10px;
     
     background: rgba(77, 77, 77, 0.9);
     
@@ -52,45 +26,13 @@ const Score = styled.label`
 `;
 
 
-const Username = styled.label`
+const Word = styled.label`
     padding-top: 5pt;
     margin: 0pt;
-    width: 100%;
     
     font-size: 20px;
-    
-    background: rgba(77, 77, 77, 0.9);
-    
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-
-const UsernameHighlighted = styled.label`
-    padding-top: 5pt;
-    margin: 0pt;
-    width: 100%;
-    
-    font-size: 20px;
-    
-    background: rgba(150, 150, 150, 0.9);
-    
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const ScoreHighlighted = styled.label`
-    padding-bottom: 5pt;
-    margin: 0pt;
-    width: 100%;
-    
-    font-size: 10px;
-    
-    background: rgba(150, 150, 150, 0.9);
+    width: 70%; 
+   
     
     color: white;
     display: flex;
@@ -128,7 +70,8 @@ class CompletedWords extends React.Component {
             let words = response.data;
 
             this.setState({
-                words: ["Hello", "World" ]
+                words: ["Hello", "World", "Hello", "World", "Hello", "World","Hello", "World","Hello", "World","Hello",
+                    "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World",]
             })
 
         }catch(error){
@@ -138,7 +81,7 @@ class CompletedWords extends React.Component {
 
     render() {
         return (
-            <Container>
+            <WordsWrapper>
                 {!this.state.words ? (
                     <Spinner/>
                 ) : (
@@ -147,14 +90,14 @@ class CompletedWords extends React.Component {
                             return (
                                     <div>
                                         <Row>
-                                            <Username> {word}</Username>
+                                            <Word> {word}</Word>
                                         </Row>
                                     </div>
                                 );
 
                         })}</div>
                 )}
-            </Container>
+            </WordsWrapper>
         );
     }
 
