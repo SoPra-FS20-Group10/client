@@ -168,7 +168,6 @@ class GamePage extends React.Component {
             checkBoxes: [{checked: false}, {checked: true}, {checked: false},
                 {checked: false}, {checked: false}, {checked: false}, {checked: false}],
             gameId: localStorage.getItem("currentGame"),
-            check: [false, false, false, false, false, false, false],
             dustbins: [
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
                 {accepts: [ItemTypes.TILE], lastDroppedItem: null},
@@ -875,29 +874,6 @@ class GamePage extends React.Component {
         console.log(this.state.check)
     }
 
-    async exchangePieces() {
-        for (let i = 0; i < this.state.check.length; i++) {
-            if (this.state.check[i]) {
-                let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
-                let playerStonesList = response.data;
-                let playerStonesBag = [];
-                playerStonesList.map((stone, index) => {
-                    playerStonesBag[index] = {piece: {text: stone.symbol, id: stone.id, score: stone.value}}
-                });
-
-                const requestBody = JSON.stringify({
-                    token: localStorage.getItem("token"),
-                    stoneIds: [playerStonesBag[i].piece.id]
-                });
-                try {
-                    await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
-
-                } catch (error) {
-                    alert("Could not put the pieces.");
-                }
-            }
-        }
-    }
     async handleCloseModalExchange() {
         this.exchangePieces();
         this.getPlayerStones();
