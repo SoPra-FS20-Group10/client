@@ -25,6 +25,7 @@ import CompletedWords from "./CompletedWords";
 import PieceCounter from "./PieceCounter";
 import {Pie} from "react-chartjs-2";
 import {Scrollbars} from 'react-custom-scrollbars';
+import {number} from "prop-types";
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -586,12 +587,13 @@ class GamePage extends React.Component {
     async getCurrentPlayer(){
 
         let response = await api.get("/games/" + localStorage.getItem("currentGame"));
-        console.log(response);
+
         let currentPlayer = response.data.currentPlayerId;
         console.log(currentPlayer);
         this.setState({
             currentPlayer: currentPlayer,
-        })
+        });
+        console.log(this.state);
 
     }
 
@@ -763,7 +765,9 @@ class GamePage extends React.Component {
 
     //TODO: Still needed?
     async testPutStone() {
-        console.log(this.state);
+        console.log(localStorage.getItem("current"));
+        console.log(this.state.currentPlayer);
+        console.log(this.state.currentPlayer === localStorage.getItem("current"));
     }
 
 
@@ -940,11 +944,11 @@ class GamePage extends React.Component {
                             <Row>
                                 <Col>
                                     <PlayerButtons>
-                                        <Button variant="dark" size="sm" block onClick={this.endTurn} disabled={!(this.state.currentPlayer === localStorage.getItem("current"))}>
+                                        <Button variant="dark" size="sm" block onClick={this.endTurn} disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                             End Turn
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
-                                                disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === localStorage.getItem("current"))}>
+                                                disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                             Swap
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.getBoard}>
