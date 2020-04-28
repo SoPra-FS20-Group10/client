@@ -17,7 +17,6 @@ const Username = styled.label`
     display: flex;
     align-items: center;
     justify-content: center;
-    
 `;
 
 // TODO: Pass real piecesLeft count from GamePage (there it should have a method getting the game anyway)

@@ -35,14 +35,11 @@ import {Scrollbars} from 'react-custom-scrollbars';
 
 const BoardWrapper = styled.div`
     border-radius: 4pt;
-    
     margin: 0pt;
     padding: 1em;
     width: 500pt;
     height: 550pt;
-
     background: rgba(77, 77, 77, 0.5);
-
     color: white;
     display: flex;
     align-items: center;
@@ -79,9 +76,8 @@ const SideWrapper = styled.div`
 `;
 
 const PlayerButtons = styled.div`
-
     position: absolute;
-    bottom: -470pt;
+    bottom: -400pt;
 `;
 
 const DeckWrapper = styled.div`
@@ -870,7 +866,7 @@ class GamePage extends React.Component {
                                 // This will activate auto-height
                                 autoHeight
                                 autoHeightMin={550}
-                                autoHeightMax={600}
+                                autoHeightMax={590}
                                 renderTrackVertical={this.renderTrackVertical}
                                 renderThumbVertical={this.renderThumbVertical}
                                 style={{overflow: 'hidden'}}
@@ -920,11 +916,8 @@ class GamePage extends React.Component {
 
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
-                            <Row>
-                                <Col className="py-2 px-0">
-                                    <ScoreBoard gameId={this.state.gameId}/>
-                                </Col>
-                            </Row>
+                            <div>Scoreboard</div>
+                            <ScoreBoard gameId={this.state.gameId}/>
 
                             <Row>
                                 <Col>

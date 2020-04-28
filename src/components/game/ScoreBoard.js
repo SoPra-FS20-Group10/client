@@ -11,24 +11,14 @@ import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const ScoreBoardEntryWrapper = styled.div`
-    margin: 0pt;
-    padding: 1em;
-    width: 100%;
-    
-    background: rgba(77, 77, 77, 0.7);
-    
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
+
 const ScoreBoardWrapper = styled.div`
+    border-radius: 4pt;
+    
     margin: 0pt;
-    padding: 1em;
     width: 100%;
     
-    background: rgba(77, 77, 77, 0.7);
+    background: rgba(77, 77, 77, 0.9);
     
     color: white;
     display: flex;
@@ -40,11 +30,7 @@ const Score = styled.label`
     padding-bottom: 5pt;
     margin: 0pt;
     width: 100%;
-    
     font-size: 10px;
-    
-    background: rgba(77, 77, 77, 0.9);
-    
     color: white;
     display: flex;
     align-items: center;
@@ -56,11 +42,7 @@ const Username = styled.label`
     padding-top: 5pt;
     margin: 0pt;
     width: 100%;
-    
     font-size: 20px;
-    
-    background: rgba(77, 77, 77, 0.9);
-    
     color: white;
     display: flex;
     align-items: center;
@@ -137,7 +119,7 @@ class ScoreBoard extends React.Component {
 
     render() {
         return (
-            <Container>
+            <ScoreBoardWrapper>
 
                 {!this.state.players ? (
                     <Spinner/>
@@ -145,9 +127,9 @@ class ScoreBoard extends React.Component {
                     <div>
                         {this.state.players.map(player => {
                             return (
+                                <div>
 
-
-                                this.state.currentPlayerId == player.id ? (
+                                    {this.state.currentPlayerId == player.id ? (
                                     <div key={player.id}>
                                         <Row>
                                             <UsernameHighlighted> {player.username}</UsernameHighlighted>
@@ -165,13 +147,13 @@ class ScoreBoard extends React.Component {
                                             <Score>Points: {player.score}</Score>
                                         </Row>
                                     </div>
-                                )
-
+                                )}
+                                </div>
                             )
                                 ;
                         })}</div>
                 )}
-            </Container>
+            </ScoreBoardWrapper>
         );
     }
 
