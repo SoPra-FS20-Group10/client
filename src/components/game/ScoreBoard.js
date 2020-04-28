@@ -14,6 +14,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ScoreBoardWrapper = styled.div`
     border-radius: 4pt;
+    padding-top:10pt;
+    padding-bottom:10pt;
     
     margin: 0pt;
     width: 100%;
@@ -49,6 +51,14 @@ const Username = styled.label`
     justify-content: center;
 `;
 
+const HighlightWrapper = styled.div`
+    border-radius: 4pt;
+    padding-left: 4em;
+    padding-right: 4em;
+    border: 1px solid white;
+   
+`;
+
 
 const UsernameHighlighted = styled.label`
     padding-top: 5pt;
@@ -57,7 +67,7 @@ const UsernameHighlighted = styled.label`
     
     font-size: 20px;
     
-    background: rgba(150, 150, 150, 0.9);
+    // background: rgba(150, 150, 150, 0.9);
     
     color: white;
     display: flex;
@@ -72,7 +82,7 @@ const ScoreHighlighted = styled.label`
     
     font-size: 10px;
     
-    background: rgba(150, 150, 150, 0.9);
+    // background: rgba(150, 150, 150, 0.9);
     
     color: white;
     display: flex;
@@ -85,62 +95,71 @@ class ScoreBoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            players: null,
-            gameId: this.props.gameId,
             currentPlayerId: this.props.currentPlayerId,
+            players: this.props.players
         };
-
     }
 
+    componentDidMount() {
+        this.setState({
+            currentPlayerId: this.props.currentPlayerId,
+            players: this.props.players
+        })
 
-    async componentDidMount() {
-        try {
-            setInterval(async () => {
-                this.fetchPlayers();
-                console.log(this.state);
-            }, 500);
-        } catch (e) {
-            console.log(e);
-        }
-        console.log(this.state);
-
-    }
-
-    async fetchPlayers() {
-        try {
-            let response = await api.get("/games/" + this.state.gameId + "/players/");
-            let players = response.data;
+        setInterval(() => {
             this.setState({
-                players: players,
+                currentPlayerId: this.props.currentPlayerId,
+                players: this.props.players
             })
-
-        }catch(error){
-            console.log(error);
-        }
+        }, 500);
     }
+
+    // async componentDidMount() {
+    //     try {
+    //         setInterval(async () => {
+    //             this.fetchPlayers();
+    //             console.log(this.state);
+    //         }, 500);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    //     console.log(this.state);
+    //
+    // }
+    //
+    // async fetchPlayers() {
+    //     try {
+    //         let response = await api.get("/games/" + this.state.gameId + "/players/");
+    //         let players = response.data;
+    //         this.setState({
+    //             players: players,
+    //         })
+    //
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
 
 
     render() {
         return (
             <ScoreBoardWrapper>
-
-                {!this.state.players ? (
+                {(!this.state.players || !this.state.currentPlayerId )? (
                     <Spinner/>
                 ) : (
                     <div>
                         {this.state.players.map(player => {
                             return (
                                 <div>
-
                                     {this.state.currentPlayerId == player.id ? (
-                                    <div key={player.id}>
-                                        <Row>
+                                    <HighlightWrapper key={player.id} >
+                                        <Row >
                                             <UsernameHighlighted> {player.username}</UsernameHighlighted>
                                         </Row>
                                         <Row className='text-center'>
                                             <ScoreHighlighted>Points: {player.score}</ScoreHighlighted>
                                         </Row>
-                                    </div>
+                                    </HighlightWrapper>
                                 ) : (
                                     <div key={player.id}>
                                         <Row>

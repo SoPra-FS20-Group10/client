@@ -27,7 +27,8 @@ const WordsWrapper = styled.div`
 
 
 const Word = styled.label`
-    padding-top: 5pt;
+    padding-top: 10pt;
+    padding-bottom: 10pt;
     margin: 0pt;
     
     font-size: 20px;

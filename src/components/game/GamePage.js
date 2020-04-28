@@ -152,7 +152,6 @@ class GamePage extends React.Component {
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
             stones: null,
-            stonesLength: null,
             gameStatus: null,
             words: null,
             showMainPage: true,
@@ -771,8 +770,8 @@ class GamePage extends React.Component {
     async getGameInfo() {
         let response = await api.get("/games/" + this.state.gameId);
         this.setState({
-            words: response.data.words, currentPlayer: response.data.currentPlayerId,
-            stones: response.data.stones, stonesLength: response.data.stones.length, gameStatus: response.data.status
+            words: response.data.words, currentPlayer: response.data.currentPlayerId, stones: response.data.stones,
+            gameStatus: response.data.status
         });
     }
 
@@ -952,7 +951,8 @@ class GamePage extends React.Component {
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
                             <div>Scoreboard</div>
-                            <ScoreBoard gameId={this.state.gameId} currentPlayerId={this.state.currentPlayer}/>
+                            <ScoreBoard gameId={this.state.gameId} currentPlayerId={this.state.currentPlayer}
+                            players={this.state.players}/>
 
                             <Row>
                                 <Col>
