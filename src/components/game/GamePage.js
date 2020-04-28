@@ -47,6 +47,8 @@ import PieceBag from "./PieceBag";
 // `;
 
 const BoardWrapper = styled.div`
+    border-radius: 4pt;
+    
     margin: 0pt;
     padding: 1em;
     width: 500pt;
@@ -75,6 +77,7 @@ const FormGroup = styled.div`
 `;
 
 const SideWrapper = styled.div`
+    border-radius: 4pt;
 
     padding: 1em;
     width: 150pt;
@@ -95,6 +98,7 @@ const PlayerButtons = styled.div`
 `;
 
 const DeckWrapper = styled.div`
+    border-radius: 4pt;
     margin-top:8pt;
     padding: 1em;
     height: 52pt;
@@ -826,14 +830,7 @@ class GamePage extends React.Component {
                 stoneIds.push(this.state.boxes[i].piece.id)
             }
         }
-        // console.log(exchangeIndices)
-        // let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
-        // let playerStonesList = response.data;
-        // let playerStonesBag = [];
-        // playerStonesList.map((stone, index) => {
-        //     playerStonesBag[index] = {piece: {text: stone.symbol, id: stone.id, score: stone.value}}
-        // });
-        //
+
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
             stoneIds: stoneIds
@@ -843,7 +840,7 @@ class GamePage extends React.Component {
             await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
 
         } catch (error) {
-            alert("Could not put the pieces.");
+            alert("Could not exchange the pieces.");
         }
 
         await this.getPlayerStones();

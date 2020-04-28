@@ -14,6 +14,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 const NameWrapper = styled.div`
+    border-radius: 4pt;
     margin-top: 2%;
     margin-bottom: 1em;
     margin-left: 5%;
@@ -24,6 +25,7 @@ const NameWrapper = styled.div`
 `;
 
 const StatsWrapper = styled.div`
+    border-radius: 4pt;
     margin-left: 5%;
     padding: 2%;
     width: 90%;
@@ -33,6 +35,7 @@ const StatsWrapper = styled.div`
 `;
 
 const GraphWrapper = styled.div`
+    border-radius: 4pt;
     margin-top: 5%;
     margin-left: 5%;
     padding: 5%;
@@ -45,6 +48,7 @@ const GraphWrapper = styled.div`
 `;
 
 const MatchHistoryWrapper = styled.div`
+    border-radius: 4pt;
     margin-top: 5%;
     margin-left: 5%;
     width: 25%;
