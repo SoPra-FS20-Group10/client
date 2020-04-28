@@ -66,7 +66,7 @@ class CompletedWords extends React.Component {
     async fetchWords() {
         try {
             let response = await api.get("/games/" + this.state.gameId);
-            console.log(response);
+
             let words = response.data;
 
             this.setState({

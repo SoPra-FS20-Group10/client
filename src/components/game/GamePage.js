@@ -142,6 +142,7 @@ class GamePage extends React.Component {
 
             placedLetters: [],
             placedLettersCoordinates: [],
+            currentPlayer: null,
             players: null,
             showModal: false,
             // TODO: Replace placeholder
@@ -391,6 +392,8 @@ class GamePage extends React.Component {
         this.exchangePieces = this.exchangePieces.bind(this);
         this.placeLetter = this.placeLetter.bind(this);
         this.endTurn = this.endTurn.bind(this);
+        this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
+        this.showScoreBoard = this.showScoreBoard.bind(this);
     }
 
 
@@ -398,12 +401,14 @@ class GamePage extends React.Component {
         try {
             setInterval(async () => {
                 this.getPlayers();
+                this.getCurrentPlayer();
             }, 5000);
         } catch (e) {
             console.log(e);
         }
+        this.getPlayers();
+        this.getBoard();
         this.getPlayerStones();
-        this.initPieceBag();
     }
 
     // Initializing a bag with all the letters (lookup)
@@ -563,12 +568,30 @@ class GamePage extends React.Component {
             pieceBag: pieceBag,
 
         }, () => {
-            console.log(this.state)
+            console.log(this.state);
         });
     }
 
     getPieceById(id) {
         return this.state.pieceBag[id];
+
+    }
+
+    showScoreBoard(){
+
+        return(<ScoreBoard gameId={this.state.gameId} currentPlayerId={this.state.currentPlayer}/>)
+
+    }
+
+    async getCurrentPlayer(){
+
+        let response = await api.get("/games/" + localStorage.getItem("currentGame"));
+        console.log(response);
+        let currentPlayer = response.data.currentPlayerId;
+        console.log(currentPlayer);
+        this.setState({
+            currentPlayer: currentPlayer,
+        })
 
     }
 
@@ -589,7 +612,7 @@ class GamePage extends React.Component {
 
             playerStonesList.map((stone, index) => {
 
-                playerStonesBag[index] = {piece: {id: stone.id, score: stone.value, text: stone.symbol}}
+                playerStonesBag[index] = {piece: {id: stone.id, score: stone.value, text: stone.symbol.toUpperCase()}}
             });
             this.setState({
                 boxes: playerStonesBag,
@@ -722,54 +745,47 @@ class GamePage extends React.Component {
     }
 
     async getBoard() {
-        console.log(this.state.boxes);
-       /* let response = await api.get("/games/" + this.state.gameId);
 
-        let board = response.data;
+        let response = await api.get("/games/" + this.state.gameId);
+        console.log(response);
+
+        let board = response.data.board;
         let newBoard = this.oneDimToTwoDim(board);
+
+
         this.initBoard(newBoard);
         this.setState({});
-        console.log(this.state.board);
-        */
+
+
 
     }
 
 
     //TODO: Still needed?
     async testPutStone() {
-        const requestBody = JSON.stringify({
-            token: localStorage.getItem("token"),
-            stoneIds: [136]
-        });
-        try {
-            await api.put("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/exchange", requestBody);
-
-        } catch (error) {
-            alert("Could not put the pieces.");
-        }
+        console.log(this.state);
     }
 
 
     initBoard(board) {
 
         // create board
-        let newBoard = this.state.board;
+        let updatedBoard = this.state.board;
 
         board.map((col, i) => {
-            board.map((tile, j) => {
-                let letter = new Piece(tile);
-
-                if (letter.text == null) {
-                    newBoard[i][j].piece = null;
+            col.map((stone, j) => {
+                if (stone.stoneSymbol == null) {
+                    updatedBoard[i][j].piece = null;
                 } else {
-                    newBoard[i][j].piece = {text: letter.text, id: letter.id, score: letter.score};
+                    updatedBoard[i][j].piece = {text: stone.stoneSymbol.toUpperCase(), score: stone.value};
                 }
             });
         });
 
         this.setState({
-            board: newBoard,
-        })
+            board: updatedBoard,
+        });
+
 
     }
 
@@ -824,7 +840,7 @@ class GamePage extends React.Component {
     async endTurn() {
         // end turn, push all changes to the backend and draw stones
 
-        console.log("Ending turn");
+
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
             stoneIds: this.state.placedLetters,
@@ -837,6 +853,7 @@ class GamePage extends React.Component {
         } catch (error) {
             console.log(error);
         }
+        this.getCurrentPlayer();
     }
 
     async handleCloseModalExchange() {
@@ -918,16 +935,16 @@ class GamePage extends React.Component {
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
                             <div>Scoreboard</div>
-                            <ScoreBoard gameId={this.state.gameId}/>
+                            <ScoreBoard gameId={this.state.gameId} currentPlayerId={this.state.currentPlayer}/>
 
                             <Row>
                                 <Col>
                                     <PlayerButtons>
-                                        <Button variant="dark" size="sm" block onClick={this.endTurn}>
+                                        <Button variant="dark" size="sm" block onClick={this.endTurn} disabled={!(this.state.currentPlayer === localStorage.getItem("current"))}>
                                             End Turn
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
-                                                disabled={this.state.placedLetters.length !== 0}>
+                                                disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === localStorage.getItem("current"))}>
                                             Swap
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.getBoard}>

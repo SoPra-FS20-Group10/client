@@ -87,6 +87,7 @@ class ScoreBoard extends React.Component {
         this.state = {
             players: null,
             gameId: this.props.gameId,
+            currentPlayerId: this.props.currentPlayerId,
         };
 
     }
@@ -96,10 +97,12 @@ class ScoreBoard extends React.Component {
         try {
             setInterval(async () => {
                 this.fetchPlayers();
+                console.log(this.state);
             }, 500);
         } catch (e) {
             console.log(e);
         }
+        console.log(this.state);
 
     }
 
