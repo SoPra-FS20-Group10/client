@@ -26,6 +26,7 @@ import PieceCounter from "./PieceCounter";
 import {Pie} from "react-chartjs-2";
 import {Scrollbars} from 'react-custom-scrollbars';
 import {number} from "prop-types";
+import {Spinner} from "../../views/design/Spinner";
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -150,6 +151,10 @@ class GamePage extends React.Component {
             // playerId: this.props.location.state.playerId,
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
+            stones: null,
+            stonesLength: null,
+            gameStatus: null,
+            words: null,
             showMainPage: true,
             showLeaderboard: false,
             showProfile: false,
@@ -399,17 +404,19 @@ class GamePage extends React.Component {
 
 
     componentDidMount() {
+        this.getPlayers();
+        this.getBoard();
+        this.getPlayerStones();
+        this.getGameInfo();
         try {
             setInterval(async () => {
                 this.getPlayers();
                 this.getCurrentPlayer();
+                this.getGameInfo();
             }, 5000);
         } catch (e) {
             console.log(e);
         }
-        this.getPlayers();
-        this.getBoard();
-        this.getPlayerStones();
     }
 
     // Initializing a bag with all the letters (lookup)
@@ -578,13 +585,13 @@ class GamePage extends React.Component {
 
     }
 
-    showScoreBoard(){
+    showScoreBoard() {
 
-        return(<ScoreBoard gameId={this.state.gameId} currentPlayerId={this.state.currentPlayer}/>)
+        return (<ScoreBoard gameId={this.state.gameId} currentPlayerId={this.state.currentPlayer}/>)
 
     }
 
-    async getCurrentPlayer(){
+    async getCurrentPlayer() {
 
         let response = await api.get("/games/" + localStorage.getItem("currentGame"));
 
@@ -759,9 +766,15 @@ class GamePage extends React.Component {
         this.setState({});
 
 
-
     }
 
+    async getGameInfo() {
+        let response = await api.get("/games/" + this.state.gameId);
+        this.setState({
+            words: response.data.words, currentPlayer: response.data.currentPlayerId,
+            stones: response.data.stones, stonesLength: response.data.stones.length, gameStatus: response.data.status
+        });
+    }
 
     //TODO: Still needed?
     async testPutStone() {
@@ -878,7 +891,7 @@ class GamePage extends React.Component {
                             <div>Remaining Stones</div>
                             <Row>
                                 <Col>
-                                    <PieceCounter piecesLeft={10}/>
+                                    <PieceCounter piecesLeft={this.state.stones}/>
                                 </Col>
                             </Row>
 
@@ -944,7 +957,8 @@ class GamePage extends React.Component {
                             <Row>
                                 <Col>
                                     <PlayerButtons>
-                                        <Button variant="dark" size="sm" block onClick={this.endTurn} disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
+                                        <Button variant="dark" size="sm" block onClick={this.endTurn}
+                                                disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                             End Turn
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.handleOpenModal}

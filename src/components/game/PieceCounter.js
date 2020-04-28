@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Username = styled.label`
     border-radius: 4pt;
     padding-top: 5pt;
+    padding-bottom: 5pt;
     margin: 0pt;
     margin-bottom:1em;
     width: 100%;
@@ -24,32 +25,38 @@ class PieceCounter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            piecesLeft: this.props.stonesLength,
+            piecesLeft: this.props.piecesLeft,
         };
     }
 
     componentDidMount() {
         this.setState({
-            piecesLeft: this.props.stonesLength,
+            piecesLeft: this.props.piecesLeft,
         })
 
-        setInterval( () => {this.setState({
-            piecesLeft: this.props.stonesLength,
-        })}, 500);
+        setInterval(() => {
+            this.setState({
+                piecesLeft: this.props.piecesLeft,
+            })
+        }, 500);
     }
 
     render() {
         return (
             <Container>
                 {!this.state.piecesLeft ? (
-                    <Spinner/>
+                    <div>
+                        <Row>
+                            <Username>
+                                <Spinner/>
+                            </Username>
+                        </Row>
+                    </div>
                 ) : (
                     <div>
-                        <div>
-                            <Row>
-                                <Username> {this.state.piecesLeft}</Username>
-                            </Row>
-                        </div>
+                        <Row>
+                            <Username> {this.state.piecesLeft.length}</Username>
+                        </Row>
                     </div>
                 )}
             </Container>
