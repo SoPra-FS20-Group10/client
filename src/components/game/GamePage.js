@@ -21,6 +21,7 @@ import TILES from "../shared/Other/Tiles";
 import FakePiece from "./FakePiece";
 import Form from "react-bootstrap/Form";
 import Piece from "../shared/models/Piece";
+import CompletedWords from "./CompletedWords";
 
 
 // const Container = styled(BaseContainer)`
@@ -858,6 +859,12 @@ class GamePage extends React.Component {
                             <div>Stones left: {10}</div>
 
                             <div>Played Words</div>
+
+                            <Row>
+                            <Col className="py-2 px-0">
+                                <CompletedWords gameId={this.state.gameId} />
+                            </Col>
+                            </Row>
                         </SideWrapper>
                     </Col>
 
