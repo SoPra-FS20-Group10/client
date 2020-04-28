@@ -579,12 +579,6 @@ class GamePage extends React.Component {
         this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
 
-    async handleCloseModalExchange() {
-        this.exchangePieces();
-        this.getPlayerStones();
-        this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
-    }
-
     async getPlayerStones(){
         try{
             let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
@@ -846,15 +840,6 @@ class GamePage extends React.Component {
         }
     }
 
-    //pieceexchange
-
-    handleChange(key, event) {
-        let s = this.state.check;
-        s[key] = event.target.checked;
-        this.setState({check: s});
-        console.log(this.state.check)
-    }
-
     async handleCloseModalExchange() {
         this.exchangePieces();
         this.getPlayerStones();
@@ -927,7 +912,7 @@ class GamePage extends React.Component {
                                         <Button variant="dark" size="sm" block onClick={this.endTurn}>
                                             End Turn
                                         </Button>
-                                        <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
+                                        <Button variant="dark" size="sm" block onClick={this.handleOpenModal} disabled={this.state.placedLetters.length!==0}>
                                             Swap
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.getBoard}>
