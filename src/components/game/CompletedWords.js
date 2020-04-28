@@ -46,57 +46,77 @@ class CompletedWords extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            words: null,
-            gameId: this.props.gameId,
+            words: -1,
         };
 
     }
 
-    async componentDidMount() {
-        try {
-            setInterval(async () => {
-                this.fetchWords();
-            }, 1000);
-        } catch (e) {
-            console.log(e);
-        }
+    componentDidMount() {
+        this.setState({words: this.props.words,})
 
-    }
-
-    // TODO: Remove or Finish
-    async fetchWords() {
-        try {
-            let response = await api.get("/games/" + this.state.gameId);
-
-            let words = response.data;
-
+        setInterval(() => {
             this.setState({
-                words: ["Hello", "World", "Hello", "World", "Hello", "World","Hello", "World","Hello", "World","Hello",
-                    "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World",]
+                words: this.props.words,
             })
-
-        }catch(error){
-            console.log(error);
-        }
+        }, 500);
     }
+
+    // async componentDidMount() {
+    //     try {
+    //         setInterval(async () => {
+    //             this.fetchWords();
+    //         }, 1000);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    //
+    // }
+    //
+    // // TODO: Remove or Finish
+    // async fetchWords() {
+    //     try {
+    //         let response = await api.get("/games/" + this.state.gameId);
+    //
+    //         let words = response.data;
+    //
+    //         this.setState({
+    //             words: ["Hello", "World", "Hello", "World", "Hello", "World","Hello", "World","Hello", "World","Hello",
+    //                 "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World",]
+    //         })
+    //
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
 
     render() {
         return (
             <WordsWrapper>
-                {!this.state.words ? (
+                {this.state.words == -1 ? (
                     <Spinner/>
                 ) : (
                     <div>
-                        {this.state.words.map(word => {
-                            return (
-                                    <div>
-                                        <Row>
-                                            <Word> {word}</Word>
-                                        </Row>
-                                    </div>
-                                );
+                        {!this.state.words ? (
+                            <div>
+                                <Row>
+                                    <Word>-</Word>
+                                </Row>
+                            </div>
+                        ) : (
+                            <div>
+                                {this.state.words.map(word => {
+                                    return (
+                                        <div>
+                                            <Row>
+                                                <Word> {word}</Word>
+                                            </Row>
+                                        </div>
+                                    );
 
-                        })}</div>
+                                })}
+                            </div>
+                        )}
+                    </div>
                 )}
             </WordsWrapper>
         );
@@ -105,3 +125,4 @@ class CompletedWords extends React.Component {
 }
 
 export default CompletedWords;
+

@@ -905,7 +905,8 @@ class GamePage extends React.Component {
                                 renderThumbVertical={this.renderThumbVertical}
                                 style={{overflow: 'hidden'}}
                             >
-                                <CompletedWords gameId={this.state.gameId}/>
+                                {/*<CompletedWords gameId={this.state.gameId}/>*/}
+                                <CompletedWords words={this.state.words}/>
                             </Scrollbars>
 
                         </SideWrapper>
@@ -951,9 +952,7 @@ class GamePage extends React.Component {
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
                             <div>Scoreboard</div>
-                            <ScoreBoard gameId={this.state.gameId} currentPlayerId={this.state.currentPlayer}
-                            players={this.state.players}/>
-
+                            <ScoreBoard currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
                             <Row>
                                 <Col>
                                     <PlayerButtons>
