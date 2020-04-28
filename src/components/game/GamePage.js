@@ -614,7 +614,6 @@ class GamePage extends React.Component {
     async getPlayerStones() {
         try {
             let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
-            console.log(response);
             let playerStonesList = response.data;
             let playerStonesBag = [];
 
@@ -713,13 +712,12 @@ class GamePage extends React.Component {
         //get current letters the user had in his bag (1d Array)
         let currentPieces = this.state.boxes;
         currentPieces.map((letter, index) => {
-            console.log(letter.piece);
-            console.log(item.piece);
+
             if (letter.piece.id === item.piece.id) {
                 // The 1d index for the backend
                 let indexInOneDimension = this.toOneDimension(i, j);
                 this.placeLetter(letter.piece, indexInOneDimension);
-                console.log("splicing");
+
                 currentPieces.splice(index, 1);
             }
         });
@@ -755,15 +753,11 @@ class GamePage extends React.Component {
     async getBoard() {
 
         let response = await api.get("/games/" + this.state.gameId);
-        console.log(response);
-
         let board = response.data.board;
         let newBoard = this.oneDimToTwoDim(board);
 
-
         this.initBoard(newBoard);
         this.setState({});
-
 
     }
 
@@ -842,10 +836,10 @@ class GamePage extends React.Component {
             token: localStorage.getItem("token"),
             stoneIds: stoneIds
         });
-
+        console.log(requestBody);
         try {
             await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
-
+            this.endTurn();
         } catch (error) {
             alert("Could not exchange the pieces.");
         }
