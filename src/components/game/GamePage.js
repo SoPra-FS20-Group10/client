@@ -399,7 +399,6 @@ class GamePage extends React.Component {
         try {
             setInterval(async () => {
                 this.getPlayers();
-                this.getPlayerStones();
             }, 5000);
         } catch (e) {
             console.log(e);
