@@ -25,6 +25,7 @@ import CompletedWords from "./CompletedWords";
 import PieceCounter from "./PieceCounter";
 import {Pie} from "react-chartjs-2";
 import {Scrollbars} from 'react-custom-scrollbars';
+import {logChatPromiseExecution} from "stream-chat";
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -151,6 +152,11 @@ class GamePage extends React.Component {
             showMainPage: true,
             showLeaderboard: false,
             showProfile: false,
+            currentPlayerId: null,
+            stones: null,
+            stonesLength:null,
+            gameStatus: null,
+            words: null,
             check: [false, false, false, false, false, false, false],
             checkBoxes: [{checked: false}, {checked: true}, {checked: false},
                 {checked: false}, {checked: false}, {checked: false}, {checked: false}],
@@ -391,19 +397,24 @@ class GamePage extends React.Component {
         this.exchangePieces = this.exchangePieces.bind(this);
         this.placeLetter = this.placeLetter.bind(this);
         this.endTurn = this.endTurn.bind(this);
+        this.getGameInfo = this.getGameInfo.bind(this);
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
+        this.getPlayerStones();
+        this.initPieceBag();
+        this.getPlayers();
+        this.getGameInfo();
+
         try {
             setInterval(async () => {
                 this.getPlayers();
+                this.getGameInfo();
             }, 5000);
         } catch (e) {
             console.log(e);
         }
-        this.getPlayerStones();
-        this.initPieceBag();
     }
 
     // Initializing a bag with all the letters (lookup)
@@ -734,6 +745,12 @@ class GamePage extends React.Component {
 
     }
 
+    async getGameInfo(){
+        let response = await api.get("/games/" + this.state.gameId);
+        this.setState({words: response.data.words,  currentPlayerId: response.data.currentPlayerId,
+            stones: response.data.stones, stonesLength: response.data.stones.length, gameStatus:response.data.status});
+    }
+
 
     //TODO: Still needed?
     async testPutStone() {
@@ -857,7 +874,7 @@ class GamePage extends React.Component {
                             <div>Remaining Stones</div>
                             <Row>
                                 <Col>
-                                    <PieceCounter piecesLeft={10}/>
+                                    <PieceCounter stonesLength={this.state.stonesLength}/>
                                 </Col>
                             </Row>
 
@@ -872,7 +889,7 @@ class GamePage extends React.Component {
                                 renderThumbVertical={this.renderThumbVertical}
                                 style={{overflow: 'hidden'}}
                             >
-                                <CompletedWords gameId={this.state.gameId}/>
+                                <CompletedWords words={this.state.words} gameId={this.state.gameId}/>
                             </Scrollbars>
 
                         </SideWrapper>

@@ -45,39 +45,48 @@ class CompletedWords extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            words: null,
-            gameId: this.props.gameId,
+            words: this.props.words,
+            // gameId: this.props.gameId,
         };
 
     }
 
-    async componentDidMount() {
-        try {
-            setInterval(async () => {
-                this.fetchWords();
-            }, 1000);
-        } catch (e) {
-            console.log(e);
-        }
+    componentDidMount() {
+        this.setState({
+            words: this.props.words,
+        })
 
+        setInterval( () => {this.setState({
+            words: this.props.words,
+        })}, 500);
     }
 
-    // TODO: Remove or Finish
-    async fetchWords() {
-        try {
-            let response = await api.get("/games/" + this.state.gameId);
-            console.log(response);
-            let words = response.data;
-
-            this.setState({
-                words: ["Hello", "World", "Hello", "World", "Hello", "World","Hello", "World","Hello", "World","Hello",
-                    "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World",]
-            })
-
-        }catch(error){
-            console.log(error);
-        }
-    }
+    // async componentDidMount() {
+    //     try {
+    //         setInterval(async () => {
+    //             this.fetchWords();
+    //         }, 1000);
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    //
+    // }
+    //
+    // // TODO: Remove or Finish
+    // async fetchWords() {
+    //     try {
+    //         let response = await api.get("/games/" + this.state.gameId);
+    //         let words = response.data;
+    //
+    //         this.setState({
+    //             words: ["Hello", "World", "Hello", "World", "Hello", "World","Hello", "World","Hello", "World","Hello",
+    //                 "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World","Hello", "World",]
+    //         })
+    //
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
 
     render() {
         return (
