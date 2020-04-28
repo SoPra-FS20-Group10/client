@@ -24,8 +24,18 @@ class PieceCounter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            piecesLeft: this.props.piecesLeft,
+            piecesLeft: this.props.stonesLength,
         };
+    }
+
+    componentDidMount() {
+        this.setState({
+            piecesLeft: this.props.stonesLength,
+        })
+
+        setInterval( () => {this.setState({
+            piecesLeft: this.props.stonesLength,
+        })}, 500);
     }
 
     render() {
