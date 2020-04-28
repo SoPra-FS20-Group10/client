@@ -721,16 +721,14 @@ class GamePage extends React.Component {
     }
 
     async getBoard() {
-
+        console.log(this.state.board);
         let response = await api.get("/games/" + this.state.gameId);
 
         let board = response.data;
         let newBoard = this.oneDimToTwoDim(board);
         this.initBoard(newBoard);
-
         this.setState({});
-
-
+        console.log(this.state.board);
     }
 
 
