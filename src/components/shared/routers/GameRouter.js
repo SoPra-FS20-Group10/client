@@ -7,6 +7,7 @@ import ProfilePage from "../../profile/ProfilePage";
 import LobbyPage from "../../lobby/LobbyPage";
 import GamePage from "../../game/GamePage";
 import EndScreenPage from "../../endscreen/EndScreenPage";
+import {InGameGuard} from "../routeProtectors/InGameGuard";
 
 const Container = styled.div`
   display: flex;
@@ -23,20 +24,31 @@ class GameRouter extends React.Component {
                 <Route
                     exact
                     path={`${this.props.base}/overview`}
-                    render={() => <OverviewPage/>}
+                    render={() =>
+                        <InGameGuard>
+                            <OverviewPage/>
+                        </InGameGuard>
+                    }
                 />
 
                 <Route
                     exact
                     path={`${this.props.base}/leaderboard`}
-                    render={() => <LeaderboardPage/>}
+                    render={() =>
+
+                        <InGameGuard>
+                            <LeaderboardPage/>
+                        </InGameGuard>
+                    }
                 />
 
                 {/*// TODO: ID or not?*/}
                 <Route
                     exact
                     path={`${this.props.base}/board`}
-                    render={() => <GamePage/>}
+                    render={() =>
+                        <GamePage/>
+                    }
                 />
 
                 {/*// TODO: ID or not?*/}
@@ -49,19 +61,31 @@ class GameRouter extends React.Component {
                 <Route
                     exact
                     path={`${this.props.base}/profile/:userId`}
-                    render={() => <ProfilePage/>}
+                    render={() =>
+                        <InGameGuard>
+                            <ProfilePage/>
+                        </InGameGuard>
+                    }
                 />
 
                 <Route
                     exact
                     path={`${this.props.base}/lobby/:lobbyId`}
-                    render={() => <LobbyPage/>}
+                    render={() =>
+                        <InGameGuard>
+                            <LobbyPage/>
+                        </InGameGuard>
+                    }
                 />
 
                 <Route
                     exact
                     path={`${this.props.base}`}
-                    render={() => <Redirect to={`${this.props.base}/overview`}/>}
+                    render={() =>
+                        <InGameGuard>
+                            <Redirect to={`${this.props.base}/overview`}/>
+                        </InGameGuard>
+                    }
                 />
             </Container>
         );
@@ -70,5 +94,5 @@ class GameRouter extends React.Component {
 
 /*
 * Don't forget to export your component!
- */
+*/
 export default GameRouter;
