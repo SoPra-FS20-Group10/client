@@ -22,6 +22,8 @@ import FakePiece from "./FakePiece";
 import Form from "react-bootstrap/Form";
 import Piece from "../shared/models/Piece";
 import CompletedWords from "./CompletedWords";
+import PieceCounter from "./PieceCounter";
+import {Pie} from "react-chartjs-2";
 
 
 // const Container = styled(BaseContainer)`
@@ -385,14 +387,14 @@ class GamePage extends React.Component {
         this.testPutStone = this.testPutStone.bind(this);
         this.getPlayers = this.getPlayers.bind(this);
         this.getPlayerStones = this.getPlayerStones.bind(this);
-        this.initBoard=this.initBoard.bind(this);
-        this.initPieceBag=this.initPieceBag.bind(this);
-        this.getPieceById=this.getPieceById.bind(this);
+        this.initBoard = this.initBoard.bind(this);
+        this.initPieceBag = this.initPieceBag.bind(this);
+        this.getPieceById = this.getPieceById.bind(this);
         this.handleCloseModalAbort = this.handleCloseModalAbort.bind(this);
         this.handleCloseModalExchange = this.handleCloseModalExchange.bind(this);
         this.exchangePieces = this.exchangePieces.bind(this);
-        this.placeLetter=this.placeLetter.bind(this);
-        this.endTurn=this.endTurn.bind(this);
+        this.placeLetter = this.placeLetter.bind(this);
+        this.endTurn = this.endTurn.bind(this);
     }
 
 
@@ -474,7 +476,8 @@ class GamePage extends React.Component {
         {
             let piece = new Piece({id: id, text: PIECE.K.text, score: PIECE.K.score})
             pieceBag.push(piece);
-            id++;}
+            id++;
+        }
 
         for (let i = 0; i < 5; i++) {
             let piece = new Piece({id: id, text: PIECE.L.text, score: PIECE.L.score})
@@ -551,7 +554,7 @@ class GamePage extends React.Component {
             id++;
         }
         for (let i = 0; i < 3; i++) {
-            let piece = new Piece({id:id,text:PIECE.Y.text, score:PIECE.Y.score})
+            let piece = new Piece({id: id, text: PIECE.Y.text, score: PIECE.Y.score})
             pieceBag.push(piece);
             id++;
         }
@@ -561,13 +564,14 @@ class GamePage extends React.Component {
         }
 
         this.setState({
-            pieceBag:pieceBag,
+            pieceBag: pieceBag,
 
         }, () => {
-            console.log(this.state)});
+            console.log(this.state)
+        });
     }
 
-    getPieceById(id){
+    getPieceById(id) {
         return this.state.pieceBag[id];
 
     }
@@ -580,33 +584,32 @@ class GamePage extends React.Component {
         this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
 
-    async getPlayerStones(){
-        try{
-            let response = await api.get("/games/"+ this.state.gameId + "/players/"+localStorage.getItem("current") +"/bag");
+    async getPlayerStones() {
+        try {
+            let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
             let playerStonesList = response.data;
             let playerStonesBag = [];
             let pieceBag = this.state.pieceBag;
 
 
             playerStonesList.map((stone, index) => {
-                let piece =this.getPieceById(stone.id);
+                let piece = this.getPieceById(stone.id);
 
-                playerStonesBag[index] = {piece: {id:piece.id, score:piece.score, text:piece.text}}
+                playerStonesBag[index] = {piece: {id: piece.id, score: piece.score, text: piece.text}}
             });
             this.setState({
                 boxes: playerStonesBag,
             });
 
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
 
-    removeStone(){
+    removeStone() {
         console.log(this.state.boxes);
 
     }
-
 
 
     drawTile(props) {
@@ -657,7 +660,7 @@ class GamePage extends React.Component {
 
     }
 
-    placeLetter(piece, index){
+    placeLetter(piece, index) {
 
         console.log(index);
         let placedLetters = this.state.placedLetters;
@@ -667,14 +670,14 @@ class GamePage extends React.Component {
         placedLettersCoordinates.push(index);
 
         this.setState({
-            placedLetters:placedLetters,
+            placedLetters: placedLetters,
             placedLettersCoordinates: placedLettersCoordinates
         });
         console.log(this.state);
     }
 
     // Helper function to get 1d Array index from 2d Array indexes
-    toOneDimension(i,j){
+    toOneDimension(i, j) {
         return i * 15 + (j % 15);
     }
 
@@ -685,16 +688,16 @@ class GamePage extends React.Component {
         //get current letters the user had in his bag (1d Array)
         let currentPieces = this.state.boxes;
         currentPieces.map((letter, index) => {
-            if(letter.piece.id === item.piece.id){
+            if (letter.piece.id === item.piece.id) {
                 // The 1d index for the backend
-                let indexInOneDimension = this.toOneDimension(i,j);
+                let indexInOneDimension = this.toOneDimension(i, j);
                 this.placeLetter(letter.piece, indexInOneDimension);
-                currentPieces.splice(index,1);
+                currentPieces.splice(index, 1);
             }
         });
 
         this.setState({
-            boxes:currentPieces,
+            boxes: currentPieces,
         });
 
         let newArray = this.state.board;
@@ -729,9 +732,7 @@ class GamePage extends React.Component {
         let newBoard = this.oneDimToTwoDim(board);
         this.initBoard(newBoard);
 
-        this.setState({
-
-        });
+        this.setState({});
 
 
     }
@@ -744,15 +745,15 @@ class GamePage extends React.Component {
             stoneIds: [136]
         });
         try {
-            await api.put("/games/" + this.state.gameId + "/players/"+localStorage.getItem("current")+"/exchange", requestBody);
+            await api.put("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/exchange", requestBody);
 
-        }catch(error){
+        } catch (error) {
             alert("Could not put the pieces.");
         }
     }
 
 
-    initBoard(board){
+    initBoard(board) {
 
         // create board
         let newBoard = this.state.board;
@@ -761,22 +762,22 @@ class GamePage extends React.Component {
             board.map((tile, j) => {
                 let letter = new Piece(tile);
 
-                if(letter.text == null) {
+                if (letter.text == null) {
                     newBoard[i][j].piece = null;
-                }else {
+                } else {
                     newBoard[i][j].piece = {text: letter.text, id: letter.id, score: letter.score};
                 }
             });
         });
 
         this.setState({
-            board:newBoard,
+            board: newBoard,
         })
 
     }
 
 
-    oneDimToTwoDim(board){
+    oneDimToTwoDim(board) {
         let newBoard = new Array(15);
 
         // Loop to create 2D array using 1D array
@@ -785,7 +786,7 @@ class GamePage extends React.Component {
         }
         board.map((tile, index) => {
             let column = index % 15;
-            let row = Math.floor(index/15);
+            let row = Math.floor(index / 15);
             newBoard[row][column] = tile;
         });
         return newBoard;
@@ -823,7 +824,7 @@ class GamePage extends React.Component {
         await this.getPlayerStones();
     }
 
-    async endTurn(){
+    async endTurn() {
         // end turn, push all changes to the backend and draw stones
 
         console.log("Ending turn");
@@ -856,14 +857,19 @@ class GamePage extends React.Component {
                 <Row className="justify-content-md-center">
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
-                            <div>Stones left: {10}</div>
+                            <div>Remaining Stones</div>
+                            <Row>
+                                <Col>
+                                    <PieceCounter piecesLeft={10}/>
+                                </Col>
+                            </Row>
 
                             <div>Played Words</div>
 
                             <Row>
-                            <Col className="py-2 px-0">
-                                <CompletedWords gameId={this.state.gameId} />
-                            </Col>
+                                <Col className="py-2 px-0">
+                                    <CompletedWords gameId={this.state.gameId}/>
+                                </Col>
                             </Row>
                         </SideWrapper>
                     </Col>
@@ -919,7 +925,8 @@ class GamePage extends React.Component {
                                         <Button variant="dark" size="sm" block onClick={this.endTurn}>
                                             End Turn
                                         </Button>
-                                        <Button variant="dark" size="sm" block onClick={this.handleOpenModal} disabled={this.state.placedLetters.length!==0}>
+                                        <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
+                                                disabled={this.state.placedLetters.length !== 0}>
                                             Swap
                                         </Button>
                                         <Button variant="dark" size="sm" block onClick={this.getBoard}>
@@ -966,11 +973,11 @@ class GamePage extends React.Component {
 
                     </Form>
 
-                    <Button variant="success" size="sm"  onClick={this.handleCloseModalExchange}>
+                    <Button variant="success" size="sm" onClick={this.handleCloseModalExchange}>
                         Exchange
                     </Button>
                     <view style={{margin: 140}}/>
-                    <Button variant="danger" size="sm"  onClick={this.handleCloseModalAbort}>
+                    <Button variant="danger" size="sm" onClick={this.handleCloseModalAbort}>
                         Cancel
                     </Button>
 
