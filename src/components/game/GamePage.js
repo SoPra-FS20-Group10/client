@@ -27,6 +27,8 @@ import {Pie} from "react-chartjs-2";
 import {Scrollbars} from 'react-custom-scrollbars';
 import {number} from "prop-types";
 import {Spinner} from "../../views/design/Spinner";
+import {ChannelPreview} from "stream-chat-react";
+
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -78,8 +80,15 @@ const SideWrapper = styled.div`
 `;
 
 const PlayerButtons = styled.div`
+
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
     position: absolute;
-    bottom: -400pt;
+    bottom: 0;
+    width: 100%;
+    padding-right: 2em;
+    padding-bottom: 1em;
 `;
 
 const DeckWrapper = styled.div`
@@ -121,21 +130,33 @@ const TileWrapper = styled.div`
 
 
 const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        padding: "10pt",
-        overflow: "none",
-        height: "60pt",
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            padding: "10pt",
+            overflow: "none",
+            height: "60pt",
 
-        color: 'white',
-        background: 'rgba(77, 77, 77, 0.5)'
+            color: 'white',
+            background: 'rgba(77, 77, 77, 0.5)'
+        },
+        bottom: {
+            flex: 1,
+            justifyContent: 'flex-end',
+            marginBottom: 36
+        },
+        elementtosticktobottom: {
+            position: 'absolute',
+            bottom: 0,
+        }
+
     }
-};
+;
+
 
 class GamePage extends React.Component {
     constructor(props) {
@@ -410,19 +431,19 @@ class GamePage extends React.Component {
         try {
             setInterval(async () => {
                 this.getPlayers();
-                this.getCurrentPlayer();
+                // this.getCurrentPlayer();
                 this.getGameInfo();
 
-                if(this.state.gameStatus=="ENDED"){
+                if (this.state.gameStatus == "ENDED") {
                     this.goToEndscreen();
                 }
-            }, 5000);
+            }, 1000);
         } catch (e) {
             console.log(e);
         }
     }
 
-    goToEndscreen(){
+    goToEndscreen() {
         this.props.history.push({
             pathname: '/game/endscreen',
             state: {
@@ -692,9 +713,7 @@ class GamePage extends React.Component {
     }
 
     isDropped(piece) {
-
         return this.state.droppedBoxNames.indexOf(piece.text) > -1;
-
     }
 
     placeLetter(piece, index) {
@@ -721,32 +740,32 @@ class GamePage extends React.Component {
 
 // Update board state when letter is dropped
     handleDrop(i, j, item) {
+        if (this.state.currentPlayer == this.state.playerId) {
+            //get current letters the user had in his bag (1d Array)
+            let currentPieces = this.state.boxes;
+            currentPieces.map((letter, index) => {
 
-        //get current letters the user had in his bag (1d Array)
-        let currentPieces = this.state.boxes;
-        currentPieces.map((letter, index) => {
+                if (letter.piece.id === item.piece.id) {
+                    // The 1d index for the backend
+                    let indexInOneDimension = this.toOneDimension(i, j);
+                    this.placeLetter(letter.piece, indexInOneDimension);
 
-            if (letter.piece.id === item.piece.id) {
-                // The 1d index for the backend
-                let indexInOneDimension = this.toOneDimension(i, j);
-                this.placeLetter(letter.piece, indexInOneDimension);
+                    currentPieces.splice(index, 1);
+                }
+            });
 
-                currentPieces.splice(index, 1);
-            }
-        });
+            this.setState({
+                boxes: currentPieces,
+            });
 
-        this.setState({
-            boxes: currentPieces,
-        });
-
-        let newArray = this.state.board;
-        let row = newArray[i];
-        let letterBox = row[j];
-        letterBox.piece = item.piece;
-        this.setState({
-            board: newArray,
-        });
-
+            let newArray = this.state.board;
+            let row = newArray[i];
+            let letterBox = row[j];
+            letterBox.piece = item.piece;
+            this.setState({
+                board: newArray,
+            });
+        }
     }
 
     async getPlayers() {
@@ -776,6 +795,20 @@ class GamePage extends React.Component {
 
     async getGameInfo() {
         let response = await api.get("/games/" + this.state.gameId);
+
+        // Calls that are only made when a new turn begins
+        if (response.data.currentPlayerId != this.state.currentPlayer) {
+
+            console.log("Updating Board");
+            let board = response.data.board;
+            let newBoard = this.oneDimToTwoDim(board);
+            this.initBoard(newBoard);
+            this.setState({});
+
+            this.getPlayerStones();
+            // this.getBoard();
+        }
+
         this.setState({
             words: response.data.words, currentPlayer: response.data.currentPlayerId, stones: response.data.stones,
             gameStatus: response.data.status
@@ -876,7 +909,8 @@ class GamePage extends React.Component {
         } catch (error) {
             console.log(error);
         }
-        this.getCurrentPlayer();
+        // this.getPlayerStones();
+        // this.getCurrentPlayer();
     }
 
     async handleCloseModalExchange() {
@@ -960,26 +994,21 @@ class GamePage extends React.Component {
                         <SideWrapper>
                             <div>Scoreboard</div>
                             <ScoreBoard currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
-                            <Row>
-                                <Col>
-                                    <PlayerButtons>
-                                        <Button variant="dark" size="sm" block onClick={this.endTurn}
-                                                disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
-                                            End Turn
-                                        </Button>
-                                        <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
-                                                disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
-                                            Swap
-                                        </Button>
-                                        <Button variant="dark" size="sm" block onClick={this.getBoard}>
-                                            Test Button to get Board
-                                        </Button>
-                                        <Button variant="dark" size="sm" block onClick={this.testPutStone}>
-                                            Test Button to get Bag
-                                        </Button>
-                                    </PlayerButtons>
-                                </Col>
-                            </Row>
+
+
+                            <PlayerButtons>
+                                <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
+                                        disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
+                                    Swap
+                                </Button>
+
+                                <view style={{margin: 4}}/>
+
+                                <Button variant="dark" size="sm" block onClick={this.endTurn}
+                                        disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
+                                    End Turn
+                                </Button>
+                            </PlayerButtons>
                         </SideWrapper>
                     </Col>
                 </Row>
@@ -1007,8 +1036,6 @@ class GamePage extends React.Component {
                                         position: "relative",
                                         left: "-21pt",
                                         top: "28pt"
-
-
                                     }}/>
                             </Form.Group>
                         ))}
