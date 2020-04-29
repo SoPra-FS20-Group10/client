@@ -53,7 +53,7 @@ class LobbylistEntry extends React.Component{
             playerName: localStorage.getItem("name"),
             lobbyId: this.props.lobbyId,
             lobbyName: this.props.lobbyName,
-            lobbyPassword: null
+            lobbyPassword: ""
         };
 
         this.goToLobby=this.goToLobby.bind(this)
@@ -85,6 +85,7 @@ class LobbylistEntry extends React.Component{
 
         // Join - Pass lobbyId
         else{
+
 
             const requestBody = JSON.stringify({
                 id: localStorage.getItem("current"),

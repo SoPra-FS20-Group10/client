@@ -121,7 +121,7 @@ class Lobbylist extends React.Component {
         this.state ={
             lobbyID: null,
             showModal: false,
-            lobbyPassword: null,
+            lobbyPassword: "",
             lobbyName: null,
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
