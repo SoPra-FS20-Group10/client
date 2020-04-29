@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Table from 'react-bootstrap/Table'
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
+import {api} from "../../helpers/api";
 
 const ButtonContainer = styled.div`
   width: 33.3%;
@@ -37,6 +38,7 @@ class LeaderboardPage extends React.Component {
         super(props);
         this.state = { // just some example data for the leaderboard
             playerId: this.props.location.state.playerId,
+            players: [],
             data: [
                 {id: 1, name: 'HOTCHILIEATER', wins: 1000, winPercentage: '59%', timePlayed: '370h'},
                 {id: 2, name: 'Kortay', wins: 800, winPercentage: '54%', timePlayed: '320h'},
@@ -44,6 +46,23 @@ class LeaderboardPage extends React.Component {
                 {id: 4, name: 'M3TIS', wins: 420, winPercentage: '53%', timePlayed: '200h'}
             ]
         }
+        this.getUserData = this.getUserData.bind(this);
+    }
+
+    componentDidMount() {
+        this.getUserData();
+        try {
+            setInterval(async () => {
+                this.getUserData();
+            }, 1000);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async getUserData() {
+        let response = await api.get("/users");
+        this.setState({players: response.data});
     }
 
     renderTableHeader() {
@@ -55,18 +74,18 @@ class LeaderboardPage extends React.Component {
     }
 
     renderTableData() {
-        return this.state.data.map((data, index) => {
-                const {id, name, wins, winPercentage, timePlayed} = data //destructuring
+        return this.state.players.map((data, index) => {
+                const {id, username, winPercentage, wonGames,playtime} = data //destructuring
                 if (index % 2 == 0) {
                     return (
                         // <tr  class='text-white' key={id}>
 
                         <tr className='dark' key={id}>
                             <td>{id}</td>
-                            <td>{name}</td>
-                            <td>{wins}</td>
+                            <td>{username}</td>
+                            <td>{wonGames}</td>
                             <td>{winPercentage}</td>
-                            <td>{timePlayed}</td>
+                            <td>{playtime}</td>
                         </tr>
 
                     )
@@ -74,15 +93,13 @@ class LeaderboardPage extends React.Component {
                     return (
                         <tr className='light' key={id}>
                             <td>{id}</td>
-                            <td>{name}</td>
-                            <td>{wins}</td>
+                            <td>{username}</td>
+                            <td>{wonGames}</td>
                             <td>{winPercentage}</td>
-                            <td>{timePlayed}</td>
+                            <td>{playtime}</td>
                         </tr>
                     )
                 }
-
-
             }
         )
     }
