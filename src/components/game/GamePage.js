@@ -412,10 +412,23 @@ class GamePage extends React.Component {
                 this.getPlayers();
                 this.getCurrentPlayer();
                 this.getGameInfo();
+
+                if(this.state.gameStatus=="ENDED"){
+                    this.goToEndscreen();
+                }
             }, 5000);
         } catch (e) {
             console.log(e);
         }
+    }
+
+    goToEndscreen(){
+        this.props.history.push({
+            pathname: '/game/endscreen',
+            state: {
+                playerId: this.props.playerId
+            }
+        });
     }
 
     // Initializing a bag with all the letters (lookup)
