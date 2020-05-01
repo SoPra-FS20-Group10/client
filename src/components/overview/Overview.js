@@ -40,6 +40,14 @@ const Container = styled(BaseContainer)`
     border-radius: 4pt;
     color: white;
     text-align: center;
+    
+    // These style attributes make text unselectable on most browsers & versions
+    user-select: none;
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none; 
+    -khtml-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
 `;
 
 

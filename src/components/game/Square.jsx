@@ -27,6 +27,7 @@ const PieceWrapper = styled.div`
     justify-content:center;
     align-items: center;
     display: flex;
+    
 `;
 function showSquare (props) {
 

@@ -928,14 +928,42 @@ class GamePage extends React.Component {
                 <Row className="justify-content-md-center">
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
-                            <div>Remaining Stones</div>
+                            <div style={{
+                                // These style attributes make text unselectable on most browsers & versions
+                                userSelect: 'none',
+                                webkitTouchCallout: 'none',
+                                webkitUserSelect: 'none',
+                                khtmlUserSelect: 'none',
+                                mozUserSelect: 'none',
+                                msUserSelect: 'none'
+                            }}>
+                                Remaining Stones
+                            </div>
                             <Row>
                                 <Col>
-                                    <PieceCounter piecesLeft={this.state.stones}/>
+                                    <PieceCounter style={{
+                                        // These style attributes make text unselectable on most browsers & versions
+                                        userSelect: 'none',
+                                        webkitTouchCallout: 'none',
+                                        webkitUserSelect: 'none',
+                                        khtmlUserSelect: 'none',
+                                        mozUserSelect: 'none',
+                                        msUserSelect: 'none'
+                                    }} piecesLeft={this.state.stones}/>
                                 </Col>
                             </Row>
 
-                            <div>Played Words</div>
+                            <div style={{
+                                // These style attributes make text unselectable on most browsers & versions
+                                userSelect: 'none',
+                                webkitTouchCallout: 'none',
+                                webkitUserSelect: 'none',
+                                khtmlUserSelect: 'none',
+                                mozUserSelect: 'none',
+                                msUserSelect: 'none'
+                            }}>
+                                Played Words
+                            </div>
 
                             <Scrollbars
                                 // This will activate auto-height
@@ -943,18 +971,35 @@ class GamePage extends React.Component {
                                 autoHeightMin={550}
                                 autoHeightMax={590}
                                 renderTrackVertical={this.renderTrackVertical}
+
                                 renderThumbVertical={this.renderThumbVertical}
                                 style={{overflow: 'hidden'}}
                             >
                                 {/*<CompletedWords gameId={this.state.gameId}/>*/}
-                                <CompletedWords words={this.state.words}/>
+                                <CompletedWords style={{
+                                    // These style attributes make text unselectable on most browsers & versions
+                                    userSelect: 'none',
+                                    webkitTouchCallout: 'none',
+                                    webkitUserSelect: 'none',
+                                    khtmlUserSelect: 'none',
+                                    mozUserSelect: 'none',
+                                    msUserSelect: 'none'
+                                }} words={this.state.words}/>
                             </Scrollbars>
 
                         </SideWrapper>
                     </Col>
 
                     <Col className="p-2" md="auto">
-                        <BoardWrapper>
+                        <BoardWrapper style={{
+                            // These style attributes make text unselectable on most browsers & versions
+                            userSelect: 'none',
+                            webkitTouchCallout: 'none',
+                            webkitUserSelect: 'none',
+                            khtmlUserSelect: 'none',
+                            mozUserSelect: 'none',
+                            msUserSelect: 'none'
+                        }}>
                             <DndProvider backend={Backend}>
                                 <div>
                                     <Grid container className="flex-grow-1" spacing={0}>
@@ -992,8 +1037,26 @@ class GamePage extends React.Component {
 
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
-                            <div>Scoreboard</div>
-                            <ScoreBoard currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
+                            <div style={{
+                                // These style attributes make text unselectable on most browsers & versions
+                                userSelect: 'none',
+                                webkitTouchCallout: 'none',
+                                webkitUserSelect: 'none',
+                                khtmlUserSelect: 'none',
+                                mozUserSelect: 'none',
+                                msUserSelect: 'none'
+                            }}>
+                                Scoreboard
+                            </div>
+                            <ScoreBoard style={{
+                                // These style attributes make text unselectable on most browsers & versions
+                                userSelect: 'none',
+                                webkitTouchCallout: 'none',
+                                webkitUserSelect: 'none',
+                                khtmlUserSelect: 'none',
+                                mozUserSelect: 'none',
+                                msUserSelect: 'none'
+                            }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
 
 
                             <PlayerButtons>

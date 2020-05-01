@@ -62,6 +62,14 @@ const Container = styled(BaseContainer)`
     text-align: center;
     width:100%;
     margin:auto;
+    
+    // These style attributes make text unselectable on most browsers & versions
+    user-select: none;
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none; 
+    -khtml-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
 `;
 //
 // const ButtonContainer = styled.div`
