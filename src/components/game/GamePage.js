@@ -793,6 +793,11 @@ class GamePage extends React.Component {
 
     }
 
+    resetLetters(){
+        this.getBoard();
+        this.getPlayerStones();
+    }
+
     async getGameInfo() {
         let response = await api.get("/games/" + this.state.gameId);
 
@@ -909,6 +914,8 @@ class GamePage extends React.Component {
             await api.put("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), requestBody);
         } catch (error) {
             console.log(error);
+            this.getBoard();
+            this.getPlayerStones();
         }
         // this.getPlayerStones();
         // this.getCurrentPlayer();
@@ -1061,8 +1068,7 @@ class GamePage extends React.Component {
 
 
                             <PlayerButtons>
-
-                                <Button variant="dark" size="sm" block onClick={this.getBoard}
+                                <Button variant="dark" size="sm" block onClick={() => { this.getBoard(); this.getPlayerStones();}}
                                         disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     Reset
                                 </Button>
