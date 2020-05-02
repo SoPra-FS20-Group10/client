@@ -893,6 +893,7 @@ class GamePage extends React.Component {
         await this.getPlayerStones();
     }
 
+
     async endTurn() {
         // end turn, push all changes to the backend and draw stones
 
@@ -1060,6 +1061,12 @@ class GamePage extends React.Component {
 
 
                             <PlayerButtons>
+
+                                <Button variant="dark" size="sm" block onClick={this.getBoard}
+                                        disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
+                                    Reset
+                                </Button>
+
                                 <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
                                         disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     Swap
