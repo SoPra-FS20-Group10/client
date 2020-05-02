@@ -80,7 +80,6 @@ const SideWrapper = styled.div`
 `;
 
 const PlayerButtons = styled.div`
-
     display: flex;
     justify-content: space-between;
     flex: 1;
@@ -420,6 +419,7 @@ class GamePage extends React.Component {
         this.endTurn = this.endTurn.bind(this);
         this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
         this.showScoreBoard = this.showScoreBoard.bind(this);
+        this.endGameShortcut = this.endGameShortcut.bind(this);
     }
 
 
@@ -643,6 +643,20 @@ class GamePage extends React.Component {
 
     handleCloseModalAbort() {
         this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
+    }
+
+    // TODO: Remove shortcut after presentation
+    async endGameShortcut() {
+        const requestBody = JSON.stringify({
+            token: localStorage.getItem("token"),
+        });
+
+        console.log(requestBody);
+        try {
+            await api.patch("/games/" + localStorage.getItem("currentGame") , requestBody);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async getPlayerStones() {
@@ -1066,6 +1080,15 @@ class GamePage extends React.Component {
                                 msUserSelect: 'none'
                             }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
 
+                            {/*TODO: Remove shortcut after presentation*/}
+                            <PlayerButtons style={{
+                                marginBottom: '3em'
+                            }}>
+                                <Button variant="success" size="sm" onClick={this.endGameShortcut}>
+                                    End Game (Shortcut)
+                                </Button>
+                            </PlayerButtons>
+
 
                             <PlayerButtons>
                                 <Button variant="dark" size="sm" block onClick={() => { this.getBoard(); this.getPlayerStones();}}
@@ -1117,7 +1140,6 @@ class GamePage extends React.Component {
                         ))}
 
                     </Form>
-
                     <Button variant="success" size="sm" onClick={this.handleCloseModalExchange}>
                         Exchange
                     </Button>
