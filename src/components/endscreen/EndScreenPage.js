@@ -118,7 +118,6 @@ class EndScreenPage extends React.Component {
             token: localStorage.getItem("token")
         });
 
-        console.log({data: requestBody})
         try {
             // Log out user in backend
             await api.delete("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current"),
@@ -126,25 +125,25 @@ class EndScreenPage extends React.Component {
             localStorage.removeItem("currentGame");
 
         } catch (error) {
-            console.log(error);
+
+
         }
-        this.props.history.push(
-            {
-                pathname: `/game/overview/`,
-                state: {
-                    playerId: this.state.playerId,
-                    playerName: this.state.playerName
-                }
-            });
-        console.log(this.state);
-        if(this.state.players == null){
+
             try {
                 await api.delete("/games/" + this.state.gameId);
+                this.props.history.push(
+                    {
+                        pathname: `/game/overview/`,
+                        state: {
+                            playerId: this.state.playerId,
+                            playerName: this.state.playerName
+                        }
+                    });
+
             }catch(error){
                 console.log(error);
             }
-            }
-        window.location.reload();
+            
     }
 
     renderTableData() {
