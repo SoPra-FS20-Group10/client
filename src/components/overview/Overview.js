@@ -76,6 +76,7 @@ class Overview extends React.Component {
             localStorage.removeItem("current");
             localStorage.removeItem("name");
             localStorage.removeItem("token");
+            localStorage.removeItem("currentGame");
             window.location.reload();
 
 
