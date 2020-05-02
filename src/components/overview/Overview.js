@@ -81,7 +81,7 @@ class Overview extends React.Component {
 
 
         }catch(error){
-            alert(error);
+            console.log(error);
         }
     }
 

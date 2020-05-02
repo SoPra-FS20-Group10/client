@@ -152,10 +152,7 @@ class Lobbylist extends React.Component {
         // TODO: POST created LobbylistEntry to Backend
         // POST --> Return Free LobbylistEntry ID
         try {
-
             const response = await api.get("/games/");
-
-
             this.setState({allLobbies: response.data})
             return response.data;
         }
@@ -163,16 +160,11 @@ class Lobbylist extends React.Component {
         catch(error){
             alert(error);
         }
-
-
-
     }
 
     componentDidMount() {
-
         // Get all active lobbies
         this.fetchLobbies();
-
     }
 
     async createLobby(){

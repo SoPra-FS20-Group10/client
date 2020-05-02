@@ -109,7 +109,7 @@ class LobbyPage extends React.Component {
             this.countLobbyPlayers();
         }
         catch(error){
-            alert(error);
+            console.log(error);
         }
     }
 
@@ -163,7 +163,7 @@ class LobbyPage extends React.Component {
                 });
         }
         catch(error){
-            alert(error);
+            console.log(error);
         }
     }
 
@@ -204,7 +204,6 @@ class LobbyPage extends React.Component {
 
             }catch(error){
                 console.log(error);
-                alert(error);
             }
         }
     }

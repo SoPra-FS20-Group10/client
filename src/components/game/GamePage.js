@@ -837,7 +837,6 @@ class GamePage extends React.Component {
         // Calls that are only made when a new turn begins
         if (response.data.currentPlayerId != this.state.currentPlayer) {
 
-            console.log("Updating Board");
             let board = response.data.board;
             let newBoard = this.oneDimToTwoDim(board);
             this.initBoard(newBoard);

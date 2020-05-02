@@ -11,9 +11,9 @@ import { Redirect } from "react-router-dom";
  * @param props
  */
 export const EndGameGuard = props => {
-    if (!localStorage.getItem("currentGame")) {
-        return <Redirect to={"/game/overview"} />;
-
+    if (localStorage.getItem("currentGame")) {
+        return props.children;
     }
-    return props.children;
+    return <Redirect to={"/game/overview"} />;
 };
+

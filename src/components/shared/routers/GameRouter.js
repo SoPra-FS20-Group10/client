@@ -53,13 +53,7 @@ class GameRouter extends React.Component {
                 />
 
                 {/*// TODO: ID or not?*/}
-                <EndGameGuard>
-                <Route
-                    exact
-                    path={`${this.props.base}/endscreen`}
-                    render={() => <EndScreenPage/>}
-                />
-            </EndGameGuard>
+
                 <Route
                     exact
                     path={`${this.props.base}/profile/:userId`}
@@ -79,6 +73,14 @@ class GameRouter extends React.Component {
                         </InGameGuard>
                     }
                 />
+                <Route
+                    exact
+                    path={`${this.props.base}/endscreen`}
+                    render={() =>
+                        <EndGameGuard>
+                            <EndScreenPage/>
+                        </EndGameGuard>}
+                />
 
                 <Route
                     exact
@@ -89,6 +91,9 @@ class GameRouter extends React.Component {
                         </InGameGuard>
                     }
                 />
+
+
+
             </Container>
         );
     }

@@ -84,6 +84,7 @@ class EndScreenPage extends React.Component {
         } catch (e) {
             console.log(e);
         }
+
     }
 
     async fetchPlayers() {
@@ -120,31 +121,32 @@ class EndScreenPage extends React.Component {
 
         try {
             // Log out user in backend
-            await api.delete("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current"),
-                {data: requestBody});
+            await api.delete("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), {data: requestBody});
             localStorage.removeItem("currentGame");
-
-        } catch (error) {
-
+            await api.delete("/games/" + this.state.gameId);
+            window.location.reload();
 
         }
-
-            try {
-                await api.delete("/games/" + this.state.gameId);
-                this.props.history.push(
-                    {
-                        pathname: `/game/overview/`,
-                        state: {
-                            playerId: this.state.playerId,
-                            playerName: this.state.playerName
-                        }
-                    });
-
-            }catch(error){
+        catch(error){
                 console.log(error);
             }
-            
-    }
+
+        }
+            /*
+            this.props.history.push(
+                {
+                    pathname: `/game/overview/`,
+                    state: {
+                        playerId: localStorage.getItem("current"),
+                        playerName: localStorage.getItem("name")
+                    }
+                });
+        }
+
+
+        */
+
+
 
     renderTableData() {
         return this.state.players.map((data, index) => {
