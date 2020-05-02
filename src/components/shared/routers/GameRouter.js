@@ -8,6 +8,7 @@ import LobbyPage from "../../lobby/LobbyPage";
 import GamePage from "../../game/GamePage";
 import EndScreenPage from "../../endscreen/EndScreenPage";
 import {InGameGuard} from "../routeProtectors/InGameGuard";
+import {EndGameGuard} from "../routeProtectors/EndGameGuard";
 
 const Container = styled.div`
   display: flex;
@@ -52,12 +53,13 @@ class GameRouter extends React.Component {
                 />
 
                 {/*// TODO: ID or not?*/}
+                <EndGameGuard>
                 <Route
                     exact
                     path={`${this.props.base}/endscreen`}
                     render={() => <EndScreenPage/>}
                 />
-
+            </EndGameGuard>
                 <Route
                     exact
                     path={`${this.props.base}/profile/:userId`}
