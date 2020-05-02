@@ -44,11 +44,13 @@ function showSquare (props) {
         return (props.props.type.text)
     }
 }
+function canDropLetter(props){return props.props.piece == null;}
 
 const Square = (props) => {
 
 
     const [{ isOver, canDrop}, drop] = useDrop({
+        canDrop: () => canDropLetter(props),
         accept: [ItemTypes.PIECE],
         drop: props.onDrop,
         collect: (monitor) => ({
@@ -72,7 +74,6 @@ const Square = (props) => {
             {isActive ?
 
                 <div>
-
 
                     <PieceWrapper style={{
                         backgroundColor: 'white',
