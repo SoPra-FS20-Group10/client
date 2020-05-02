@@ -136,6 +136,14 @@ class EndScreenPage extends React.Component {
                     playerName: this.state.playerName
                 }
             });
+        console.log(this.state);
+        if(this.state.players == null){
+            try {
+                await api.delete("/games/" + this.state.gameId);
+            }catch(error){
+                console.log(error);
+            }
+            }
         window.location.reload();
     }
 

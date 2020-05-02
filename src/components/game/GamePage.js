@@ -177,6 +177,7 @@ class GamePage extends React.Component {
             showMainPage: true,
             showLeaderboard: false,
             showProfile: false,
+            placedFirstLetter: false,
             check: [false, false, false, false, false, false, false],
             checkBoxes: [{checked: false}, {checked: true}, {checked: false},
                 {checked: false}, {checked: false}, {checked: false}, {checked: false}],
@@ -420,6 +421,7 @@ class GamePage extends React.Component {
         this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
         this.showScoreBoard = this.showScoreBoard.bind(this);
         this.endGameShortcut = this.endGameShortcut.bind(this);
+        this.checkFirstLetterSet = this.checkFirstLetterSet.bind(this);
     }
 
 
@@ -428,12 +430,13 @@ class GamePage extends React.Component {
         this.getBoard();
         this.getPlayerStones();
         this.getGameInfo();
+        this.checkFirstLetterSet();
         try {
             setInterval(async () => {
                 this.getPlayers();
                 // this.getCurrentPlayer();
                 this.getGameInfo();
-
+                this.checkFirstLetterSet();
                 if (this.state.gameStatus == "ENDED") {
                     this.goToEndscreen();
                 }
@@ -441,6 +444,22 @@ class GamePage extends React.Component {
         } catch (e) {
             console.log(e);
         }
+    }
+
+    checkFirstLetterSet(){
+        let isSet = false;
+        let board = this.state.board;
+        board.map((col, i) => {
+            col.map((stone, j) => {
+                if(stone.piece != null){
+                    isSet = true;
+                }
+            });
+        });
+        this.setState({
+           placedFirstLetter: isSet,
+        });
+        return isSet;
     }
 
     goToEndscreen() {
@@ -1030,7 +1049,7 @@ class GamePage extends React.Component {
                                             <Grid item xs={12} key={i} container justify="center" spacing={0}>
                                                 {row.map((col, j) => (
                                                     <Grid key={j} item>
-                                                        <Square props={col} row={i} column={j}
+                                                        <Square props={col} row={i} column={j} placedFirstLetter={this.state.placedFirstLetter}
                                                                 onDrop={(item) => this.handleDrop(i, j, item)}/>
                                                     </Grid>
                                                 ))}

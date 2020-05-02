@@ -3,6 +3,7 @@ import { useDrop } from 'react-dnd'
 import styled from "styled-components";
 import ItemTypes from "./ItemTypes";
 import OnBoardLetterBox from "./OnBoardLetterBox";
+import Overlay from "react-bootstrap/Overlay";
 const style = {
     backgroundColor: "grey",
     fontSize: 7,
@@ -41,10 +42,25 @@ function showSquare (props) {
         )
     }
     else{
-        return (props.props.type.text)
+        return (props.props.type.text);
     }
 }
-function canDropLetter(props){return props.props.piece == null;}
+function canDropLetter(props){
+
+    if(props.props.piece != null){
+        return false;
+    }
+    else{
+        if(props.placedFirstLetter === false){
+            return props.row === 7 && props.column === 7;
+        }
+        return true;
+
+    }
+
+
+
+}
 
 const Square = (props) => {
 
@@ -60,14 +76,14 @@ const Square = (props) => {
     });
 
 
-
-    const isActive = isOver && canDrop;
     let backgroundColor = props.props.type.color;
+    const isActive = isOver && canDrop;
     if (isActive) {
-        backgroundColor = props.props.type.color
-    } else if (canDrop) {
-
-        backgroundColor = props.props.type.color
+        backgroundColor = 'yellow'
+    } else if (canDrop && !props.placedFirstLetter) {
+        console.log("here");
+        console.log(props.placedFirstLetter);
+        backgroundColor = "darkgreen"
     }
     return (
         <div ref={drop} style={{ ...style, backgroundColor }}>
@@ -76,7 +92,7 @@ const Square = (props) => {
                 <div>
 
                     <PieceWrapper style={{
-                        backgroundColor: 'white',
+                        backgroundColor: 'transparent',
                         fontSize: 10,
                         borderRadius: '2pt',
                         width: '20pt',
@@ -96,7 +112,19 @@ const Square = (props) => {
                     {showSquare(props)}
 
                 </div>
+/*<div
+      ref={drop}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <Square black={black}>{children}</Square>
 
+    </div>
+
+ */
             }
 
         </div>
