@@ -29,7 +29,10 @@ const LobbyWrapper = styled.div`
     border-radius: 4pt;
     margin-top: 10%;
     margin-left: 5%;
-    width: 60%;
+    
+    // width: 60%;
+    margin-right: 5%;
+    width: 90%;
     height: 400pt; 
     background: rgba(77, 77, 77, 0.5);
     float:left;
