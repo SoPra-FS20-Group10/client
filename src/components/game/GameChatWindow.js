@@ -25,7 +25,7 @@ class GameChatWindow extends React.Component {
     }
 
 
-    async componentDidMount() {
+    componentDidMount() {
 
     }
 

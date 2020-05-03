@@ -53,6 +53,8 @@ const ButtonContainer2 = styled.div`
 
 
 class EndScreenPage extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -80,15 +82,32 @@ class EndScreenPage extends React.Component {
         return 0;
     }
 
-    async componentDidMount() {
-        try {
-            setInterval(async () => {
-                this.fetchPlayers();
-            }, 5000);
-        } catch (e) {
-            console.log(e);
+    componentDidMount() {
+        this._isMounted = true;
+
+        if(this._isMounted) {
+            try {
+                setInterval(async () => {
+                    if (this._isMounted) {
+                        this.fetchPlayers();
+                    }
+                }, 5000);
+            } catch (e) {
+                console.log(e);
+            }
         }
 
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+        if(this.state.players){
+            this.deleteGame();
+        }
+    }
+
+    async deleteGame(){
+        await api.delete("/games/" + this.state.gameId);
     }
 
     async fetchPlayers() {
@@ -127,7 +146,16 @@ class EndScreenPage extends React.Component {
             // Log out user in backend
             await api.delete("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), {data: requestBody});
             localStorage.removeItem("currentGame");
-            await api.delete("/games/" + this.state.gameId);
+            // await api.delete("/games/" + this.state.gameId);
+            console.log(this.state.players)
+            this.props.history.push(
+                {
+                    pathname: `/game/overview/`,
+                    state: {
+                        playerId: this.state.playerId,
+                        playerName: this.state.playerName
+                    }
+                });
             window.location.reload();
 
         }

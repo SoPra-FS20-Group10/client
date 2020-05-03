@@ -1,10 +1,10 @@
 import React from "react";
 
 import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
-import { Button } from '../../views/design/Button';
-import { withRouter } from 'react-router-dom';
+import {BaseContainer} from '../../helpers/layout';
+import {api, handleError} from '../../helpers/api';
+import {Button} from '../../views/design/Button';
+import {withRouter} from 'react-router-dom';
 import LobbylistEntry from "../overview/LobbylistEntry";
 import Modal from "react-modal";
 import {CloseButton} from "react-bootstrap";
@@ -14,8 +14,10 @@ import PlayerBar from "./PlayerBar";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
-  margin: 0;
+  // margin: 0;
   
+  margin-right: 5%;
+  margin-left: 5%;
  
 `;
 
@@ -59,8 +61,9 @@ const ButtonContainer2 = styled.div`
 `;
 
 
-
 class LobbyPage extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -78,48 +81,60 @@ class LobbyPage extends React.Component {
             isLobbyLeader: false
         };
 
-        this.leaveLobby=this.leaveLobby.bind(this);
-        this.fetchLobbyPlayers=this.fetchLobbyPlayers.bind(this);
-        this.startGame=this.startGame.bind(this);
-        this.countLobbyPlayers=this.countLobbyPlayers.bind(this);
-        this.checkLobbyLeader=this.checkLobbyLeader.bind(this);
-        this.allPlayersReady=this.allPlayersReady.bind(this);
-        this.goToBoard=this.goToBoard.bind(this);
-        this.checkStartGame=this.checkStartGame.bind(this);
-        this.checkInLobby=this.checkInLobby.bind(this);
+        this.leaveLobby = this.leaveLobby.bind(this);
+        this.fetchLobbyPlayers = this.fetchLobbyPlayers.bind(this);
+        this.startGame = this.startGame.bind(this);
+        this.countLobbyPlayers = this.countLobbyPlayers.bind(this);
+        this.checkLobbyLeader = this.checkLobbyLeader.bind(this);
+        this.allPlayersReady = this.allPlayersReady.bind(this);
+        this.goToBoard = this.goToBoard.bind(this);
+        this.checkStartGame = this.checkStartGame.bind(this);
+        this.checkInLobby = this.checkInLobby.bind(this);
 
     }
 
 
+    componentDidMount() {
+        this._isMounted = true;
 
-    async componentDidMount() {
+        if (this._isMounted) {
+            this.fetchLobbyPlayers();
+            this.checkLobbyLeader();
+            this.checkStartGame();
+            this.checkInLobby();
 
-        try {
-            setInterval(async () => {
-                this.fetchLobbyPlayers();
-                this.checkLobbyLeader();
-                this.checkStartGame();
-                this.checkInLobby();
-            }, 500);
-        } catch(e) {
-            console.log(e);
+            try {
+                setInterval(async () => {
+                    if (this._isMounted) {
+                        this.fetchLobbyPlayers();
+                        this.checkLobbyLeader();
+                        this.checkStartGame();
+                        this.checkInLobby();
+                    }
+                }, 500);
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 
-    async fetchLobbyPlayers(){
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    async fetchLobbyPlayers() {
 
         try {
 
             const response = await api.get("/games/" + this.state.lobbyId + "/players");
             this.setState({lobbyPlayers: response.data})
             this.countLobbyPlayers();
-        }
-        catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
 
-    countLobbyPlayers(){
+    countLobbyPlayers() {
 
         let nrPlayers = this.state.lobbyPlayers.length;
         this.setState({
@@ -127,16 +142,18 @@ class LobbyPage extends React.Component {
         })
     }
 
-    checkInLobby(){
+    checkInLobby() {
+        console.log('check')
         if (this.state.lobbyPlayers) {
 
             let isInLobby = false;
+            this.fetchLobbyPlayers();
             this.state.lobbyPlayers.map((player) => {
-
                 if (player.id.toString() === localStorage.getItem("current")) {
                     isInLobby = true;
                 }
             });
+
             if (!isInLobby) {
                 this.props.history.push(
                     {
@@ -146,16 +163,19 @@ class LobbyPage extends React.Component {
                             playerName: this.state.playerName
                         }
                     });
+                window.location.reload();
             }
         }
+
     }
 
-    showPlayers(){
+    showPlayers() {
 
         if (this.state.lobbyPlayers) {
             let lobbyPlayers = this.state.lobbyPlayers;
             let listPlayers = lobbyPlayers.map((player) =>
-                <PlayerBar playerId={player.id} playerName={player.username} readyStatus={player.status} isLobbyLeader={this.state.isLobbyLeader} lobbyId={this.state.lobbyId}/>
+                <PlayerBar playerId={player.id} playerName={player.username} readyStatus={player.status}
+                           isLobbyLeader={this.state.isLobbyLeader} lobbyId={this.state.lobbyId}/>
             );
             return (
                 <LobbyContainer>
@@ -170,7 +190,7 @@ class LobbyPage extends React.Component {
         }
     }
 
-    async leaveLobby(){
+    async leaveLobby() {
 
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
@@ -183,21 +203,20 @@ class LobbyPage extends React.Component {
             await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
             this.props.history.push(
                 {
-                    pathname: `/game/overview/`,
+                    pathname: `/game/overview`,
                     state: {
                         playerId: this.state.playerId,
                         playerName: this.state.playerName
                     }
                 });
-        }
-        catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
 
-    checkLobbyLeader(){
+    checkLobbyLeader() {
 
-        if(this.state.ownerId) {
+        if (this.state.ownerId) {
 
             this.setState({
                 isLobbyLeader: true
@@ -205,43 +224,42 @@ class LobbyPage extends React.Component {
         }
     }
 
-    async startGame(){
+    async startGame() {
 
         let allReady = this.allPlayersReady();
-        if (this.state.lobbyPlayerNumber > this.state.maxPlayerCounter){
+        if (this.state.lobbyPlayerNumber > this.state.maxPlayerCounter) {
             alert("Too many people in lobby");
         }
-        if (this.state.lobbyPlayerNumber < this.state.minPlayerCounter){
+        if (this.state.lobbyPlayerNumber < this.state.minPlayerCounter) {
             alert("Not enoguh people in Lobby (at least" + this.state.minPlayerCounter + "required)");
-        }
-        else if (!allReady){
+        } else if (!allReady) {
             alert("Not all players are ready!");
         }
 
         // If all conditions to start a game are met, start the game and tell the backend.
-        else{
+        else {
             const requestBody = JSON.stringify({
                 token: localStorage.getItem("token"),
             });
-            try{
+            try {
                 console.log(this.state.lobbyId);
                 // Start game in backend
                 await api.put("/games/" + this.state.lobbyId, requestBody);
 
-               this.goToBoard();
+                this.goToBoard();
 
-            }catch(error){
+            } catch (error) {
                 console.log(error);
             }
         }
     }
 
-    allPlayersReady (){
+    allPlayersReady() {
 
         let allReady = true;
         this.state.lobbyPlayers.map((player) => {
 
-            if(player.status !== "READY"){
+            if (player.status !== "READY") {
                 allReady = false;
             }
         });
@@ -249,7 +267,7 @@ class LobbyPage extends React.Component {
     }
 
     // Redirect player to the board
-    async goToBoard(){
+    async goToBoard() {
         // Redirect to board
 
         localStorage.setItem("currentGame", this.state.lobbyId);
@@ -263,23 +281,22 @@ class LobbyPage extends React.Component {
 
     // Check if the game had started, if yes --> redirect the player to the board
 
-    async checkStartGame(){
+    async checkStartGame() {
 
         let response = await api.get("/games");
         let currentGames = response.data;
-        currentGames.map((game) =>{
-           if(game.id === this.state.lobbyId){
-               if (game.status === "RUNNING"){
-                   this.goToBoard();
-               }
-           }
-        }
+        currentGames.map((game) => {
+                if (game.id === this.state.lobbyId) {
+                    if (game.status === "RUNNING") {
+                        this.goToBoard();
+                    }
+                }
+            }
         );
     }
 
 
     render() {
-
 
 
         return (
@@ -303,9 +320,10 @@ class LobbyPage extends React.Component {
                         <Button variant="dark" size="sm" block onClick={this.leaveLobby}>
                             Leave Lobby
                         </Button>
-                        {this.state.isLobbyLeader?<Button variant="dark" size="sm" block onClick={this.startGame} active>
-                            Start Game
-                        </Button>:
+                        {this.state.isLobbyLeader ?
+                            <Button variant="dark" size="sm" block onClick={this.startGame} active>
+                                Start Game
+                            </Button> :
                             <Button variant="dark" size="sm" block onClick={this.startGame} disabled>
                                 Start Game
                             </Button>}

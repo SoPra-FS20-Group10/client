@@ -37,9 +37,7 @@ class GameRouter extends React.Component {
                     path={`${this.props.base}/leaderboard`}
                     render={() =>
 
-                        <InGameGuard>
                             <LeaderboardPage/>
-                        </InGameGuard>
                     }
                 />
 
@@ -79,7 +77,8 @@ class GameRouter extends React.Component {
                     render={() =>
                         <EndGameGuard>
                             <EndScreenPage/>
-                        </EndGameGuard>}
+                        </EndGameGuard>
+                        }
                 />
 
                 <Route
