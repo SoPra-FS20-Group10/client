@@ -125,7 +125,7 @@ class LobbyPage extends React.Component {
 
     checkInLobby(){
         if (this.state.lobbyPlayers) {
-            
+
             let isInLobby = false;
             this.state.lobbyPlayers.map((player) => {
 
