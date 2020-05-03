@@ -1,9 +1,9 @@
 import React from "react";
 
 import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
-import { withRouter } from 'react-router-dom';
+import {BaseContainer} from '../../helpers/layout';
+import {api, handleError} from '../../helpers/api';
+import {withRouter} from 'react-router-dom';
 import LobbylistEntry from "./LobbylistEntry";
 import Modal from 'react-modal';
 import {InputLabel} from "@material-ui/core";
@@ -29,8 +29,6 @@ const MyInputLabel = styled.div`
     margin-bottom: 10pt;
     text-align: center;
 `;
-
-
 
 
 const ButtonContainer = styled.div`
@@ -100,15 +98,15 @@ const InputFieldWrapper = styled.div`
 `;
 
 const customStyles = {
-    content : {
-        top                   : '50%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)',
-        padding               : "0pt",
-        width                 : "55%"
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: "0pt",
+        width: "55%"
     }
 };
 
@@ -118,7 +116,7 @@ class Lobbylist extends React.Component {
 
         // Simulates Player ID
 
-        this.state ={
+        this.state = {
             lobbyID: null,
             showModal: false,
             lobbyPassword: "",
@@ -129,7 +127,7 @@ class Lobbylist extends React.Component {
         }
 
 
-        this.createLobby=this.createLobby.bind(this);
+        this.createLobby = this.createLobby.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.showLobbies = this.showLobbies.bind(this);
@@ -137,42 +135,40 @@ class Lobbylist extends React.Component {
     }
 
     async componentDidMount() {
+        this.fetchLobbies();
         try {
             setInterval(async () => {
                 this.fetchLobbies();
-            }, 500);
-        } catch(e) {
+                this.setState({state: this.state});
+            }, 1000);
+        } catch (e) {
             console.log(e);
         }
     }
 
-    handleOpenModal () {
-        this.setState({ showModal: true });
+    handleOpenModal() {
+        this.setState({showModal: true});
     }
 
-    handleCloseModal () {
-        this.setState({ showModal: false });
+    handleCloseModal() {
+        this.setState({showModal: false});
     }
 
     // Get all lobbies
 
     async fetchLobbies() {
-
-
         // TODO: POST created LobbylistEntry to Backend
         // POST --> Return Free LobbylistEntry ID
         try {
             const response = await api.get("/games/");
             this.setState({allLobbies: response.data})
-            return response.data;
-        }
-
-        catch(error){
+            // return response.data;
+        } catch (error) {
             alert(error);
         }
     }
 
-    async createLobby(){
+    async createLobby() {
 
         const requestBody = JSON.stringify({
             ownerId: this.state.playerId,
@@ -193,55 +189,53 @@ class Lobbylist extends React.Component {
             // TODO: Backend should return a free lobby id. For now, this is just random.
             this.setState({lobbyId: 4});
             this.props.history.push(
-                {pathname: `/game/lobby/${lobbyId}`,
-                    state: { lobbyId: lobbyId,
+                {
+                    pathname: `/game/lobby/${lobbyId}`,
+                    state: {
+                        lobbyId: lobbyId,
                         lobbyName: this.state.lobbyName,
                         lobbyPassword: this.state.lobbyPassword,
                         playerName: this.state.playerName,
                         playerId: this.state.playerId,
-                        ownerId: this.state.playerId}
+                        ownerId: this.state.playerId
+                    }
                 });
 
-        }
-
-        catch(error){
+        } catch (error) {
             console.log(error);
             alert(error);
         }
 
-        }
+    }
 
+    // TODO: Find method to not render this at 60Hz
     showLobbies() {
+        // this.fetchLobbies();
 
-            // TODO: GET Lobbies from Backend and show them here.
+        if (this.state.allLobbies) {
 
-            this.fetchLobbies();
+            let lobbies = this.state.allLobbies;
 
-            if (this.state.allLobbies) {
+            let listLobbies = lobbies.map((lobby) =>
 
-                let lobbies = this.state.allLobbies;
+                <LobbylistEntry lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
+                                playerId={this.state.playerId} history={this.props.history}/>
+            );
 
-                let listLobbies = lobbies.map((lobby) =>
+            return (
+                <LobbyContainer>
+                    {listLobbies}
 
-                    <LobbylistEntry lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
-                                    playerId={this.state.playerId} history={this.props.history}/>
-                );
-
-                return (
-                    <LobbyContainer>
-                        {listLobbies}
-
-                    </LobbyContainer>
-                );
-            } else {
+                </LobbyContainer>
+            );
+        } else {
 
 
-                return (
-                    <h1> Waiting For Lobby Fetching</h1>
-                );
-            }
+            return (
+                <h1> Waiting For Lobby Fetching</h1>
+            );
         }
-
+    }
 
 
     handleInputChange(key, value) {
@@ -254,11 +248,10 @@ class Lobbylist extends React.Component {
             <Container>
 
 
-
-               <h2> LOBBY LIST </h2>
-<ListContainer>
-                {this.showLobbies}
-</ListContainer>
+                <h2> LOBBY LIST </h2>
+                <ListContainer>
+                    {this.showLobbies()}
+                </ListContainer>
                 <view style={{margin: 40}}/>
 
                 <ButtonContainer2>
@@ -279,31 +272,30 @@ class Lobbylist extends React.Component {
                         <CloseButton onClick={this.handleCloseModal}/>
 
                         <Title>
-                                <Label>CREATE LOBBY</Label>
-                            </Title>
+                            <Label>CREATE LOBBY</Label>
+                        </Title>
 
-                            <MyInputLabel> LOBBY NAME</MyInputLabel>
+                        <MyInputLabel> LOBBY NAME</MyInputLabel>
 
                         <InputFieldWrapper>
-                        <InputField
-                            placeholder="Name"
-                            onChange={e => {
-                                this.handleInputChange('lobbyName', e.target.value);
-                            }}/>
+                            <InputField
+                                placeholder="Name"
+                                onChange={e => {
+                                    this.handleInputChange('lobbyName', e.target.value);
+                                }}/>
                         </InputFieldWrapper>
-                            <MyInputLabel>PASSWORD</MyInputLabel>
+                        <MyInputLabel>PASSWORD</MyInputLabel>
 
 
                         <InputFieldWrapper>
-                        <InputField
-                            placeholder="Password"
-                            onChange={e => {
-                                this.handleInputChange('lobbyPassword', e.target.value);
-                            }}/>
+                            <InputField
+                                placeholder="Password"
+                                onChange={e => {
+                                    this.handleInputChange('lobbyPassword', e.target.value);
+                                }}/>
                         </InputFieldWrapper>
 
                     </LobbyCreationWrapper>
-
 
 
                     <ButtonContainer>
@@ -314,7 +306,6 @@ class Lobbylist extends React.Component {
                 </Modal>
 
             </Container>
-
 
 
         );
