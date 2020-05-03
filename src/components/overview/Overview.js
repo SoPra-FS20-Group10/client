@@ -91,9 +91,11 @@ class Overview extends React.Component {
 
 
                 <CloseButton onClick={this.logoutUser} style={{color: "white"}}/>
-                <ChatWrapper>
-                    <h2>This would be the chat</h2>
-                </ChatWrapper>
+
+                {/*TODO: Add real chat*/}
+                {/*<ChatWrapper>*/}
+                {/*    <h2>This would be the chat</h2>*/}
+                {/*</ChatWrapper>*/}
 
                 <LobbyWrapper>
 

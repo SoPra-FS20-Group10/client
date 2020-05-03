@@ -187,9 +187,10 @@ class EndScreenPage extends React.Component {
     render() {
         return (
             <Container>
-                <ChatWrapper>
-                    <h2>This would be the chat</h2>
-                </ChatWrapper>
+                {/*TODO: Add real chat*/}
+                {/*<ChatWrapper>*/}
+                {/*    <h2>This would be the chat</h2>*/}
+                {/*</ChatWrapper>*/}
 
                 <PlayerWrapper>
                     <h2> Game Finished!</h2>
