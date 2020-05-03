@@ -136,6 +136,16 @@ class Lobbylist extends React.Component {
         this.fetchLobbies = this.fetchLobbies.bind(this);
     }
 
+    async componentDidMount() {
+        try {
+            setInterval(async () => {
+                this.fetchLobbies();
+            }, 500);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
     handleOpenModal () {
         this.setState({ showModal: true });
     }
@@ -160,11 +170,6 @@ class Lobbylist extends React.Component {
         catch(error){
             alert(error);
         }
-    }
-
-    componentDidMount() {
-        // Get all active lobbies
-        this.fetchLobbies();
     }
 
     async createLobby(){
@@ -252,7 +257,7 @@ class Lobbylist extends React.Component {
 
                <h2> LOBBY LIST </h2>
 <ListContainer>
-                {this.showLobbies()}
+                {this.showLobbies}
 </ListContainer>
                 <view style={{margin: 40}}/>
 
