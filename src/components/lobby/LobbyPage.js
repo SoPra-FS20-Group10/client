@@ -72,7 +72,7 @@ class LobbyPage extends React.Component {
             maxPlayerCounter: 4,
             minPlayerCounter: 1,
             isLobbyLeader: false
-        }
+        };
 
         this.leaveLobby=this.leaveLobby.bind(this);
         this.fetchLobbyPlayers=this.fetchLobbyPlayers.bind(this);
@@ -82,6 +82,7 @@ class LobbyPage extends React.Component {
         this.allPlayersReady=this.allPlayersReady.bind(this);
         this.goToBoard=this.goToBoard.bind(this);
         this.checkStartGame=this.checkStartGame.bind(this);
+        this.checkInLobby=this.checkInLobby.bind(this);
 
     }
 
@@ -94,6 +95,7 @@ class LobbyPage extends React.Component {
                 this.fetchLobbyPlayers();
                 this.checkLobbyLeader();
                 this.checkStartGame();
+                this.checkInLobby();
             }, 500);
         } catch(e) {
             console.log(e);
@@ -121,13 +123,36 @@ class LobbyPage extends React.Component {
         })
     }
 
+    checkInLobby(){
+        if (this.state.lobbyPlayers) {
+            console.log(this.state.lobbyPlayers);
+            console.log(localStorage.getItem("current"));
+            let isInLobby = false;
+            this.state.lobbyPlayers.map((player) => {
+
+                if (player.id.toString() === localStorage.getItem("current")) {
+                    isInLobby = true;
+                }
+            });
+            if (!isInLobby) {
+                this.props.history.push(
+                    {
+                        pathname: `/game/overview/`,
+                        state: {
+                            playerId: this.state.playerId,
+                            playerName: this.state.playerName
+                        }
+                    });
+            }
+        }
+    }
 
     showPlayers(){
 
         if (this.state.lobbyPlayers) {
             let lobbyPlayers = this.state.lobbyPlayers;
             let listPlayers = lobbyPlayers.map((player) =>
-                <PlayerBar playerId={player.id} playerName={player.username} readyStatus={player.status}/>
+                <PlayerBar playerId={player.id} playerName={player.username} readyStatus={player.status} isLobbyLeader={this.state.isLobbyLeader} lobbyId={this.state.lobbyId}/>
             );
             return (
                 <LobbyContainer>

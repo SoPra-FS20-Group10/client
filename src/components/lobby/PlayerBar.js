@@ -14,7 +14,7 @@ import LobbyRoom from "./LobbyPage";
 
 const ButtonContainer = styled.div`
 
-
+    margin-bottom: 10pt;
 `;
 
 const PlayerBarContainer = styled.div`
@@ -52,6 +52,8 @@ class PlayerBar extends React.Component{
 
         this.setReady=this.setReady.bind(this)
         this.readyButton = this.readyButton.bind(this);
+        this.kickButton= this.kickButton.bind(this);
+        this.kickPlayer=this.kickPlayer.bind(this);
     }
 
 
@@ -94,7 +96,7 @@ class PlayerBar extends React.Component{
 
         let button;
         const ownPlayerId = localStorage.getItem("current");
-        if(this.state.playerId == ownPlayerId){
+        if(this.state.playerId === ownPlayerId){
             button = this.state.readyStatus ==="READY" ? (<Button variant="success" size="sm" block onClick={this.setReady}>
                 YOU ARE READY
             </Button>) : (<Button variant="danger" size="sm" block onClick={this.setReady}>
@@ -112,6 +114,47 @@ class PlayerBar extends React.Component{
         return (button);
     }
 
+    kickButton(){
+        let button;
+        const ownPlayerId = localStorage.getItem("current");
+
+        if(this.props.isLobbyLeader){
+
+            if(this.props.playerId.toString() === ownPlayerId)
+            {
+                button = <div/>
+            }
+            else {
+                button =
+                    (<Button variant="danger" size="sm" block onClick={this.kickPlayer}>
+                        KICK
+                    </Button>)
+            }
+        }
+        else {
+
+            button = <div></div>
+        }
+        return (button);
+
+    }
+    async kickPlayer(){
+
+        const requestBody = JSON.stringify({
+            token: localStorage.getItem("token"),
+        });
+
+        try {
+            // Kick user in backend
+            await api.delete("/games/" + this.props.lobbyId + "/players/" + this.props.playerId, {data: requestBody});
+        }
+        catch(error){
+            console.log(error);
+        }
+
+
+    }
+
     render() {
         return (
             <BaseContainer>
@@ -123,6 +166,10 @@ class PlayerBar extends React.Component{
 
                     <ButtonContainer>
                         {this.readyButton()}
+                    </ButtonContainer>
+
+                    <ButtonContainer>
+                        {this.kickButton()}
                     </ButtonContainer>
 
                 </PlayerBarContainer>
