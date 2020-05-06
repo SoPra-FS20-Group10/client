@@ -30,6 +30,7 @@ import {Spinner} from "../../views/design/Spinner";
 import {ChannelPreview} from "stream-chat-react";
 import Snackbar from "@material-ui/core/Snackbar";
 import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 // const Container = styled(BaseContainer)`
@@ -1130,11 +1131,12 @@ class GamePage extends React.Component {
                                         disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     Reset
                                 </Button>
-
-                                <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
-                                        disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
-                                    Swap
-                                </Button>
+                                <Tooltip title="Swap letters. This ends your turn.">
+                                    <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
+                                            disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
+                                        Swap
+                                    </Button>
+                                </Tooltip>
 
                                 <view style={{margin: 4}}/>
 
