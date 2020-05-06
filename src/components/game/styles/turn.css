@@ -5,8 +5,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
 margin-top:100pt;
+-webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
  
 }
 .reveals-main > div {
@@ -16,4 +19,8 @@ margin-top:100pt;
   overflow: hidden;
 padding: 1cm;
 color:indianred;
+-webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
 }
