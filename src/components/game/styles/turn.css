@@ -1,11 +1,12 @@
 .reveals-main {
   width: 100%;
-  height: 100%;
+  height: 25%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+margin-top:100pt;
  
 }
 .reveals-main > div {
@@ -14,4 +15,5 @@
   will-change: transform, opacity;
   overflow: hidden;
 padding: 1cm;
+color:indianred;
 }
