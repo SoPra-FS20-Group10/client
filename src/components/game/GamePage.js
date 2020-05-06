@@ -165,6 +165,10 @@ class GamePage extends React.Component {
         super(props);
         this.state = {
             isOpenGameStartSnackbar: false,
+            isOpenExchangePieceSnackbar: false,
+            isOpenTurnStartSnackbar: false,
+            isOpenTurnEndSnackbar: false,
+            isOpenInvalidMoveSnackbar:false,
             placedLetters: [],
             placedLettersCoordinates: [],
             currentPlayer: null,
@@ -426,7 +430,7 @@ class GamePage extends React.Component {
         this.endGameShortcut = this.endGameShortcut.bind(this);
         this.checkFirstLetterSet = this.checkFirstLetterSet.bind(this);
         this.handleOpenGameStartSnackbar=this.handleOpenGameStartSnackbar.bind(this);
-        this.handleCloseGameStartSnackbar=this.handleCloseGameStartSnackbar.bind(this);
+        this.handleCloseSnackbars=this.handleCloseSnackbars.bind(this);
         this.showSnackbar=this.showSnackbar.bind(this);
         this.closeSnackbar=this.closeSnackbar.bind(this);
     }
@@ -915,9 +919,9 @@ class GamePage extends React.Component {
             token: localStorage.getItem("token"),
             stoneIds: stoneIds
         });
-        console.log(requestBody);
         try {
             await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
+            this.setState({isOpenExchangePieceSnackbar: true});
             this.endTurn();
         } catch (error) {
             alert("Could not exchange the pieces.");
@@ -960,18 +964,42 @@ class GamePage extends React.Component {
                 isOpenGameStartSnackbar: true,
             })
     }
-    handleCloseGameStartSnackbar(event, reason){
+    handleOpenGameStartSnackbar(){
+        this.setState({
+            isOpenExchangePieceSnackbar: true,
+        })
+    }
+    handleOpenGameStartSnackbar(){
+        this.setState({
+            isOpenTurnStartSnackbar: true,
+        })
+    }
+    handleOpenGameStartSnackbar(){
+        this.setState({
+            isOpenTurnEndSnackbar: true,
+        })
+    }
+    handleOpenGameStartSnackbar(){
+        this.setState({
+            isOpenInvalidMoveSnackbar: true,
+        })
+    }
+    handleCloseSnackbars(){
         this.setState({
             isOpenGameStartSnackbar: false,
+            isOpenExchangePieceSnackbar: false,
+            isOpenTurnStartSnackbar: false,
+            isOpenTurnEndSnackbar: false,
+            isOpenInvalidMoveSnackbar:false
         })
     }
 
 
-    showSnackbar(){
-        return SnackbarAlert({close:this.closeSnackbar, type:"info" ,message: "Game started!"});
+    showSnackbar(message){
+        return SnackbarAlert({close:this.closeSnackbar, type:"info" ,message: message});
     }
     closeSnackbar(){
-        this.handleCloseGameStartSnackbar();
+        this.handleCloseSnackbars();
     }
 
     render() {
@@ -981,7 +1009,11 @@ class GamePage extends React.Component {
         return (
             <Container>
 
-                {this.state.isOpenGameStartSnackbar? this.showSnackbar(): null}
+                {this.state.isOpenGameStartSnackbar? this.showSnackbar("Game started"): null}
+                {this.state.isOpenExchangePieceSnackbar? this.showSnackbar("Pieces exchanged - your turn ends"): null}
+                {this.state.isOpenTurnStartSnackbar? this.showSnackbar("Your turn"): null}
+                {this.state.isOpenTurnEndSnackbar? this.showSnackbar("Your turn is over"): null}
+                {this.state.isOpenInvalidMoveSnackbar? this.showSnackbar("Your move was invalid"): null}
 
                 <Row className="justify-content-md-center">
                     <Col className="py-2 px-0" md="auto">
