@@ -1195,21 +1195,21 @@ class GamePage extends React.Component {
                             }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
 
                             {/*TODO: Remove shortcut after presentation*/}
-
-                                <Button variant="success" size="sm" onClick={this.endGameShortcut} style={{margin:"20pt"}}>
-                                    End Game (Shortcut)
+                            <Tooltip title="End Game prematurely">
+                                <Button variant="success" size="sm" block onClick={this.endGameShortcut} style={{marginTop:"20pt"}}>
+                                    End Game
                                 </Button>
+                            </Tooltip>
 
 
-
-
+                            <Tooltip title="Reset your placed letters">
                                 <Button variant="dark" size="sm" block onClick={() => { this.getBoard(); this.getPlayerStones();}}
                                         disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     Reset
                                 </Button>
+                            </Tooltip>
 
-
-                                <Tooltip title="Swap letters. This ends your turn.">
+                                <Tooltip title="Swap letters (ends your turn)">
                                     <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
                                             disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                         Swap
@@ -1218,11 +1218,12 @@ class GamePage extends React.Component {
 
 
                                 <view style={{margin: 4}}/>
-
+                            <Tooltip title="End your turn">
                                 <Button variant="dark" size="sm" block onClick={this.endTurn}
                                         disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     End Turn
                                 </Button>
+                            </Tooltip>
 
                             {this.showPlayerTurn()}
                         </SideWrapper>
