@@ -982,16 +982,17 @@ class GamePage extends React.Component {
             coordinates: this.state.placedLettersCoordinates
         });
 
-        console.log(requestBody);
         try {
             await api.put("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), requestBody);
+
         } catch (error) {
+            this.setState({
+                isOpenInvalidMoveSnackbar:true
+            })
             console.log(error);
             this.getBoard();
             this.getPlayerStones();
         }
-        // this.getPlayerStones();
-        // this.getCurrentPlayer();
     }
 
     async handleCloseModalExchange() {
@@ -1038,9 +1039,10 @@ class GamePage extends React.Component {
     }
 
 
-    showSnackbar(message){
-        console.log(message);
-        return SnackbarAlert({close:this.closeSnackbar, type:"info" ,message: message});
+    showSnackbar(message, type){
+
+        return SnackbarAlert({close:this.closeSnackbar, type:type ,message: message});
+
     }
     closeSnackbar(){
         this.handleCloseSnackbars();
@@ -1053,11 +1055,11 @@ class GamePage extends React.Component {
         return (
             <Container>
 
-                {this.state.isOpenGameStartSnackbar? this.showSnackbar("Game started"): null}
-                {this.state.isOpenExchangePieceSnackbar? this.showSnackbar("Pieces exchanged - your turn ends"): null}
+                {this.state.isOpenGameStartSnackbar? this.showSnackbar("Game started", "info"): null}
+                {this.state.isOpenExchangePieceSnackbar? this.showSnackbar("Pieces exchanged - your turn ends", "info"): null}
 
-                {this.state.isOpenTurnEndSnackbar? this.showSnackbar("Your turn is over"): null}
-                {this.state.isOpenInvalidMoveSnackbar? this.showSnackbar("Your move was invalid"): null}
+                {this.state.isOpenTurnEndSnackbar? this.showSnackbar("Your turn is over", "info"): null}
+                {this.state.isOpenInvalidMoveSnackbar? this.showSnackbar("Your move was invalid", "error"): null}
 
                 <Row className="justify-content-md-center">
                     <Col className="py-2 px-0" md="auto">

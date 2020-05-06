@@ -8,23 +8,11 @@ export function Alert(props) {
 }
 
 export function SnackbarAlert(props){
-    let alertType;
-    if(props.type === "bad"){
-        alertType = "error";
-    }
-    else if(props.type === "good"){
-        alertType = "success"
-    }
-    else{
-        alertType = "info"
-    }
-
     return(<Snackbar open={true} autoHideDuration={6000}
                      onClose={props.close}
                      anchorOrigin={{ vertical: "top", horizontal: "center" }}
-
     >
-        <Alert severity={alertType}>
+        <Alert severity={props.type}>
             {props.message}
         </Alert>
     </Snackbar>);
