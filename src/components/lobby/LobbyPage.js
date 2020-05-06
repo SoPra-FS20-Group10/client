@@ -10,6 +10,10 @@ import Modal from "react-modal";
 import {CloseButton} from "react-bootstrap";
 import LobbyList from "../overview/Lobbylist";
 import PlayerBar from "./PlayerBar";
+import Snackbar from "@material-ui/core/Snackbar";
+import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
+import MuiAlert from '@material-ui/lab/Alert';
+
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -78,7 +82,8 @@ class LobbyPage extends React.Component {
             ownerId: this.props.location.state.ownerId,
             maxPlayerCounter: 4,
             minPlayerCounter: 1,
-            isLobbyLeader: false
+            isLobbyLeader: false,
+            isOpenLobbyCreateSnackbar: false,
         };
 
         this.leaveLobby = this.leaveLobby.bind(this);
@@ -90,6 +95,9 @@ class LobbyPage extends React.Component {
         this.goToBoard = this.goToBoard.bind(this);
         this.checkStartGame = this.checkStartGame.bind(this);
         this.checkInLobby = this.checkInLobby.bind(this);
+        this.handleCloseLobbyCreateSnackbar=this.handleCloseLobbyCreateSnackbar.bind(this);
+        this.handleOpenLobbyCreateSnackBar=this.handleOpenLobbyCreateSnackBar.bind(this);
+        this.closeSnackbar=this.closeSnackbar.bind(this);
 
     }
 
@@ -102,6 +110,7 @@ class LobbyPage extends React.Component {
             this.checkLobbyLeader();
             this.checkStartGame();
             this.checkInLobby();
+            this.handleOpenLobbyCreateSnackBar();
 
             try {
                 setInterval(async () => {
@@ -294,10 +303,28 @@ class LobbyPage extends React.Component {
             }
         );
     }
+    handleOpenLobbyCreateSnackBar(){
 
+        if(this.props.location.state.ownerId != null)
+        this.setState({
+            isOpenLobbyCreateSnackbar: true,
+        })
+    }
+
+    handleCloseLobbyCreateSnackbar(){
+        this.setState({
+            isOpenLobbyCreateSnackbar: false,
+        })
+    }
+
+    showSnackbar(){
+        return SnackbarAlert({close:this.closeSnackbar, type:"good", message:"Lobby created!"});
+    }
+    closeSnackbar(){
+        this.handleCloseLobbyCreateSnackbar();
+    }
 
     render() {
-
 
         return (
 
@@ -307,6 +334,8 @@ class LobbyPage extends React.Component {
                 {/*<ChatWrapper>*/}
                 {/*    <h2>This would be the chat</h2>*/}
                 {/*</ChatWrapper>*/}
+
+                {this.state.isOpenLobbyCreateSnackbar? this.showSnackbar(): null}
 
                 <LobbyWrapper>
 
@@ -331,6 +360,7 @@ class LobbyPage extends React.Component {
                     </ButtonContainer2>
 
                 </LobbyWrapper>
+
 
             </Container>
         );

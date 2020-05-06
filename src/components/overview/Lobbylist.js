@@ -10,6 +10,8 @@ import {InputLabel} from "@material-ui/core";
 
 import Button from 'react-bootstrap/Button'
 import {CloseButton} from "react-bootstrap";
+import Alert from "react-bootstrap/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -123,7 +125,8 @@ class Lobbylist extends React.Component {
             lobbyName: null,
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
-            allLobbies: null
+            allLobbies: null,
+            isOpenLobbyCreateSnackbar: null,
         }
 
 
@@ -132,7 +135,9 @@ class Lobbylist extends React.Component {
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.showLobbies = this.showLobbies.bind(this);
         this.fetchLobbies = this.fetchLobbies.bind(this);
-    }
+        this.handleCloseLobbyCreateSnackbar=this.handleCloseLobbyCreateSnackbar.bind(this);
+        this.handleOpenLobbyCreateSnackBar=this.handleOpenLobbyCreateSnackBar.bind(this);
+}
 
     async componentDidMount() {
         this.fetchLobbies();
@@ -201,11 +206,27 @@ class Lobbylist extends React.Component {
                     }
                 });
 
+
         } catch (error) {
             console.log(error);
             alert(error);
         }
 
+    }
+
+    handleOpenLobbyCreateSnackBar(){
+        this.setState({
+            isOpenLobbyCreateSnackbar: true,
+        })
+    }
+    handleCloseLobbyCreateSnackbar(event, reason){
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        this.setState({
+            isOpenLobbyCreateSnackbar: false,
+        })
     }
 
     // TODO: Find method to not render this at 60Hz
@@ -246,7 +267,11 @@ class Lobbylist extends React.Component {
         return (
 
             <Container>
-
+                <Snackbar open={this.state.isOpenLobbyCreateSnackbar} autoHideDuration={6000} onClose={this.handleCloseLobbyCreateSnackbar}>
+                    <Alert onClose={this.handleCloseLobbyCreateSnackbar} severity="success">
+                        This is a success message!
+                    </Alert>
+                </Snackbar>
 
                 <h2> LOBBY LIST </h2>
                 <ListContainer>
@@ -258,6 +283,7 @@ class Lobbylist extends React.Component {
                     <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
                         Create new Lobby
                     </Button>
+
                 </ButtonContainer2>
 
 
@@ -299,6 +325,8 @@ class Lobbylist extends React.Component {
 
 
                     <ButtonContainer>
+
+
                         <Button variant="dark" size="sm" block onClick={this.createLobby}>
                             Create Lobby
                         </Button>

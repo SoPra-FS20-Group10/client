@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
+import {SnackbarAlert} from "../shared/Other/SnackbarAlert";
 
 
 const InputField = styled.input`
@@ -105,10 +106,21 @@ class LoginPage extends React.Component {
         super();
         this.state = {
             password: null,
-            username: null
+            username: null,
+            fromSignup: this.fromSignup()
         };
+        console.log(this.state);
+        this.handleCloseSnackbar=this.handleCloseSnackbar.bind(this);
+        this.closeSnackbar=this.closeSnackbar.bind(this);
+        this.showSnackbar=this.showSnackbar.bind(this);
     }
-
+    fromSignup(){
+        if(localStorage.getItem("fromSignup") === "true"){
+            localStorage.removeItem("fromSignup");
+            return true;
+        }
+        return false;
+    }
     /**
      * HTTP POST request is sent to the backend.
      * If the request is successful, a new user is returned to the front-end
@@ -118,21 +130,24 @@ class LoginPage extends React.Component {
         try {
             const requestBody = JSON.stringify({
                 username: this.state.username,
-                password: this.state.password
+                password: this.state.password,
             });
 
             // send request to backend
             const response = await api.put('/login', requestBody);
 
             const user = response.data
-            console.log(response);
+
             // Store the token into the local storage.
             localStorage.setItem('current', user.id);
             localStorage.setItem("name", user.username);
             localStorage.setItem("token", response.data.token);
-
+            localStorage.setItem("fromLogin", "true");
             // LoginPage successfully worked --> navigate to the route /game in the GameRouter
-            this.props.history.push("/game");
+
+            this.props.history.push(
+                {pathname: `/game`}
+            );
         } catch (error) {
             alert(`Something went wrong during the login: \n${handleError(error)}`);
         }
@@ -164,12 +179,27 @@ class LoginPage extends React.Component {
      * You may call setState() immediately in componentDidMount().
      * It will trigger an extra rendering, but it will happen before the browser updates the screen.
      */
-    componentDidMount() {
+
+
+    handleCloseSnackbar(){
+        this.setState({
+            fromSignup: false,
+        })
+    }
+
+    showSnackbar(){
+        return SnackbarAlert({close:this.closeSnackbar, type:"good", message:"Successfully registered!"});
+    }
+    closeSnackbar(){
+        this.handleCloseSnackbar();
     }
 
     render() {
         return (
             <Container>
+
+                {this.state.fromSignup? this.showSnackbar(): null}
+
                 <Row>
                     <Col lg> <GameTitle> SCRABBAR.IO </GameTitle> </Col>
                 </Row>
@@ -223,7 +253,7 @@ class LoginPage extends React.Component {
                                 <Button variant="primary" type="submit" size="lg"
                                         onClick={() => {
                                             this.props.history.push(
-                                                {pathname: `/signUp`}
+                                                {pathname: `/signUp`},
                                             );
                                         }}
                                 >Register</Button>

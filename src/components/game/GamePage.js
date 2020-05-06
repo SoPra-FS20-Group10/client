@@ -28,6 +28,8 @@ import {Scrollbars} from 'react-custom-scrollbars';
 import {number} from "prop-types";
 import {Spinner} from "../../views/design/Spinner";
 import {ChannelPreview} from "stream-chat-react";
+import Snackbar from "@material-ui/core/Snackbar";
+import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
 
 
 // const Container = styled(BaseContainer)`
@@ -161,7 +163,7 @@ class GamePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            isOpenGameStartSnackbar: false,
             placedLetters: [],
             placedLettersCoordinates: [],
             currentPlayer: null,
@@ -422,6 +424,10 @@ class GamePage extends React.Component {
         this.showScoreBoard = this.showScoreBoard.bind(this);
         this.endGameShortcut = this.endGameShortcut.bind(this);
         this.checkFirstLetterSet = this.checkFirstLetterSet.bind(this);
+        this.handleOpenGameStartSnackbar=this.handleOpenGameStartSnackbar.bind(this);
+        this.handleCloseGameStartSnackbar=this.handleCloseGameStartSnackbar.bind(this);
+        this.showSnackbar=this.showSnackbar.bind(this);
+        this.closeSnackbar=this.closeSnackbar.bind(this);
     }
 
 
@@ -431,6 +437,7 @@ class GamePage extends React.Component {
         this.getPlayerStones();
         this.getGameInfo();
         this.checkFirstLetterSet();
+        this.handleOpenGameStartSnackbar();
         try {
             setInterval(async () => {
                 this.getPlayers();
@@ -697,12 +704,6 @@ class GamePage extends React.Component {
         }
     }
 
-    removeStone() {
-        console.log(this.state.boxes);
-
-    }
-
-
     drawTile(props) {
 
         return (
@@ -826,11 +827,6 @@ class GamePage extends React.Component {
 
     }
 
-    resetLetters(){
-        this.getBoard();
-        this.getPlayerStones();
-    }
-
     async getGameInfo() {
         let response = await api.get("/games/" + this.state.gameId);
 
@@ -878,7 +874,6 @@ class GamePage extends React.Component {
         this.setState({
             board: updatedBoard,
         });
-
 
     }
 
@@ -959,12 +954,34 @@ class GamePage extends React.Component {
         this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
 
+    handleOpenGameStartSnackbar(){
+            this.setState({
+                isOpenGameStartSnackbar: true,
+            })
+    }
+    handleCloseGameStartSnackbar(event, reason){
+        this.setState({
+            isOpenGameStartSnackbar: false,
+        })
+    }
+
+
+    showSnackbar(){
+        return SnackbarAlert({close:this.closeSnackbar, type:"info" ,message: "Game started!"});
+    }
+    closeSnackbar(){
+        this.handleCloseGameStartSnackbar();
+    }
+
     render() {
 
         const {board} = this.state;
 
         return (
             <Container>
+
+                {this.state.isOpenGameStartSnackbar? this.showSnackbar(): null}
+
                 <Row className="justify-content-md-center">
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>

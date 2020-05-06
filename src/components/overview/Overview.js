@@ -11,6 +11,7 @@ import LobbyList from "./Lobbylist";
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
 import {CloseButton} from "react-bootstrap";
+import {SnackbarAlert} from "../shared/Other/SnackbarAlert";
 
 // TODO: WORK IN PROGRESS!
 
@@ -58,13 +59,27 @@ const Container = styled(BaseContainer)`
 class Overview extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            users: null
-        };
 
+        this.state = {
+            users: null,
+            fromLogin: this.fromLogin()
+        };
         this.logoutUser = this.logoutUser.bind(this);
+        console.log(this.props);
+        this.handleCloseSnackbar=this.handleCloseSnackbar.bind(this);
+        this.closeSnackbar=this.closeSnackbar.bind(this);
+        this.showSnackbar=this.showSnackbar.bind(this);
     }
 
+    fromLogin(){
+        if(localStorage.getItem("fromLogin") === "true"){
+
+            localStorage.removeItem("fromLogin");
+            console.log("removed");
+            return true;
+        }
+        return false;
+    }
 
     async logoutUser() {
         const requestBody = JSON.stringify({
@@ -88,11 +103,25 @@ class Overview extends React.Component {
         }
     }
 
+
+    handleCloseSnackbar(){
+        this.setState({
+            fromLogin: false,
+        })
+    }
+
+    showSnackbar(){
+        return SnackbarAlert({close:this.closeSnackbar, type:"good", message:"Logged in!"});
+    }
+    closeSnackbar(){
+        this.handleCloseSnackbar();
+    }
+
     render() {
         return (
             <Container>
 
-
+                {this.state.fromLogin? this.showSnackbar(): null}
                 <CloseButton onClick={this.logoutUser} style={{color: "white"}}/>
 
                 {/*TODO: Add real chat*/}

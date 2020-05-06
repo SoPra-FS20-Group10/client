@@ -84,6 +84,7 @@ class SignupPage extends React.Component {
             const response = await api.post("/users", requestBody);
 
             //SignupPage successfully worked -> navigate to the route /login
+            localStorage.setItem("fromSignup", "true");
             this.props.history.push(response.data);
         } catch (error) {
             alert(`Something went wrong during the sign up: \n${handleError(error)}`);        }
