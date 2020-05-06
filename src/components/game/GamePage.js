@@ -23,15 +23,13 @@ import Form from "react-bootstrap/Form";
 import Piece from "../shared/models/Piece";
 import CompletedWords from "./CompletedWords";
 import PieceCounter from "./PieceCounter";
-import {Pie} from "react-chartjs-2";
 import {Scrollbars} from 'react-custom-scrollbars';
-import {number} from "prop-types";
-import {Spinner} from "../../views/design/Spinner";
-import {ChannelPreview} from "stream-chat-react";
-import Snackbar from "@material-ui/core/Snackbar";
 import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
 import Tooltip from "@material-ui/core/Tooltip";
-
+import 'react-spring';
+import {turnAnimation} from "./TurnAnimation";
+import {Transition, animated} from 'react-spring/renderprops'
+import "./styles/turn.css"
 
 // const Container = styled(BaseContainer)`
 //     color: white;
@@ -169,6 +167,7 @@ class GamePage extends React.Component {
             isOpenTurnStartSnackbar: false,
             isOpenTurnEndSnackbar: false,
             isOpenInvalidMoveSnackbar:false,
+            myTurn: false,
             placedLetters: [],
             placedLettersCoordinates: [],
             currentPlayer: null,
@@ -407,6 +406,7 @@ class GamePage extends React.Component {
                 }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
             ],
             pieceBag: null,
+            show:true,
 
         };
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -433,6 +433,8 @@ class GamePage extends React.Component {
         this.handleCloseSnackbars=this.handleCloseSnackbars.bind(this);
         this.showSnackbar=this.showSnackbar.bind(this);
         this.closeSnackbar=this.closeSnackbar.bind(this);
+        this.checkTurn=this.checkTurn.bind(this);
+        this.showPlayerTurn=this.showPlayerTurn.bind(this);
     }
 
 
@@ -445,6 +447,7 @@ class GamePage extends React.Component {
         this.handleOpenGameStartSnackbar();
         try {
             setInterval(async () => {
+                this.checkTurn();
                 this.getPlayers();
                 // this.getCurrentPlayer();
                 this.getGameInfo();
@@ -457,6 +460,44 @@ class GamePage extends React.Component {
             console.log(e);
         }
     }
+
+    checkTurn() {
+
+        // show snackbar if not yet shown
+        if (this.state.currentPlayer === Number(localStorage.getItem("current")) && !this.state.myTurn) {
+            this.setState({
+               myTurn:true
+            });
+            return true;
+        } else if (this.state.currentPlayer !== Number(localStorage.getItem("current")) && this.state.myTurn){
+            this.setState({
+                myTurn: false,
+            });
+    }
+    }
+
+    showPlayerTurn(){
+        if(this.state.myTurn){
+            let toggle = e => this.checkTurn()? this.setState(state => ({ show: !state.show })):null;
+                return (
+                    <div className="reveals-main">
+                        <Transition
+                            native
+                            items={this.state.show}
+                            from={{ position: 'absolute', overflow: 'hidden', height: 0 }}
+                            enter={[{ height: 'auto' }]}
+                            leave={{ height: 0 }}>
+                            {show =>
+                                show && (props => <animated.div style={props}>YOUR TURN</animated.div>)
+                            }
+                        </Transition>
+                    </div>)
+        }
+        else{
+            return(<div></div>)
+        }
+    }
+
 
     checkFirstLetterSet(){
         let isSet = false;
@@ -757,7 +798,7 @@ class GamePage extends React.Component {
 
     placeLetter(piece, index) {
 
-        console.log(index);
+
         let placedLetters = this.state.placedLetters;
         let placedLettersCoordinates = this.state.placedLettersCoordinates;
 
@@ -768,7 +809,7 @@ class GamePage extends React.Component {
             placedLetters: placedLetters,
             placedLettersCoordinates: placedLettersCoordinates
         });
-        console.log(this.state);
+
     }
 
     // Helper function to get 1d Array index from 2d Array indexes
@@ -964,6 +1005,7 @@ class GamePage extends React.Component {
                 isOpenGameStartSnackbar: true,
             })
     }
+    /*
     handleOpenGameStartSnackbar(){
         this.setState({
             isOpenExchangePieceSnackbar: true,
@@ -984,6 +1026,7 @@ class GamePage extends React.Component {
             isOpenInvalidMoveSnackbar: true,
         })
     }
+    */
     handleCloseSnackbars(){
         this.setState({
             isOpenGameStartSnackbar: false,
@@ -996,6 +1039,7 @@ class GamePage extends React.Component {
 
 
     showSnackbar(message){
+        console.log(message);
         return SnackbarAlert({close:this.closeSnackbar, type:"info" ,message: message});
     }
     closeSnackbar(){
@@ -1011,7 +1055,7 @@ class GamePage extends React.Component {
 
                 {this.state.isOpenGameStartSnackbar? this.showSnackbar("Game started"): null}
                 {this.state.isOpenExchangePieceSnackbar? this.showSnackbar("Pieces exchanged - your turn ends"): null}
-                {this.state.isOpenTurnStartSnackbar? this.showSnackbar("Your turn"): null}
+
                 {this.state.isOpenTurnEndSnackbar? this.showSnackbar("Your turn is over"): null}
                 {this.state.isOpenInvalidMoveSnackbar? this.showSnackbar("Your move was invalid"): null}
 
@@ -1147,7 +1191,7 @@ class GamePage extends React.Component {
                                 mozUserSelect: 'none',
                                 msUserSelect: 'none'
                             }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
-
+                            {this.showPlayerTurn()}
                             {/*TODO: Remove shortcut after presentation*/}
                             <PlayerButtons style={{
                                 marginBottom: '3em'
