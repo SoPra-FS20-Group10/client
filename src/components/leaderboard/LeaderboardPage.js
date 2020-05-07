@@ -84,7 +84,7 @@ class LeaderboardPage extends React.Component {
     }
 
     renderTableHeader() {
-        let header = ['#', 'Name', 'Wins', 'Win %', 'Time Played']
+        let header = ['#', 'Name', 'Wins', 'Win %', 'Overall Score','Time Played']
         // let header = Object.keys(this.state.data[0])
         return header.map((key, index) => {
             return <th class='text-white' key={index}>{key.toUpperCase()}</th>
@@ -93,7 +93,7 @@ class LeaderboardPage extends React.Component {
 
     renderTableData() {
         return this.state.players.map((data, index) => {
-                const {id, username, winPercentage, wonGames,playtime} = data //destructuring
+                const {id, username, winPercentage, wonGames, overallScore, playtime} = data //destructuring
                 if (index % 2 == 0) {
                     return (
                         // <tr  class='text-white' key={id}>
@@ -103,6 +103,7 @@ class LeaderboardPage extends React.Component {
                             <td>{username}</td>
                             <td>{wonGames}</td>
                             <td>{winPercentage}</td>
+                            <td>{overallScore}</td>
                             <td>{playtime}</td>
                         </tr>
 
@@ -114,6 +115,7 @@ class LeaderboardPage extends React.Component {
                             <td>{username}</td>
                             <td>{wonGames}</td>
                             <td>{winPercentage}</td>
+                            <td>{overallScore}</td>
                             <td>{playtime}</td>
                         </tr>
                     )
