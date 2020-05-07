@@ -176,7 +176,6 @@ class ProfilePage extends React.Component {
             tempUsername: null,
 
         }
-        this.fetchUser();
         this.handleOpenModalName = this.handleOpenModalName.bind(this);
         this.handleCloseModalName = this.handleCloseModalName.bind(this);
         this.handleOpenModalPassword = this.handleOpenModalPassword.bind(this);
@@ -188,10 +187,14 @@ class ProfilePage extends React.Component {
     }
 
     async componentDidMount() {
+        this.fetchUser();
         try {
             setInterval(async () => {
+                if(parseInt(window.location.href.split('/').pop(), 10) != this.state.userId){
+                    this.setState({userId: parseInt(window.location.href.split('/').pop(), 10)})
+                }
                 this.fetchUser();
-            }, 10000);
+            }, 100);
         } catch(e) {
             console.log(e);
         }
