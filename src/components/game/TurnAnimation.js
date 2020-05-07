@@ -4,7 +4,7 @@ import { useTrail, animated } from 'react-spring'
 const items = ['Lorem', 'ipsum', 'dolor', 'sit']
 const config = { mass: 5, tension: 2000, friction: 200 }
 
-function getTrail(){
+function GetTrail(){
     const toggle = true;
     const set = true;
     const trail = useTrail(items.length, {
@@ -21,7 +21,7 @@ function getTrail(){
 export function turnAnimation() {
     const toggle = true;
     const set = true;
-    let trail = getTrail();
+    let trail = GetTrail();
 
 
     return (
