@@ -190,16 +190,17 @@ class ProfilePage extends React.Component {
         this.fetchUser();
         try {
             setInterval(async () => {
-                if(parseInt(window.location.href.split('/').pop(), 10) != this.state.userId){
+                if (parseInt(window.location.href.split('/').pop(), 10) != this.state.userId) {
                     this.setState({userId: parseInt(window.location.href.split('/').pop(), 10)})
                 }
                 this.fetchUser();
             }, 100);
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
-    async fetchUser(){
+
+    async fetchUser() {
         try {
 
             const response = await api.get("/users/" + this.state.userId);
@@ -215,8 +216,7 @@ class ProfilePage extends React.Component {
             console.log(this)
 
             // this.countLobbyPlayers();
-        }
-        catch(error){
+        } catch (error) {
             alert(error);
         }
     }
@@ -243,11 +243,13 @@ class ProfilePage extends React.Component {
     }
 
     render() {
+        // boolean that is true if player is on his / her own profile
+        const isUser = this.state.userId == localStorage.getItem("current");
         return (
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <NavigationBar  playerId={localStorage.getItem("current")}/>
+                <NavigationBar playerId={localStorage.getItem("current")}/>
 
                 {/*Username*/}
                 <NameWrapper>{this.state.userName}'s Profile</NameWrapper>
@@ -292,15 +294,20 @@ class ProfilePage extends React.Component {
 
 
                 {/*Buttons for editing credentials*/}
-                <ButtonContainer3>
-                    <Button variant="dark" size="lg" onClick={this.handleOpenModalName}>
-                        Change Name
-                    </Button> {' '}
-                    <Button variant="dark" size="lg" onClick={this.handleOpenModalPassword}>
-                        Change Password
-                    </Button>
 
-                </ButtonContainer3>
+
+                {isUser ?
+                    <ButtonContainer3>
+
+                        <Button variant="dark" size="lg" onClick={this.handleOpenModalName}>
+                            Change Name
+                        </Button> {' '}
+                        <Button variant="dark" size="lg" onClick={this.handleOpenModalPassword}>
+                            Change Password
+                        </Button>
+
+                    </ButtonContainer3>
+                    : null}
 
                 {/*Modal for Name-Popup*/}
                 <Modal
@@ -383,12 +390,10 @@ class ProfilePage extends React.Component {
             await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
             this.fetchUser();
             this.handleCloseModalName();
-        }catch(error){
+        } catch (error) {
             alert(error);
         }
     }
-
-
 
 
     async changePassword() {
@@ -403,7 +408,7 @@ class ProfilePage extends React.Component {
             await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
             this.fetchUser();
             this.handleCloseModalPassword();
-        }catch(error){
+        } catch (error) {
             alert(error);
         }
     }
