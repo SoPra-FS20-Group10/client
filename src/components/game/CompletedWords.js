@@ -59,6 +59,7 @@ class CompletedWords extends React.Component {
 
     }
 
+    // TODO: Fix?
     componentDidMount() {
         this.setState({words: this.props.words,})
 

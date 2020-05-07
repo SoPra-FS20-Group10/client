@@ -158,8 +158,8 @@ class ProfilePage extends React.Component {
         super(props);
         this.state = { // some example data for the profile page
             // playerId: this.props.location.state.playerId,
-            userId: Number(localStorage.getItem("current")),
-            userName: localStorage.getItem("name"),
+            userId: parseInt(window.location.href.split('/').pop(), 10),
+            userName: null,
 
             overallScore: null,
             playedGames: null,
@@ -188,7 +188,6 @@ class ProfilePage extends React.Component {
     }
 
     async componentDidMount() {
-
         try {
             setInterval(async () => {
                 this.fetchUser();
@@ -245,7 +244,7 @@ class ProfilePage extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <NavigationBar  playerId={this.state.playerId}/>
+                <NavigationBar  playerId={localStorage.getItem("current")}/>
 
                 {/*Username*/}
                 <NameWrapper>{this.state.userName}'s Profile</NameWrapper>
