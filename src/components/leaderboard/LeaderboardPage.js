@@ -8,6 +8,8 @@ import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
 import {api} from "../../helpers/api";
 import LeaderboardEntry from "./LeaderboardEntry";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const ButtonContainer = styled.div`
   width: 33.3%;
@@ -46,6 +48,7 @@ class LeaderboardPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { // just some example data for the leaderboard
+            sortBy: 'Overall Score',
             playerId: this.props.location.state.playerId,
             players: [],
             data: [
@@ -69,6 +72,30 @@ class LeaderboardPage extends React.Component {
         }
     }
 
+    changeSortingComparator(comparator) {
+        this.setState({sortBy: `${comparator}`})
+    }
+
+    compareWins(a, b) {
+        if (a.wins > b.wins) {
+            return -1;
+        }
+        if (a.wins < b.wins) {
+            return 1;
+        }
+        return 0;
+    }
+
+    compareWinPercentage(a, b) {
+        if (a.winPercentage > b.winPercentage) {
+            return -1;
+        }
+        if (a.winPercentage < b.winPercentage) {
+            return 1;
+        }
+        return 0;
+    }
+
     compareOverallScore(a, b) {
         if (a.overallScore > b.overallScore) {
             return -1;
@@ -79,9 +106,27 @@ class LeaderboardPage extends React.Component {
         return 0;
     }
 
+    compareTimePlayed(a, b) {
+        if (a.timePlayed > b.timePlayed) {
+            return -1;
+        }
+        if (a.timePlayed < b.timePlayed) {
+            return 1;
+        }
+        return 0;
+    }
+
     async getUserData() {
         let response = await api.get("/users");
-        this.setState({players: response.data.sort(this.compareOverallScore)});
+        if(this.state.sortBy == 'Wins'){
+            this.setState({players: response.data.sort(this.compareWins)});
+        }else if(this.state.sortBy == 'Win %'){
+            this.setState({players: response.data.sort(this.compareWinPercentage)});
+        }else if(this.state.sortBy == 'Overall Score'){
+            this.setState({players: response.data.sort(this.compareOverallScore)});
+        }else if(this.state.sortBy == 'Time Played'){
+            this.setState({players: response.data.sort(this.compareTimePlayed)});
+        }
     }
 
     renderTableHeader() {
@@ -101,6 +146,7 @@ class LeaderboardPage extends React.Component {
         )
     }
 
+
     render() {
         return (
             <Container>
@@ -111,7 +157,21 @@ class LeaderboardPage extends React.Component {
                 {/*leaderboard*/}
                 <div>
                     <LeaderboardWrapper responsive>
-                        <h1 id='title'>Leaderboard</h1>
+                        <h1 >Leaderboard</h1>
+                        {/*dropdown menu for selecting what stat to sort by*/}
+                        <DropdownButton style={{float: 'left', margin: 'auto'}} id="dropdown-item-button" title={this.state.sortBy}>
+                            <Dropdown.Item as="button"
+                                           onClick={() => this.changeSortingComparator('Wins')}>Wins</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Win %')}>Win
+                                %</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Overall Score')}>Overall
+                                Score</Dropdown.Item>
+                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Time Played')}>Time
+                                Played</Dropdown.Item>
+                        </DropdownButton>
+
+
+                        {/*rendering users*/}
                         <table class="table" id='leaderboard'>
                             <tbody block>
                             <tr>{this.renderTableHeader()}</tr>
@@ -120,6 +180,8 @@ class LeaderboardPage extends React.Component {
                         </table>
                     </LeaderboardWrapper>
                 </div>
+
+
             </Container>
         );
     }
