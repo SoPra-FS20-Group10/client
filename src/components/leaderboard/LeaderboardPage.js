@@ -68,9 +68,19 @@ class LeaderboardPage extends React.Component {
         }
     }
 
+    compareOverallScore(a, b) {
+        if (a.overallScore > b.overallScore) {
+            return -1;
+        }
+        if (a.overallScore < b.overallScore) {
+            return 1;
+        }
+        return 0;
+    }
+
     async getUserData() {
         let response = await api.get("/users");
-        this.setState({players: response.data});
+        this.setState({players: response.data.sort(this.compareOverallScore)});
     }
 
     renderTableHeader() {
