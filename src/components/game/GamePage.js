@@ -52,11 +52,8 @@ float:left;
 
 const GameWrapper = styled.div`
 
-margin-top: 10%;
-margin-left: 2%;
-
-margin-right: 2%;
-width: 80%;
+margin-top: 5%;
+width: 100%;
 
 float:left;
 `;
