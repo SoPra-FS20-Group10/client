@@ -13,13 +13,15 @@ import PlayerBar from "./PlayerBar";
 import Snackbar from "@material-ui/core/Snackbar";
 import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
 import MuiAlert from '@material-ui/lab/Alert';
-
+import { ThemeProvider } from '@livechat/ui-kit'
+import "./styles/chat.css"
 
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
   // margin: 0;
-  
+  width: 80%
+  max-width: none;
   margin-right: 5%;
   margin-left: 5%;
  
@@ -33,10 +35,8 @@ const ChatWrapper = styled.div`
 
 margin-top: 10%;
 margin-left: 5%;
-padding: 5%;
 width: 25%;
-height: 400pt; 
-background: grey;
+height: 325pt; 
 float:left;
 `;
 
@@ -45,9 +45,8 @@ const LobbyWrapper = styled.div`
 margin-top: 10%;
 margin-left: 5%;
 
-// width: 60%;
 margin-right: 5%;
-width: 90%;
+width: 60%;
 
 height: 400pt; 
 background: rgba(77, 77, 77, 0.5);
@@ -63,6 +62,12 @@ const ButtonContainer2 = styled.div`
     width: 50%;
     margin:auto;
 `;
+
+// Chat title
+
+function Title() {
+    return <p className="title">Lobby Chat</p>
+}
 
 
 class LobbyPage extends React.Component {
@@ -84,6 +89,8 @@ class LobbyPage extends React.Component {
             minPlayerCounter: 1,
             isLobbyLeader: false,
             isOpenLobbyCreateSnackbar: false,
+            messages: [],
+            message: ""
         };
 
         this.leaveLobby = this.leaveLobby.bind(this);
@@ -98,6 +105,7 @@ class LobbyPage extends React.Component {
         this.handleCloseLobbyCreateSnackbar=this.handleCloseLobbyCreateSnackbar.bind(this);
         this.handleOpenLobbyCreateSnackBar=this.handleOpenLobbyCreateSnackBar.bind(this);
         this.closeSnackbar=this.closeSnackbar.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
 
     }
 
@@ -111,6 +119,10 @@ class LobbyPage extends React.Component {
             this.checkStartGame();
             this.checkInLobby();
             this.handleOpenLobbyCreateSnackBar();
+            this.handleChange = this.handleChange.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
+            this.getMessages=this.getMessages.bind(this);
+            this.showMessages=this.showMessages.bind(this);
 
             try {
                 setInterval(async () => {
@@ -119,6 +131,7 @@ class LobbyPage extends React.Component {
                         this.checkLobbyLeader();
                         this.checkStartGame();
                         this.checkInLobby();
+                        this.getMessages();
                     }
                 }, 500);
             } catch (e) {
@@ -126,6 +139,7 @@ class LobbyPage extends React.Component {
             }
         }
     }
+
 
     componentWillUnmount() {
         this._isMounted = false;
@@ -324,6 +338,65 @@ class LobbyPage extends React.Component {
         this.handleCloseLobbyCreateSnackbar();
     }
 
+
+    // CHAT FUNCTIONALITY
+
+    handleChange(e){
+
+        this.setState({
+            message: e.target.value
+        })
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.sendMessage(this.state.message);
+        this.setState({
+            message: ''
+        })
+    }
+
+    async sendMessage(message){
+
+        try{
+            const d = new Date();
+            const n = d.getTime();
+            const requestBody = JSON.stringify({
+                username: localStorage.getItem("name"),
+                time: n,
+                message: message
+            });
+            let response = await api.put("/chat/" + this.state.lobbyId, requestBody);
+        }catch(error){
+            console.log(error);
+        }
+
+    }
+
+
+    async getMessages() {
+try {
+    let response = await api.get("chat/" + this.state.lobbyId);
+    this.setState({
+        messages:response.data
+    });
+}catch(error){
+    console.log(error);
+}
+
+    }
+
+    showMessages(){
+
+    }
+    // Helper function to format date for the chat
+    formatDate(date){
+        let hours = date.getHours().toString();
+        let minutes = date.getMinutes().toString();
+        let formatedDate = hours +":" + minutes;
+        return formatedDate;
+    }
+
     render() {
 
         return (
@@ -331,9 +404,34 @@ class LobbyPage extends React.Component {
             <Container>
 
                 {/*TODO: Add real chat*/}
-                {/*<ChatWrapper>*/}
-                {/*    <h2>This would be the chat</h2>*/}
-                {/*</ChatWrapper>*/}
+                <ChatWrapper>
+                    <Title />
+                    <ul className="message-list">
+                        { this.state.messages.map((message, index) => {
+                            let date = new Date(message.time);
+                            let dateFormated = this.formatDate(date);
+                            return (
+
+                                <li   className="message">
+                                    <div>{message.username + " - " + dateFormated}</div>
+                                    <div>{message.message}</div>
+
+
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    <form
+                        onSubmit={this.handleSubmit}
+                        className="send-message-form">
+                        <input
+                            onChange={this.handleChange}
+                            value={this.state.message}
+                            placeholder="Type your message and hit ENTER"
+                            type="text" />
+                    </form>
+                </ChatWrapper>
+
 
                 {this.state.isOpenLobbyCreateSnackbar? this.showSnackbar(): null}
 

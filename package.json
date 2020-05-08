@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@livechat/ui-kit": "^0.4.0-10",
     "@material-ui/lab": "^4.0.0-alpha.52",
+    "@progress/kendo-react-conversational-ui": "^3.13.0",
     "@yazanaabed/react-tabs": "^2.3.6",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
@@ -48,6 +50,6 @@
     "@material-ui/core": "^4.9.13",
     "immutability-helper": "^3.0.2",
     "stream-chat": "^1.8.0",
-    "stream-chat-react": "^0.11.17"
+    "stream-chat-react": "^0.11.18"
   }
 }

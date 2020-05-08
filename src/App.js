@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./views/Header";
 import AppRouter from "./components/shared/routers/AppRouter";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import styled from "styled-components";
 
 /**
