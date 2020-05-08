@@ -123,7 +123,6 @@ class LobbyPage extends React.Component {
             this.handleSubmit = this.handleSubmit.bind(this);
             this.getMessages=this.getMessages.bind(this);
             this.showMessages=this.showMessages.bind(this);
-
             try {
                 setInterval(async () => {
                     if (this._isMounted) {

@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Container from 'react-bootstrap/Container'
+
 import {DndProvider} from "react-dnd";
 import Backend, {NativeTypes} from "react-dnd-html5-backend"
 import ScoreBoard from "./ScoreBoard";
@@ -30,13 +30,37 @@ import 'react-spring';
 import {turnAnimation} from "./TurnAnimation";
 import {Transition, animated} from 'react-spring/renderprops'
 import "./styles/turn.css"
+import {BaseContainer} from "../../helpers/layout";
 
-// const Container = styled(BaseContainer)`
-//     color: white;
-//     text-align: center;
-//     width:100%;
-//     padding:0;
-// `;
+const Container = styled(BaseContainer)`
+  color: white;
+  text-align: center;
+  margin: 0;
+  width: 100%
+  max-width: none;
+
+
+ 
+`;
+
+const ChatWrapper = styled.div`
+
+margin-top: 10%;
+height: 210pt; 
+float:left;
+`;
+
+const GameWrapper = styled.div`
+
+margin-top: 10%;
+margin-left: 2%;
+
+margin-right: 2%;
+width: 80%;
+
+float:left;
+`;
+
 
 const BoardWrapper = styled.div`
     border-radius: 4pt;
@@ -45,20 +69,6 @@ const BoardWrapper = styled.div`
     width: 500pt;
     height: 550pt;
     background: rgba(77, 77, 77, 0.5);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const FormGroup = styled.div`
-    margin: 0pt;
-    padding: 1em;
-    width: 500pt;
-    height: 550pt;
-
-    background: rgba(77, 77, 77, 0.5);
-
     color: white;
     display: flex;
     align-items: center;
@@ -80,16 +90,6 @@ const SideWrapper = styled.div`
     justify-content: center;
 `;
 
-const PlayerButtons = styled.div`
-    display: flex;
-    justify-content: space-between;
-    flex: 1;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding-right: 2em;
-    padding-bottom: 1em;
-`;
 
 const DeckWrapper = styled.div`
     border-radius: 4pt;
@@ -157,11 +157,18 @@ const customStyles = {
     }
 ;
 
+// Chat title
+
+function Title() {
+    return <p className="title">Lobby Chat</p>
+}
 
 class GamePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            messages: [],
+            message: "",
             isOpenGameStartSnackbar: false,
             isOpenExchangePieceSnackbar: false,
             isOpenTurnStartSnackbar: false,
@@ -435,6 +442,11 @@ class GamePage extends React.Component {
         this.closeSnackbar=this.closeSnackbar.bind(this);
         this.checkTurn=this.checkTurn.bind(this);
         this.showPlayerTurn=this.showPlayerTurn.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.getMessages=this.getMessages.bind(this);
+        this.showMessages=this.showMessages.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
     }
 
 
@@ -452,6 +464,7 @@ class GamePage extends React.Component {
                 // this.getCurrentPlayer();
                 this.getGameInfo();
                 this.checkFirstLetterSet();
+                this.getMessages();
                 if (this.state.gameStatus == "ENDED") {
                     this.goToEndscreen();
                 }
@@ -1048,6 +1061,66 @@ class GamePage extends React.Component {
         this.handleCloseSnackbars();
     }
 
+    // CHAT FUNCTIONALITY
+
+    handleChange(e){
+
+        this.setState({
+            message: e.target.value
+        })
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.sendMessage(this.state.message);
+        this.setState({
+            message: ''
+        })
+    }
+
+    async sendMessage(message){
+
+        try{
+            const d = new Date();
+            const n = d.getTime();
+            const requestBody = JSON.stringify({
+                username: localStorage.getItem("name"),
+                time: n,
+                message: message
+            });
+            let response = await api.put("/chat/" + localStorage.getItem("currentGame"), requestBody);
+        }catch(error){
+            console.log(error);
+        }
+
+    }
+
+
+    async getMessages() {
+        try {
+            let response = await api.get("chat/" + localStorage.getItem("currentGame"));
+            this.setState({
+                messages:response.data
+            });
+        }catch(error){
+            console.log(error);
+        }
+
+    }
+
+    showMessages(){
+
+    }
+    // Helper function to format date for the chat
+    formatDate(date){
+        let hours = date.getHours().toString();
+        let minutes = date.getMinutes().toString();
+        if (minutes < 10){
+            minutes = "0" + minutes;
+        }
+        let formatedDate = hours +":" + minutes;
+        return formatedDate;
+    }
     render() {
 
         const {board} = this.state;
@@ -1061,6 +1134,7 @@ class GamePage extends React.Component {
                 {this.state.isOpenTurnEndSnackbar? this.showSnackbar("Your turn is over", "info"): null}
                 {this.state.isOpenInvalidMoveSnackbar? this.showSnackbar("Your move was invalid", "error"): null}
 
+<GameWrapper>
                 <Row className="justify-content-md-center">
                     <Col className="py-2 px-0" md="auto">
                         <SideWrapper>
@@ -1104,8 +1178,8 @@ class GamePage extends React.Component {
                             <Scrollbars
                                 // This will activate auto-height
                                 autoHeight
-                                autoHeightMin={550}
-                                autoHeightMax={590}
+                                autoHeightMin={410}
+                                autoHeightMax={450}
                                 renderTrackVertical={this.renderTrackVertical}
 
                                 renderThumbVertical={this.renderThumbVertical}
@@ -1122,7 +1196,7 @@ class GamePage extends React.Component {
                                     msUserSelect: 'none'
                                 }} words={this.state.words}/>
                             </Scrollbars>
-
+                            {this.showPlayerTurn()}
                         </SideWrapper>
                     </Col>
 
@@ -1224,12 +1298,38 @@ class GamePage extends React.Component {
                                     End Turn
                                 </Button>
                             </Tooltip>
+                            <ChatWrapper>
+                                <Title />
+                                <ul className="message-list">
+                                    { this.state.messages.map((message, index) => {
+                                        let date = new Date(message.time);
+                                        let dateFormated = this.formatDate(date);
+                                        return (
 
-                            {this.showPlayerTurn()}
+                                            <li   className="message">
+                                                <div>{message.username + " - " + dateFormated}</div>
+                                                <div>{message.message}</div>
+
+
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                                <form
+                                    onSubmit={this.handleSubmit}
+                                    className="send-message-form">
+                                    <input
+                                        onChange={this.handleChange}
+                                        value={this.state.message}
+                                        placeholder="Type your message and hit ENTER"
+                                        type="text" />
+                                </form>
+                            </ChatWrapper>
+
                         </SideWrapper>
                     </Col>
                 </Row>
-
+</GameWrapper>
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="Inline Styles Modal GameBoard"
