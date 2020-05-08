@@ -122,7 +122,6 @@ class LobbyPage extends React.Component {
             this.handleChange = this.handleChange.bind(this);
             this.handleSubmit = this.handleSubmit.bind(this);
             this.getMessages=this.getMessages.bind(this);
-            this.showMessages=this.showMessages.bind(this);
             try {
                 setInterval(async () => {
                     if (this._isMounted) {
@@ -385,9 +384,6 @@ try {
 
     }
 
-    showMessages(){
-
-    }
     // Helper function to format date for the chat
     formatDate(date){
         let hours = date.getHours().toString();

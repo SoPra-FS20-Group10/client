@@ -63,7 +63,6 @@ class OverviewPage extends React.Component {
       showProfile: false,
     };
 
-    console.log(this.props);
   }
 
   currentDisplay(){
