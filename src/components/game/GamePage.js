@@ -444,6 +444,7 @@ class GamePage extends React.Component {
         this.getMessages=this.getMessages.bind(this);
         this.showMessages=this.showMessages.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
+        this.handleChangeChat = this.handleChangeChat.bind(this);
     }
 
 
@@ -1060,7 +1061,7 @@ class GamePage extends React.Component {
 
     // CHAT FUNCTIONALITY
 
-    handleChange(e){
+    handleChangeChat(e){
 
         this.setState({
             message: e.target.value
@@ -1316,7 +1317,7 @@ class GamePage extends React.Component {
                                     onSubmit={this.handleSubmit}
                                     className="send-message-form">
                                     <input
-                                        onChange={this.handleChange}
+                                        onChange={this.handleChangeChat}
                                         value={this.state.message}
                                         placeholder="Type your message and hit ENTER"
                                         type="text" />
