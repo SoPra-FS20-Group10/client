@@ -393,6 +393,9 @@ try {
     formatDate(date){
         let hours = date.getHours().toString();
         let minutes = date.getMinutes().toString();
+        if (minutes < 10){
+            minutes = "0" + minutes;
+        }
         let formatedDate = hours +":" + minutes;
         return formatedDate;
     }
