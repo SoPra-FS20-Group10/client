@@ -214,10 +214,8 @@ class Overview extends React.Component {
 
      playSound(sfx) {
         sfx.play();
-         console.log('Started SFX')
         sfx.onended = function () {
             sfx.remove() //Remove when played.
-            console.log('Ended SFX')
         };
     }
 

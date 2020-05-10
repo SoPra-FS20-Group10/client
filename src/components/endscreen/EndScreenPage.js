@@ -10,6 +10,8 @@ import Modal from "react-modal";
 import {CloseButton} from "react-bootstrap";
 import LobbyList from "../overview/Lobbylist";
 
+import subtleClick from '../../sounds/subtle_click.wav'
+
 const Container = styled(BaseContainer)`
     color: white;
     text-align: center;
@@ -137,6 +139,7 @@ class EndScreenPage extends React.Component {
     }
 
     async leaveGame() {
+        this.playSound(new Audio(subtleClick));
 
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token")
@@ -214,6 +217,15 @@ class EndScreenPage extends React.Component {
                 }
             }
         )
+    }
+
+    playSound(sfx) {
+        sfx.play();
+        console.log('Started SFX')
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+            console.log('Ended SFX')
+        };
     }
 
     render() {
