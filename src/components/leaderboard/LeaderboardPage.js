@@ -11,6 +11,8 @@ import LeaderboardEntry from "./LeaderboardEntry";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
+import subtleClick from "../../sounds/subtle_click.wav";
+
 const ButtonContainer = styled.div`
   width: 33.3%;
   float:left;
@@ -73,6 +75,7 @@ class LeaderboardPage extends React.Component {
     }
 
     changeSortingComparator(comparator) {
+        this.playSound(new Audio(subtleClick));
         this.setState({sortBy: `${comparator}`})
     }
 
@@ -146,6 +149,12 @@ class LeaderboardPage extends React.Component {
         )
     }
 
+    playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
+    }
 
     render() {
         return (
