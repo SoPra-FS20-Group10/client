@@ -13,8 +13,9 @@ import PlayerBar from "./PlayerBar";
 import Snackbar from "@material-ui/core/Snackbar";
 import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
 import MuiAlert from '@material-ui/lab/Alert';
-import { ThemeProvider } from '@livechat/ui-kit'
+import {ThemeProvider} from '@livechat/ui-kit'
 import "./styles/chat.css"
+import subtleClick from "../../sounds/subtle_click.wav";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -69,6 +70,7 @@ function Title() {
     return <p className="title">Lobby Chat</p>
 }
 
+// TODO: Snackbars for errors?
 
 class LobbyPage extends React.Component {
     _isMounted = false;
@@ -86,7 +88,7 @@ class LobbyPage extends React.Component {
             lobbyPlayerNumber: null,
             ownerId: this.props.location.state.ownerId,
             maxPlayerCounter: 4,
-            minPlayerCounter: 1,
+            minPlayerCounter: 2,
             isLobbyLeader: false,
             isOpenLobbyCreateSnackbar: false,
             messages: [],
@@ -102,9 +104,9 @@ class LobbyPage extends React.Component {
         this.goToBoard = this.goToBoard.bind(this);
         this.checkStartGame = this.checkStartGame.bind(this);
         this.checkInLobby = this.checkInLobby.bind(this);
-        this.handleCloseLobbyCreateSnackbar=this.handleCloseLobbyCreateSnackbar.bind(this);
-        this.handleOpenLobbyCreateSnackBar=this.handleOpenLobbyCreateSnackBar.bind(this);
-        this.closeSnackbar=this.closeSnackbar.bind(this);
+        this.handleCloseLobbyCreateSnackbar = this.handleCloseLobbyCreateSnackbar.bind(this);
+        this.handleOpenLobbyCreateSnackBar = this.handleOpenLobbyCreateSnackBar.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
 
     }
@@ -121,7 +123,7 @@ class LobbyPage extends React.Component {
             this.handleOpenLobbyCreateSnackBar();
             this.handleChange = this.handleChange.bind(this);
             this.handleSubmit = this.handleSubmit.bind(this);
-            this.getMessages=this.getMessages.bind(this);
+            this.getMessages = this.getMessages.bind(this);
             try {
                 setInterval(async () => {
                     if (this._isMounted) {
@@ -220,6 +222,9 @@ class LobbyPage extends React.Component {
             'Authorization': null,
         };
         try {
+            let audio = new Audio(subtleClick);
+            this.playSound(audio);
+
             // Log out user in backend
             await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
             this.props.history.push(
@@ -246,6 +251,9 @@ class LobbyPage extends React.Component {
     }
 
     async startGame() {
+        let audio = new Audio(subtleClick);
+        await this.playSound(audio);
+
 
         let allReady = this.allPlayersReady();
         if (this.state.lobbyPlayerNumber > this.state.maxPlayerCounter) {
@@ -256,6 +264,8 @@ class LobbyPage extends React.Component {
         } else if (!allReady) {
             alert("Not all players are ready!");
         }
+
+
 
         // If all conditions to start a game are met, start the game and tell the backend.
         else {
@@ -315,31 +325,33 @@ class LobbyPage extends React.Component {
             }
         );
     }
-    handleOpenLobbyCreateSnackBar(){
 
-        if(this.props.location.state.ownerId != null)
-        this.setState({
-            isOpenLobbyCreateSnackbar: true,
-        })
+    handleOpenLobbyCreateSnackBar() {
+
+        if (this.props.location.state.ownerId != null)
+            this.setState({
+                isOpenLobbyCreateSnackbar: true,
+            })
     }
 
-    handleCloseLobbyCreateSnackbar(){
+    handleCloseLobbyCreateSnackbar() {
         this.setState({
             isOpenLobbyCreateSnackbar: false,
         })
     }
 
-    showSnackbar(){
-        return SnackbarAlert({close:this.closeSnackbar, type:"good", message:"Lobby created!"});
+    showSnackbar() {
+        return SnackbarAlert({close: this.closeSnackbar, type: "good", message: "Lobby created!"});
     }
-    closeSnackbar(){
+
+    closeSnackbar() {
         this.handleCloseLobbyCreateSnackbar();
     }
 
 
     // CHAT FUNCTIONALITY
 
-    handleChange(e){
+    handleChange(e) {
 
         this.setState({
             message: e.target.value
@@ -354,9 +366,11 @@ class LobbyPage extends React.Component {
         })
     }
 
-    async sendMessage(message){
+    async sendMessage(message) {
+        let audio = new Audio(subtleClick);
+        this.playSound(audio);
 
-        try{
+        try {
             const d = new Date();
             const n = d.getTime();
             const requestBody = JSON.stringify({
@@ -365,7 +379,7 @@ class LobbyPage extends React.Component {
                 message: message
             });
             let response = await api.put("/chat/" + this.state.lobbyId, requestBody);
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
 
@@ -373,26 +387,33 @@ class LobbyPage extends React.Component {
 
 
     async getMessages() {
-try {
-    let response = await api.get("chat/" + this.state.lobbyId);
-    this.setState({
-        messages:response.data
-    });
-}catch(error){
-    console.log(error);
-}
+        try {
+            let response = await api.get("chat/" + this.state.lobbyId);
+            this.setState({
+                messages: response.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
 
     }
 
     // Helper function to format date for the chat
-    formatDate(date){
+    formatDate(date) {
         let hours = date.getHours().toString();
         let minutes = date.getMinutes().toString();
-        if (minutes < 10){
+        if (minutes < 10) {
             minutes = "0" + minutes;
         }
-        let formatedDate = hours +":" + minutes;
+        let formatedDate = hours + ":" + minutes;
         return formatedDate;
+    }
+
+    async playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
     }
 
     render() {
@@ -403,14 +424,14 @@ try {
 
                 {/*TODO: Add real chat*/}
                 <ChatWrapper>
-                    <Title />
+                    <Title/>
                     <ul className="message-list">
-                        { this.state.messages.map((message, index) => {
+                        {this.state.messages.map((message, index) => {
                             let date = new Date(message.time);
                             let dateFormated = this.formatDate(date);
                             return (
 
-                                <li   className="message">
+                                <li className="message">
                                     <div>{message.username + " - " + dateFormated}</div>
                                     <div>{message.message}</div>
 
@@ -426,12 +447,12 @@ try {
                             onChange={this.handleChange}
                             value={this.state.message}
                             placeholder="Type your message and hit ENTER"
-                            type="text" />
+                            type="text"/>
                     </form>
                 </ChatWrapper>
 
 
-                {this.state.isOpenLobbyCreateSnackbar? this.showSnackbar(): null}
+                {this.state.isOpenLobbyCreateSnackbar ? this.showSnackbar() : null}
 
                 <LobbyWrapper>
 

@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BaseContainer} from "../helpers/layout";
 import {CloseButton} from "react-bootstrap";
+
 import subtleClick from "../sounds/subtle_click.wav";
 
 
@@ -29,10 +30,9 @@ const ButtonContainer = styled.div`
 
 
 class NavigationBar extends React.Component {
-    sClick = new Audio(subtleClick);
-
-    goToMainPage = () => {
-        this.playSound(this.sClick);
+   goToMainPage = () => {
+        let audio = new Audio(subtleClick);
+        this.playSound(audio);
         this.props.history.push({
             pathname: '/game/overview',
             state: {
@@ -42,7 +42,8 @@ class NavigationBar extends React.Component {
     }
 
     goToLeaderboard = () => {
-        this.playSound(this.sClick);
+        let audio = new Audio(subtleClick);
+        this.playSound(audio);
         this.props.history.push({
             pathname: '/game/leaderboard',
             state: {
@@ -52,7 +53,8 @@ class NavigationBar extends React.Component {
     }
 
     goToProfile = () => {
-        this.playSound(this.sClick);
+        let audio = new Audio(subtleClick);
+        this.playSound(audio);
         this.props.history.push({
             pathname: `/game/profile/${this.props.playerId}`,
             state: {
@@ -63,6 +65,9 @@ class NavigationBar extends React.Component {
 
     playSound(sfx) {
         sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
     }
 
     render() {
