@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
+import {BaseContainer} from '../../helpers/layout';
+import {api, handleError} from '../../helpers/api';
 import Player from '../../views/Player';
-import { Spinner } from '../../views/design/Spinner';
-import { Button } from '../../views/design/Button';
-import { withRouter } from 'react-router-dom';
+import {Spinner} from '../../views/design/Spinner';
+// import {Button} from '../../views/design/Button';
+
+import Button from 'react-bootstrap/Button'
+import {withRouter} from 'react-router-dom';
 import ChatWindow from "./ChatWindow";
 import LobbyList from "./Lobbylist";
 import Header from "../../views/Header";
@@ -13,6 +15,9 @@ import NavigationBar from "../../views/NavigationBar";
 import {CloseButton} from "react-bootstrap";
 import {SnackbarAlert} from "../shared/Other/SnackbarAlert";
 import "./styles/chat.css"
+
+import subtleClick from '../../sounds/subtle_click.wav'
+
 
 // TODO: WORK IN PROGRESS!
 // Chat title
@@ -65,8 +70,8 @@ const Container = styled(BaseContainer)`
 `;
 
 
-
 class Overview extends React.Component {
+    audio = new Audio(subtleClick)
     constructor(props) {
         super(props);
 
@@ -77,19 +82,19 @@ class Overview extends React.Component {
             message: ""
         };
         this.logoutUser = this.logoutUser.bind(this);
-        this.handleCloseSnackbar=this.handleCloseSnackbar.bind(this);
-        this.closeSnackbar=this.closeSnackbar.bind(this);
-        this.showSnackbar=this.showSnackbar.bind(this);
+        this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
+        this.showSnackbar = this.showSnackbar.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
     }
 
     componentDidMount() {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.getMessages=this.getMessages.bind(this);
+        this.getMessages = this.getMessages.bind(this);
         try {
             setInterval(async () => {
-                    this.getMessages();
+                this.getMessages();
             }, 500);
         } catch (e) {
             console.log(e);
@@ -97,8 +102,8 @@ class Overview extends React.Component {
 
     }
 
-    fromLogin(){
-        if(localStorage.getItem("fromLogin") === "true"){
+    fromLogin() {
+        if (localStorage.getItem("fromLogin") === "true") {
 
             localStorage.removeItem("fromLogin");
             console.log("removed");
@@ -108,10 +113,10 @@ class Overview extends React.Component {
     }
 
     async logoutUser() {
+
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token")
         });
-
 
         // Try to logout
         try {
@@ -121,31 +126,34 @@ class Overview extends React.Component {
             localStorage.removeItem("name");
             localStorage.removeItem("token");
             localStorage.removeItem("currentGame");
-            window.location.reload();
 
+            // TODO: Changed from reload to push("/login"), is that OK?
+            // window.location.reload();
+            this.props.history.push("/login")
 
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
 
 
-    handleCloseSnackbar(){
+    handleCloseSnackbar() {
         this.setState({
             fromLogin: false,
         })
     }
 
-    showSnackbar(){
-        return SnackbarAlert({close:this.closeSnackbar, type:"good", message:"Logged in!"});
+    showSnackbar() {
+        return SnackbarAlert({close: this.closeSnackbar, type: "good", message: "Logged in!"});
     }
-    closeSnackbar(){
+
+    closeSnackbar() {
         this.handleCloseSnackbar();
     }
 
     // CHAT FUNCTIONALITY
 
-    handleChange(e){
+    handleChange(e) {
 
         this.setState({
             message: e.target.value
@@ -153,6 +161,9 @@ class Overview extends React.Component {
     }
 
     handleSubmit(e) {
+        // play sound when sending message
+        this.playSound(new Audio(subtleClick));
+
         e.preventDefault();
         this.sendMessage(this.state.message);
         this.setState({
@@ -160,9 +171,9 @@ class Overview extends React.Component {
         })
     }
 
-    async sendMessage(message){
+    async sendMessage(message) {
 
-        try{
+        try {
             const d = new Date();
             const n = d.getTime();
             const requestBody = JSON.stringify({
@@ -171,7 +182,7 @@ class Overview extends React.Component {
                 message: message
             });
             let response = await api.put("/chat/", requestBody);
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
 
@@ -182,59 +193,71 @@ class Overview extends React.Component {
         try {
             let response = await api.get("chat/");
             this.setState({
-                messages:response.data
+                messages: response.data
             });
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
 
     }
 
     // Helper function to format date for the chat
-    formatDate(date){
+    formatDate(date) {
         let hours = date.getHours().toString();
         let minutes = date.getMinutes().toString();
-        if (minutes < 10){
+        if (minutes < 10) {
             minutes = "0" + minutes;
         }
-        let formatedDate = hours +":" + minutes;
+        let formatedDate = hours + ":" + minutes;
         return formatedDate;
     }
 
+     playSound(sfx) {
+        sfx.play();
+         console.log('Started SFX')
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+            console.log('Ended SFX')
+        };
+    }
+
+
     render() {
+
         return (
             <Container>
 
-                {this.state.fromLogin? this.showSnackbar(): null}
-                <CloseButton onClick={this.logoutUser} style={{color: "white"}}/>
-
-                    <ChatWrapper>
-                        <Title />
-                        <ul className="message-list">
-                            { this.state.messages.map((message, index) => {
-                                let date = new Date(message.time);
-                                let dateFormated = this.formatDate(date);
-                                return (
-
-                                    <li   className="message">
-                                        <div>{message.username + " - " + dateFormated}</div>
-                                        <div>{message.message}</div>
+                {this.state.fromLogin ? this.showSnackbar() : null}
 
 
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                        <form
-                            onSubmit={this.handleSubmit}
-                            className="send-message-form">
-                            <input
-                                onChange={this.handleChange}
-                                value={this.state.message}
-                                placeholder="Type your message and hit ENTER"
-                                type="text" />
-                        </form>
-                    </ChatWrapper>
+
+                <ChatWrapper>
+                    <Title/>
+                    <ul className="message-list">
+                        {this.state.messages.map((message, index) => {
+                            let date = new Date(message.time);
+                            let dateFormated = this.formatDate(date);
+                            return (
+
+                                <li className="message">
+                                    <div>{message.username + " - " + dateFormated}</div>
+                                    <div>{message.message}</div>
+
+
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    <form
+                        onSubmit={this.handleSubmit}
+                        className="send-message-form">
+                        <input
+                            onChange={this.handleChange}
+                            value={this.state.message}
+                            placeholder="Type your message and hit ENTER"
+                            type="text"/>
+                    </form>
+                </ChatWrapper>
 
 
                 <LobbyWrapper>
@@ -242,6 +265,13 @@ class Overview extends React.Component {
                     <LobbyList/>
                 </LobbyWrapper>
 
+                <Button type="button"  variant="danger" size="lg" onClick={ async (e) => {
+                    await this.playSound(this.audio);
+                    this.logoutUser();
+
+                }} style={{color: "white", margin: "1em"}}>
+                    Logout
+                </Button>
 
 
             </Container>

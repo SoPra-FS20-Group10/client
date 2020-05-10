@@ -13,6 +13,8 @@ import {CloseButton} from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 
+import subtleClick from "../../sounds/subtle_click.wav";
+
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
@@ -135,9 +137,9 @@ class Lobbylist extends React.Component {
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.showLobbies = this.showLobbies.bind(this);
         this.fetchLobbies = this.fetchLobbies.bind(this);
-        this.handleCloseLobbyCreateSnackbar=this.handleCloseLobbyCreateSnackbar.bind(this);
-        this.handleOpenLobbyCreateSnackBar=this.handleOpenLobbyCreateSnackBar.bind(this);
-}
+        this.handleCloseLobbyCreateSnackbar = this.handleCloseLobbyCreateSnackbar.bind(this);
+        this.handleOpenLobbyCreateSnackBar = this.handleOpenLobbyCreateSnackBar.bind(this);
+    }
 
     async componentDidMount() {
         this.fetchLobbies();
@@ -214,12 +216,13 @@ class Lobbylist extends React.Component {
 
     }
 
-    handleOpenLobbyCreateSnackBar(){
+    handleOpenLobbyCreateSnackBar() {
         this.setState({
             isOpenLobbyCreateSnackbar: true,
         })
     }
-    handleCloseLobbyCreateSnackbar(event, reason){
+
+    handleCloseLobbyCreateSnackbar(event, reason) {
         if (reason === 'clickaway') {
             return;
         }
@@ -263,11 +266,19 @@ class Lobbylist extends React.Component {
         this.setState({[key]: value});
     }
 
+    playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
+    }
+
     render() {
         return (
 
             <Container>
-                <Snackbar open={this.state.isOpenLobbyCreateSnackbar} autoHideDuration={6000} onClose={this.handleCloseLobbyCreateSnackbar}>
+                <Snackbar open={this.state.isOpenLobbyCreateSnackbar} autoHideDuration={6000}
+                          onClose={this.handleCloseLobbyCreateSnackbar}>
                     <Alert onClose={this.handleCloseLobbyCreateSnackbar} severity="success">
                         This is a success message!
                     </Alert>
@@ -280,7 +291,12 @@ class Lobbylist extends React.Component {
                 <view style={{margin: 40}}/>
 
                 <ButtonContainer2>
-                    <Button variant="dark" size="sm" block onClick={this.handleOpenModal}>
+                    <Button variant="dark" size="sm" block
+                            onClick={() => {
+                                this.playSound(new Audio(subtleClick));
+                                this.handleOpenModal();
+                            }}
+                    >
                         Create new Lobby
                     </Button>
 
@@ -295,7 +311,10 @@ class Lobbylist extends React.Component {
 
                     <LobbyCreationWrapper>
 
-                        <CloseButton onClick={this.handleCloseModal}/>
+                        <CloseButton onClick={() => {
+                            this.playSound(new Audio(subtleClick));
+                            this.handleCloseModal();
+                        }}/>
 
                         <Title>
                             <Label>CREATE LOBBY</Label>
@@ -327,7 +346,10 @@ class Lobbylist extends React.Component {
                     <ButtonContainer>
 
 
-                        <Button variant="dark" size="sm" block onClick={this.createLobby}>
+                        <Button variant="dark" size="sm" block onClick={() => {
+                            this.playSound(new Audio(subtleClick));
+                            this.createLobby();
+                        }}>
                             Create Lobby
                         </Button>
                     </ButtonContainer>

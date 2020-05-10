@@ -31,8 +31,7 @@ const ButtonContainer = styled.div`
 
 class NavigationBar extends React.Component {
    goToMainPage = () => {
-        let audio = new Audio(subtleClick);
-        this.playSound(audio);
+        this.playSound(new Audio(subtleClick));
         this.props.history.push({
             pathname: '/game/overview',
             state: {
@@ -42,8 +41,7 @@ class NavigationBar extends React.Component {
     }
 
     goToLeaderboard = () => {
-        let audio = new Audio(subtleClick);
-        this.playSound(audio);
+        this.playSound(new Audio(subtleClick));
         this.props.history.push({
             pathname: '/game/leaderboard',
             state: {
@@ -53,8 +51,7 @@ class NavigationBar extends React.Component {
     }
 
     goToProfile = () => {
-        let audio = new Audio(subtleClick);
-        this.playSound(audio);
+        this.playSound(new Audio(subtleClick));
         this.props.history.push({
             pathname: `/game/profile/${this.props.playerId}`,
             state: {
