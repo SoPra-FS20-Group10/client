@@ -452,6 +452,7 @@ class GamePage extends React.Component {
         this.showMessages=this.showMessages.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.handleChangeChat = this.handleChangeChat.bind(this);
+        this.resetPlacedPieces = this.resetPlacedPieces.bind(this);
     }
 
 
@@ -758,6 +759,8 @@ class GamePage extends React.Component {
             let playerStonesList = response.data;
             let playerStonesBag = [];
 
+
+
             playerStonesList.map((stone, index) => {
 
                 playerStonesBag[index] = {piece: {id: stone.id, score: stone.value, text: stone.symbol.toUpperCase()}}
@@ -769,6 +772,10 @@ class GamePage extends React.Component {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    resetPlacedPieces(){
+        this.setState({ placedLetters: [],placedLettersCoordinates: []});
     }
 
     drawTile(props) {
@@ -915,7 +922,7 @@ class GamePage extends React.Component {
             let board = response.data.board;
             let newBoard = this.oneDimToTwoDim(board);
             this.initBoard(newBoard);
-            this.setState({});
+            this.setState({ placedLetters: [],placedLettersCoordinates: []});
 
             this.getPlayerStones();
             // this.getBoard();
@@ -1307,7 +1314,7 @@ class GamePage extends React.Component {
 
 
                             <Tooltip title="Reset your placed letters">
-                                <Button variant="dark" size="sm" block onClick={() => { this.playSound(new Audio(subtleClick)); this.getBoard(); this.getPlayerStones();}}
+                                <Button variant="dark" size="sm" block onClick={() => { this.playSound(new Audio(subtleClick)); this.getBoard(); this.getPlayerStones(); this.resetPlacedPieces();}}
                                         disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     Reset
                                 </Button>
