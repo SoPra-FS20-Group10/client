@@ -8,6 +8,9 @@ import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LobbyRoom from "../lobby/LobbyPage";
 import Form from "react-bootstrap/Form";
+
+import subtleClick from "../../sounds/subtle_click.wav";
+
 /**
  * LobbylistEntry Model
  */
@@ -77,6 +80,7 @@ class LobbylistEntry extends React.Component{
     // Join LobbylistEntry
 
     async goToLobby(){
+        this.playSound(new Audio(subtleClick));
 
         // Check if there's space for the player in the lobby
         if (this.state.playerCount >= this.state.maxPlayerCount){
@@ -116,6 +120,12 @@ class LobbylistEntry extends React.Component{
 
     }
 
+    playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
+    }
 
     render() {
         return (

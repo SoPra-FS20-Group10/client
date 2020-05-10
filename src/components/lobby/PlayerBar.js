@@ -10,6 +10,7 @@ import LobbyRoom from "./LobbyPage";
 
 import activateSFX from "../../sounds/activate.wav";
 import deactivateSFX from "../../sounds/deactivate.wav";
+import subtleClick from "../../sounds/subtle_click.wav";
 
 /**
  * LobbylistEntry Model
@@ -156,6 +157,8 @@ class PlayerBar extends React.Component {
 
     async kickPlayer() {
         // TODO: Popup if couldn't kick player?
+
+        this.playSound(new Audio(subtleClick));
 
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
