@@ -143,7 +143,15 @@ class ScoreBoard extends React.Component {
 
     render() {
         return (
-            <ScoreBoardWrapper>
+            <ScoreBoardWrapper  style={{
+                // These style attributes make text unselectable on most browsers & versions
+                userSelect: 'none',
+                webkitTouchCallout: 'none',
+                webkitUserSelect: 'none',
+                khtmlUserSelect: 'none',
+                mozUserSelect: 'none',
+                msUserSelect: 'none'
+            }}>
                 {(!this.state.players || !this.state.currentPlayerId )? (
                     <Spinner/>
                 ) : (

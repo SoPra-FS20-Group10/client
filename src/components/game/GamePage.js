@@ -1189,15 +1189,7 @@ class GamePage extends React.Component {
                             </div>
                             <Row>
                                 <Col>
-                                    <PieceCounter style={{
-                                        // These style attributes make text unselectable on most browsers & versions
-                                        userSelect: 'none',
-                                        webkitTouchCallout: 'none',
-                                        webkitUserSelect: 'none',
-                                        khtmlUserSelect: 'none',
-                                        mozUserSelect: 'none',
-                                        msUserSelect: 'none'
-                                    }} piecesLeft={this.state.stones}/>
+                                    <PieceCounter piecesLeft={this.state.stones}/>
                                 </Col>
                             </Row>
 
@@ -1336,7 +1328,15 @@ class GamePage extends React.Component {
                                     End Turn
                                 </Button>
                             </Tooltip>
-                            <ChatWrapper>
+                            <ChatWrapper style={{
+                                // These style attributes make text unselectable on most browsers & versions
+                                userSelect: 'none',
+                                webkitTouchCallout: 'none',
+                                webkitUserSelect: 'none',
+                                khtmlUserSelect: 'none',
+                                mozUserSelect: 'none',
+                                msUserSelect: 'none'
+                            }}>
                                 <Title />
                                 <ul className="message-list">
                                     { this.state.messages.map((message, index) => {
