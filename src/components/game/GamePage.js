@@ -32,6 +32,13 @@ import {Transition, animated} from 'react-spring/renderprops'
 import "./styles/turn.css"
 import {BaseContainer} from "../../helpers/layout";
 
+import subtleClick from '../../sounds/subtle_click.wav'
+import positiveSound from '../../sounds/positive.wav'
+import negativeSound from '../../sounds/negative.wav'
+import yourTurn from '../../sounds/save.wav'
+import newTurn from '../../sounds/sharp_echo.wav'
+import endSound from '../../sounds/misc_sound.wav'
+
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
@@ -725,10 +732,12 @@ class GamePage extends React.Component {
     }
 
     handleCloseModalAbort() {
+        this.playSound(new Audio(subtleClick));
         this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
 
     // TODO: Remove shortcut after presentation
+    // TODO: Could be turned into a feature were players could end the game in a draw? (Votesystem?)
     async endGameShortcut() {
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
@@ -737,6 +746,7 @@ class GamePage extends React.Component {
         console.log(requestBody);
         try {
             await api.patch("/games/" + localStorage.getItem("currentGame") , requestBody);
+            this.playSound(new Audio(endSound));
         } catch (error) {
             console.log(error);
         }
@@ -837,6 +847,8 @@ class GamePage extends React.Component {
             currentPieces.map((letter, index) => {
 
                 if (letter.piece.id === item.piece.id) {
+                    this.playSound(new Audio(subtleClick));
+
                     // The 1d index for the backend
                     let indexInOneDimension = this.toOneDimension(i, j);
                     this.placeLetter(letter.piece, indexInOneDimension);
@@ -889,6 +901,16 @@ class GamePage extends React.Component {
 
         // Calls that are only made when a new turn begins
         if (response.data.currentPlayerId != this.state.currentPlayer) {
+
+            // If this client is the new player
+            if(response.data.currentPlayerId == this.state.playerId){
+                this.playSound(new Audio(yourTurn));
+            }else{
+                // Only play turn sound for other players if they didn't just have their turn (else to much SFX)
+                if(this.state.currentPlayer != this.state.playerId){
+                    this.playSound(new Audio(newTurn));
+                }
+            }
 
             let board = response.data.board;
             let newBoard = this.oneDimToTwoDim(board);
@@ -951,6 +973,8 @@ class GamePage extends React.Component {
     }
 
     handleChange(key, event) {
+        this.playSound(new Audio(subtleClick));
+
         let s = this.state.check;
         s[key] = event.target.checked;
         this.setState({check: s});
@@ -958,6 +982,8 @@ class GamePage extends React.Component {
     }
 
     async exchangePieces() {
+        this.playSound(new Audio(subtleClick));
+
         let exchangeIndices = [];
         let stoneIds = [];
         for (let i = 0; i < this.state.check.length; i++) {
@@ -984,6 +1010,7 @@ class GamePage extends React.Component {
 
 
     async endTurn() {
+
         // end turn, push all changes to the backend and draw stones
 
 
@@ -995,8 +1022,11 @@ class GamePage extends React.Component {
 
         try {
             await api.put("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), requestBody);
+            this.playSound(new Audio(positiveSound));
 
         } catch (error) {
+            this.playSound(new Audio(negativeSound));
+
             this.setState({
                 isOpenInvalidMoveSnackbar:true
             })
@@ -1068,7 +1098,9 @@ class GamePage extends React.Component {
         })
     }
 
-    handleSubmit(e) {
+    handleSubmit(e) {// play sound when sending message
+        this.playSound(new Audio(subtleClick));
+
         e.preventDefault();
         this.sendMessage(this.state.message);
         this.setState({
@@ -1119,6 +1151,14 @@ class GamePage extends React.Component {
         let formatedDate = hours +":" + minutes;
         return formatedDate;
     }
+
+    playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
+    }
+
     render() {
 
         const {board} = this.state;
@@ -1275,14 +1315,14 @@ class GamePage extends React.Component {
 
 
                             <Tooltip title="Reset your placed letters">
-                                <Button variant="dark" size="sm" block onClick={() => { this.getBoard(); this.getPlayerStones();}}
+                                <Button variant="dark" size="sm" block onClick={() => { this.playSound(new Audio(subtleClick)); this.getBoard(); this.getPlayerStones();}}
                                         disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     Reset
                                 </Button>
                             </Tooltip>
 
                                 <Tooltip title="Swap letters (ends your turn)">
-                                    <Button variant="dark" size="sm" block onClick={this.handleOpenModal}
+                                    <Button variant="dark" size="sm" block onClick={() => { this.playSound(new Audio(subtleClick)); this.handleOpenModal(); }}
                                             disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                         Swap
                                     </Button>
