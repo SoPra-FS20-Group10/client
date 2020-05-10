@@ -409,7 +409,7 @@ class LobbyPage extends React.Component {
         return formatedDate;
     }
 
-    async playSound(sfx) {
+    playSound(sfx) {
         sfx.play();
         sfx.onended = function () {
             sfx.remove() //Remove when played.

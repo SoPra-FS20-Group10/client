@@ -52,7 +52,6 @@ class PlayerBar extends React.Component {
             readyStatus: this.props.readyStatus,
             playerId: this.props.playerId,
             playerName: this.props.playerName,
-            currentAudio: null,
         };
 
         this.setReady = this.setReady.bind(this)

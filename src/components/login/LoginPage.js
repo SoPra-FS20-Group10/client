@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import {SnackbarAlert} from "../shared/Other/SnackbarAlert";
-
+import subtleClick from "../../sounds/subtle_click.wav";
 
 const InputField = styled.input`
   &::placeholder {
@@ -194,6 +194,13 @@ class LoginPage extends React.Component {
         this.handleCloseSnackbar();
     }
 
+    playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
+    }
+
     render() {
         return (
             <Container>
@@ -210,11 +217,12 @@ class LoginPage extends React.Component {
                                 No statistics will be saved when playing with guest account
                             </Form.Text>
                             <Form.Group controlId="formTemporaryUsername">
-                                <Form.Control type="email" placeholder="Enter temporary username"/>
+                                <Form.Control type="name" placeholder="Enter temporary username"/>
                             </Form.Group>
 
-                            <Button variant="primary" type="submit" size="lg"
+                            <Button variant="primary" type="button" size="lg"
                                     onClick={() => {
+                                        this.playSound(new Audio(subtleClick));
                                         this.loginGuest();
                                     }}
                             >Login as Guest
@@ -231,7 +239,7 @@ class LoginPage extends React.Component {
                                     onChange={e => {
                                         this.handleInputChange('username', e.target.value);
                                     }}
-                                    type="email" placeholder="Enter username"/>
+                                    type="name" placeholder="Enter username"/>
                             </Form.Group>
 
                             <Form.Group controlId="formPassword">
@@ -239,19 +247,21 @@ class LoginPage extends React.Component {
                                     onChange={e => {
                                         this.handleInputChange('password', e.target.value);
                                     }}
-                                    type="email" placeholder="Enter password"/>
+                                    type="password" placeholder="Enter password"/>
                             </Form.Group>
 
                             <div>
-                                <Button variant="primary" type="submit" size="lg"
+                                <Button variant="primary" type="button" size="lg"
                                         onClick={() => {
+                                            this.playSound(new Audio(subtleClick));
                                             this.login();
                                         }}
                                 >Login
                                 </Button>{' '}
 
-                                <Button variant="primary" type="submit" size="lg"
+                                <Button variant="primary" type="button" size="lg"
                                         onClick={() => {
+                                            this.playSound(new Audio(subtleClick));
                                             this.props.history.push(
                                                 {pathname: `/signUp`},
                                             );
@@ -261,6 +271,7 @@ class LoginPage extends React.Component {
 
                             <Form.Label
                                 onClick={() => {
+                                    this.playSound(new Audio(subtleClick));
                                     this.recoverPassword();
                                 }}
                             >Forgot your password?
