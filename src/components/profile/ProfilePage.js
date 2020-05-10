@@ -13,6 +13,8 @@ import {api} from "../../helpers/api";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
+import subtleClick from "../../sounds/subtle_click.wav";
+
 const NameWrapper = styled.div`
     border-radius: 4pt;
     margin-top: 2%;
@@ -227,19 +229,30 @@ class ProfilePage extends React.Component {
     }
 
     handleOpenModalName() {
+        this.playSound(new Audio(subtleClick));
         this.setState({showModalName: true});
     }
 
     handleCloseModalName() {
+        this.playSound(new Audio(subtleClick));
         this.setState({showModalName: false});
     }
 
     handleOpenModalPassword() {
+        this.playSound(new Audio(subtleClick));
         this.setState({showModalPassword: true});
     }
 
     handleCloseModalPassword() {
+        this.playSound(new Audio(subtleClick));
         this.setState({showModalPassword: false});
+    }
+
+    playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
     }
 
     render() {
