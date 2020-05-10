@@ -4,6 +4,7 @@ import { BaseContainer} from "../../helpers/layout";
 import { api, handleError } from "../../helpers/api";
 import { withRouter} from "react-router-dom";
 import Button from 'react-bootstrap/Button'
+import subtleClick from "../../sounds/subtle_click.wav";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -102,6 +103,13 @@ class SignupPage extends React.Component {
     componentDidMount() {
     }
 
+    playSound(sfx) {
+        sfx.play();
+        sfx.onended = function () {
+            sfx.remove() //Remove when played.
+        };
+    }
+
     render() {
         return (
             <BaseContainer>
@@ -128,6 +136,7 @@ class SignupPage extends React.Component {
                                 disabled={!this.state.username || !this.state.password}
                                 width="50%"
                                 onClick={() => {
+                                    this.playSound(new Audio(subtleClick));
                                     this.signup();
                                 }}
                             >
@@ -139,6 +148,7 @@ class SignupPage extends React.Component {
                             <Button
                                 width="50%"
                                 onClick={() => {
+                                    this.playSound(new Audio(subtleClick));
                                     this.props.history.push("/login")
                                 }}
                             >
