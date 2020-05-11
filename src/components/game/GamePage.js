@@ -985,7 +985,6 @@ class GamePage extends React.Component {
         let s = this.state.check;
         s[key] = event.target.checked;
         this.setState({check: s});
-        // console.log(this.state.check)
     }
 
     async exchangePieces() {
@@ -1005,9 +1004,13 @@ class GamePage extends React.Component {
             stoneIds: stoneIds
         });
         try {
-            await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
-            this.setState({isOpenExchangePieceSnackbar: true});
-            this.endTurn();
+            if(stoneIds.length > 0){
+                await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
+                this.setState({isOpenExchangePieceSnackbar: true});
+                this.endTurn();
+            }else{
+                alert("You need to at least one piece to exchange!");
+            }
         } catch (error) {
             alert("Could not exchange the pieces.");
         }
@@ -1307,7 +1310,7 @@ class GamePage extends React.Component {
 
                             {/*TODO: Remove shortcut after presentation*/}
                             <Tooltip title="End Game prematurely">
-                                <Button variant="success" size="sm" block onClick={this.endGameShortcut} style={{marginTop:"20pt"}}>
+                                <Button variant="danger" size="sm" block onClick={this.endGameShortcut} style={{marginTop:"20pt"}}>
                                     End Game
                                 </Button>
                             </Tooltip>
@@ -1330,7 +1333,7 @@ class GamePage extends React.Component {
 
                                 <view style={{margin: 4}}/>
                             <Tooltip title="End your turn">
-                                <Button variant="dark" size="sm" block onClick={this.endTurn}
+                                <Button variant="success" size="sm" block onClick={this.endTurn}
                                         disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                     End Turn
                                 </Button>
@@ -1403,7 +1406,8 @@ class GamePage extends React.Component {
                         ))}
 
                     </Form>
-                    <Button variant="success" size="sm" onClick={this.handleCloseModalExchange}>
+                    <Button variant="success" size="sm" onClick={this.handleCloseModalExchange}
+                            disabled={!this.state.check.includes(true)}>
                         Exchange
                     </Button>
                     <view style={{margin: 140}}/>
