@@ -73,8 +73,6 @@ function Title() {
 // TODO: Snackbars for errors?
 
 class LobbyPage extends React.Component {
-    _isMounted = false;
-
     constructor(props) {
         super(props);
 
@@ -113,36 +111,29 @@ class LobbyPage extends React.Component {
 
 
     componentDidMount() {
-        this._isMounted = true;
-
-        if (this._isMounted) {
-            this.fetchLobbyPlayers();
-            this.checkLobbyLeader();
-            this.checkStartGame();
-            this.checkInLobby();
-            this.handleOpenLobbyCreateSnackBar();
-            this.handleChange = this.handleChange.bind(this);
-            this.handleSubmit = this.handleSubmit.bind(this);
-            this.getMessages = this.getMessages.bind(this);
-            try {
-                setInterval(async () => {
-                    if (this._isMounted) {
-                        this.fetchLobbyPlayers();
-                        this.checkLobbyLeader();
-                        this.checkStartGame();
-                        this.checkInLobby();
-                        this.getMessages();
-                    }
-                }, 500);
-            } catch (e) {
-                console.log(e);
-            }
+        this.fetchLobbyPlayers();
+        this.checkLobbyLeader();
+        this.checkStartGame();
+        this.checkInLobby();
+        this.handleOpenLobbyCreateSnackBar();
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.getMessages = this.getMessages.bind(this);
+        try {
+            this.timerID = setInterval(async () => {
+                this.fetchLobbyPlayers();
+                this.checkLobbyLeader();
+                this.checkStartGame();
+                this.checkInLobby();
+                this.getMessages();
+            }, 500);
+        } catch (e) {
+            console.log(e);
         }
     }
 
-
     componentWillUnmount() {
-        this._isMounted = false;
+        clearInterval(this.timerID);
     }
 
     async fetchLobbyPlayers() {

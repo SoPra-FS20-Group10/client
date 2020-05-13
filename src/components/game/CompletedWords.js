@@ -63,11 +63,15 @@ class CompletedWords extends React.Component {
     componentDidMount() {
         this.setState({words: this.props.words,})
 
-        setInterval(() => {
+        this.timerID = setInterval(() => {
             this.setState({
                 words: this.props.words,
             })
         }, 500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     // async componentDidMount() {

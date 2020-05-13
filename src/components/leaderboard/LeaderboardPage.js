@@ -66,12 +66,16 @@ class LeaderboardPage extends React.Component {
     componentDidMount() {
         this.getUserData();
         try {
-            setInterval(async () => {
+            this.timerID = setInterval(async () => {
                 this.getUserData();
             }, 1000);
         } catch (e) {
             console.log(e);
         }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     changeSortingComparator(comparator) {

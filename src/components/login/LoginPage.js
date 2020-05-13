@@ -110,17 +110,19 @@ class LoginPage extends React.Component {
             fromSignup: this.fromSignup()
         };
         console.log(this.state);
-        this.handleCloseSnackbar=this.handleCloseSnackbar.bind(this);
-        this.closeSnackbar=this.closeSnackbar.bind(this);
-        this.showSnackbar=this.showSnackbar.bind(this);
+        this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
+        this.showSnackbar = this.showSnackbar.bind(this);
     }
-    fromSignup(){
-        if(localStorage.getItem("fromSignup") === "true"){
+
+    fromSignup() {
+        if (localStorage.getItem("fromSignup") === "true") {
             localStorage.removeItem("fromSignup");
             return true;
         }
         return false;
     }
+
     /**
      * HTTP POST request is sent to the backend.
      * If the request is successful, a new user is returned to the front-end
@@ -181,16 +183,17 @@ class LoginPage extends React.Component {
      */
 
 
-    handleCloseSnackbar(){
+    handleCloseSnackbar() {
         this.setState({
             fromSignup: false,
         })
     }
 
-    showSnackbar(){
-        return SnackbarAlert({close:this.closeSnackbar, type:"good", message:"Successfully registered!"});
+    showSnackbar() {
+        return SnackbarAlert({close: this.closeSnackbar, type: "good", message: "Successfully registered!"});
     }
-    closeSnackbar(){
+
+    closeSnackbar() {
         this.handleCloseSnackbar();
     }
 
@@ -205,7 +208,7 @@ class LoginPage extends React.Component {
         return (
             <Container>
 
-                {this.state.fromSignup? this.showSnackbar(): null}
+                {this.state.fromSignup ? this.showSnackbar() : null}
 
                 <Row>
                     <Col lg> <GameTitle> SCRABBAR.IO </GameTitle> </Col>

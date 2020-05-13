@@ -15,7 +15,7 @@ import 'react-chat-elements/dist/main.css';
 import { MessageBox } from 'react-chat-elements';
 import Input from "@material-ui/core/Input";
 
-
+// TODO: Is this in use?
 class ChatWindow extends React.Component {
     constructor() {
         super();

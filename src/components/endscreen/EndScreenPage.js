@@ -55,8 +55,6 @@ const ButtonContainer2 = styled.div`
 
 
 class EndScreenPage extends React.Component {
-    _isMounted = false;
-
     constructor(props) {
         super(props);
 
@@ -85,30 +83,25 @@ class EndScreenPage extends React.Component {
     }
 
     componentDidMount() {
-        this._isMounted = true;
-
-        if(this._isMounted) {
-            try {
-                setInterval(async () => {
-                    if (this._isMounted) {
-                        this.fetchPlayers();
-                    }
-                }, 5000);
-            } catch (e) {
-                console.log(e);
-            }
+        try {
+            this.timerID = setInterval(async () => {
+                if (this._isMounted) {
+                    this.fetchPlayers();
+                }
+            }, 5000);
+        } catch (e) {
+            console.log(e);
         }
-
     }
 
     componentWillUnmount() {
-        this._isMounted = false;
-        if(this.state.players){
+        clearInterval(this.timerID);
+        if (this.state.players) {
             this.deleteGame();
         }
     }
 
-    async deleteGame(){
+    async deleteGame() {
         await api.delete("/games/" + this.state.gameId);
     }
 
@@ -161,26 +154,25 @@ class EndScreenPage extends React.Component {
                 });
             window.location.reload();
 
+        } catch (error) {
+            console.log(error);
         }
-        catch(error){
-                console.log(error);
+
+    }
+
+    /*
+    this.props.history.push(
+        {
+            pathname: `/game/overview/`,
+            state: {
+                playerId: localStorage.getItem("current"),
+                playerName: localStorage.getItem("name")
             }
-
-        }
-            /*
-            this.props.history.push(
-                {
-                    pathname: `/game/overview/`,
-                    state: {
-                        playerId: localStorage.getItem("current"),
-                        playerName: localStorage.getItem("name")
-                    }
-                });
-        }
+        });
+}
 
 
-        */
-
+*/
 
 
     renderTableData() {

@@ -464,7 +464,7 @@ class GamePage extends React.Component {
         this.checkFirstLetterSet();
         this.handleOpenGameStartSnackbar();
         try {
-            setInterval(async () => {
+            this.timerID = setInterval(async () => {
                 this.checkTurn();
                 this.getPlayers();
                 // this.getCurrentPlayer();
@@ -474,10 +474,14 @@ class GamePage extends React.Component {
                 if (this.state.gameStatus == "ENDED") {
                     this.goToEndscreen();
                 }
-            }, 1000);
+            }, 500);
         } catch (e) {
             console.log(e);
         }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     checkTurn() {

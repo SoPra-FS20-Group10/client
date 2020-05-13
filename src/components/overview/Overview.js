@@ -93,13 +93,17 @@ class Overview extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getMessages = this.getMessages.bind(this);
         try {
-            setInterval(async () => {
+            this.timerID = setInterval(async () => {
                 this.getMessages();
             }, 500);
         } catch (e) {
             console.log(e);
         }
 
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     fromLogin() {

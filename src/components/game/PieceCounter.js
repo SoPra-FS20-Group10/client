@@ -34,11 +34,15 @@ class PieceCounter extends React.Component {
             piecesLeft: this.props.piecesLeft,
         })
 
-        setInterval(() => {
+        this.timerID = setInterval(() => {
             this.setState({
                 piecesLeft: this.props.piecesLeft,
             })
         }, 500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     render() {

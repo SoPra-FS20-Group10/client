@@ -191,7 +191,7 @@ class ProfilePage extends React.Component {
     async componentDidMount() {
         this.fetchUser();
         try {
-            setInterval(async () => {
+            this.timerID = setInterval(() => {
                 if (parseInt(window.location.href.split('/').pop(), 10) != this.state.userId) {
                     this.setState({userId: parseInt(window.location.href.split('/').pop(), 10)})
                 }
@@ -202,11 +202,13 @@ class ProfilePage extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
     async fetchUser() {
         try {
-
             const response = await api.get("/users/" + this.state.userId);
-            console.log(response)
 
             this.setState({userName: response.data.username})
             this.setState({overallScore: response.data.overallScore})
@@ -214,10 +216,6 @@ class ProfilePage extends React.Component {
             this.setState({playtime: response.data.playtime})
             this.setState({winPercentage: response.data.winPercentage})
             this.setState({wonGames: response.data.wonGames})
-
-            console.log(this)
-
-            // this.countLobbyPlayers();
         } catch (error) {
             alert(error);
         }

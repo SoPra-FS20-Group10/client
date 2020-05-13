@@ -144,13 +144,17 @@ class Lobbylist extends React.Component {
     async componentDidMount() {
         this.fetchLobbies();
         try {
-            setInterval(async () => {
+            this.timerID = setInterval(async () => {
                 this.fetchLobbies();
                 this.setState({state: this.state});
             }, 1000);
         } catch (e) {
             console.log(e);
         }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     handleOpenModal() {

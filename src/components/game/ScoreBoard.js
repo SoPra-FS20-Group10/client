@@ -106,12 +106,16 @@ class ScoreBoard extends React.Component {
             players: this.props.players
         })
 
-        setInterval(() => {
+        this.timerID = setInterval(() => {
             this.setState({
                 currentPlayerId: this.props.currentPlayerId,
                 players: this.props.players
             })
         }, 500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     // async componentDidMount() {

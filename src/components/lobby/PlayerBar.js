@@ -72,15 +72,17 @@ class PlayerBar extends React.Component {
             readyStatus: this.props.readyStatus
         })
 
-        setInterval(() => {
+        this.timerID = setInterval(() => {
             this.setState({
                 playerName: this.props.playerName,
                 readyStatus: this.props.readyStatus
             })
         }, 500);
-
     }
 
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
 
     async setReady() {
         // this.state.readyStatus == "READY" ? this.setState({readyStatus:"NOT_READY"}) : this.setState({readyStatus:"READY"});
