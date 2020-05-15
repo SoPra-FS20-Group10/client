@@ -158,15 +158,20 @@ class LoginPage extends React.Component {
 
     async loginGuest() {
         try {
-            const requestBody = JSON.stringify({
+            const requestBodyRegister = JSON.stringify({
+                username: this.state.guestname,
+                password: ""
+            });
+
+            await api.post("/users", requestBodyRegister);
+
+            const requestBodyLogin = JSON.stringify({
                 username: this.state.guestname,
                 password: "",
             });
 
-            console.log(requestBody)
-
             // send request to backend
-            const response = await api.put('/login', requestBody);
+            const response = await api.put('/login', requestBodyLogin);
 
             const user = response.data
 
@@ -250,7 +255,7 @@ class LoginPage extends React.Component {
                                 <Form.Control onChange={e => {
                                     this.handleInputChange('guestname', e.target.value);
                                 }}
-                                type="name" placeholder="Enter temporary username"/>
+                                              type="name" placeholder="Enter temporary username"/>
                             </Form.Group>
 
                             <Button variant="primary" type="button" size="lg"
