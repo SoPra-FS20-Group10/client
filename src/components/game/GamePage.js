@@ -1055,6 +1055,7 @@ class GamePage extends React.Component {
         });
 
         try {
+            console.log(requestBody)
             await api.put("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), requestBody);
             this.playSound(new Audio(positiveSound));
 
@@ -1067,6 +1068,7 @@ class GamePage extends React.Component {
             console.log(error);
             this.getBoard();
             this.getPlayerStones();
+            this.resetPlacedPieces();
         }
     }
 
