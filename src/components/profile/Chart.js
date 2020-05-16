@@ -125,6 +125,7 @@ const Chart = ({matches}) => {
                             fontSize: 10
                         },
                         ticks: {
+                            beginAtZero: true,
                             fontColor: "white",
                             fontSize: 14
                         },
