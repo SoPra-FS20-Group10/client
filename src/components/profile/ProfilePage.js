@@ -43,7 +43,7 @@ const GraphWrapper = styled.div`
     margin-left: 5%;
     padding: 5%;
     width: 60%;
-    height: 500pt;
+    // height: 500pt;
     background: grey;
     float:left;
     color: white;
@@ -55,7 +55,7 @@ const MatchHistoryWrapper = styled.div`
     margin-top: 5%;
     margin-left: 5%;
     width: 25%;
-    height: 500pt;
+    // height: 500pt;
     background: grey;
     float:left;
 `;
@@ -198,7 +198,7 @@ class ProfilePage extends React.Component {
                     this.setState({userId: parseInt(window.location.href.split('/').pop(), 10)})
                 }
                 this.fetchUser();
-            }, 100);
+            }, 500);
         } catch (e) {
             console.log(e);
         }
@@ -211,7 +211,6 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
-            console.log(response)
 
             this.setState({userName: response.data.username})
             this.setState({overallScore: response.data.overallScore})
@@ -298,6 +297,7 @@ class ProfilePage extends React.Component {
                 </StatsWrapper>
 
                 {/*/!*TODO: Refine Chart view*!/*/}
+
                 {/*<GraphWrapper>*/}
                 {/*    <Chart></Chart>*/}
                 {/*</GraphWrapper>*/}
@@ -305,6 +305,12 @@ class ProfilePage extends React.Component {
                 {/*TODO: Implement match-history view*/}
                 <MatchHistoryWrapper>
                 <MatchHistory  matches={this.state.matches} />
+
+
+                    <Chart matches={this.state.matches}/>
+
+
+
                 </MatchHistoryWrapper>
 
 
