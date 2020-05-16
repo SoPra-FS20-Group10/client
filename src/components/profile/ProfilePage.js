@@ -211,7 +211,7 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
-            console.log(response)
+            // console.log(response)
 
             this.setState({userName: response.data.username})
             this.setState({overallScore: response.data.overallScore})
