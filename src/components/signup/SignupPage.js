@@ -19,7 +19,7 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 20%;
+  width: 30em;
   // height: 375px;
   font-size: 16px;
   font-weight: 300;
@@ -133,8 +133,8 @@ class SignupPage extends React.Component {
                         />
                         <ButtonContainer>
                             <Button
-                                disabled={!this.state.username || !this.state.password}
-                                width="50%"
+                                disabled={!this.state.username || !this.state.password
+                                || !!this.state.username.match(/^[\s]*$/i) || !!this.state.password.match(/^[\s]*$/i)}
                                 onClick={() => {
                                     this.playSound(new Audio(subtleClick));
                                     this.signup();
@@ -146,7 +146,6 @@ class SignupPage extends React.Component {
                             <view style={{margin: 10}}/>
 
                             <Button
-                                width="50%"
                                 onClick={() => {
                                     this.playSound(new Audio(subtleClick));
                                     this.props.history.push("/login")
