@@ -3,6 +3,7 @@ import * as React from "react";
 import Row from 'react-bootstrap/Row'
 import {Spinner} from '../../views/design/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Col from "react-bootstrap/Col";
 
 
 const WordsWrapper = styled.div`
@@ -56,11 +57,16 @@ const CompletedWords = ({words}) => {
                         </div>
                     ) : (
                         <div>
-                            {words.map(word => {
+                            {words.map(worddata => {
                                 return (
                                     <div>
                                         <Row>
-                                            <Word> {word}</Word>
+                                            <Col>
+                                                <Word> {worddata.word}</Word>
+                                            </Col>
+                                            <Col>
+                                                <Word> {worddata.value}</Word>
+                                            </Col>
                                         </Row>
                                     </div>
                                 );
