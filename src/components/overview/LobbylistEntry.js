@@ -59,7 +59,8 @@ class LobbylistEntry extends React.Component{
             lobbyPassword: ""
         };
 
-        this.goToLobby=this.goToLobby.bind(this)
+        this.goToLobby=this.goToLobby.bind(this);
+        this.getLobbyPlayers=this.getLobbyPlayers.bind(this);
 
     }
 
@@ -74,7 +75,18 @@ class LobbylistEntry extends React.Component{
             lobbyId:this.props.lobbyId,
             ownerId:this.props.ownerId
         })
+         try {
+             this.timerID = setInterval(async () => {
+                 this.getLobbyPlayers();
+             }, 500);
+         } catch (e) {
+             console.log(e);
+         }
+    }
 
+    async getLobbyPlayers(){
+        let response = await api.get("/games/" + this.state.lobbyId + "/players");
+        this.setState({playerCount : response.data.length});
     }
 
     // Join LobbylistEntry
