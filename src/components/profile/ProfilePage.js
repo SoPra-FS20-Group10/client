@@ -14,6 +14,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 import subtleClick from "../../sounds/subtle_click.wav";
+import MatchHistory from "./MatchHistory";
 
 const NameWrapper = styled.div`
     border-radius: 4pt;
@@ -168,6 +169,7 @@ class ProfilePage extends React.Component {
             playtime: null,
             winPercentage: null,
             wonGames: null,
+            matches: null,
 
 
             // example data for the stat overview
@@ -209,6 +211,7 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
+            console.log(response)
 
             this.setState({userName: response.data.username})
             this.setState({overallScore: response.data.overallScore})
@@ -216,6 +219,7 @@ class ProfilePage extends React.Component {
             this.setState({playtime: response.data.playtime})
             this.setState({winPercentage: response.data.winPercentage})
             this.setState({wonGames: response.data.wonGames})
+            this.setState({matches: response.data.historyList})
         } catch (error) {
             alert(error);
         }
@@ -291,6 +295,10 @@ class ProfilePage extends React.Component {
                         <Col># Won Games</Col>
                         <Col>{this.state.wonGames} </Col>
                     </Row>
+                </StatsWrapper>
+
+                <StatsWrapper style={{marginTop: '3em', width: '40%'}}>
+                    <MatchHistory  matches={this.state.matches} />
                 </StatsWrapper>
 
                 {/*/!*TODO: Refine Chart view*!/*/}
