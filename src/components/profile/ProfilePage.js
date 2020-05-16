@@ -297,19 +297,15 @@ class ProfilePage extends React.Component {
                     </Row>
                 </StatsWrapper>
 
-                <StatsWrapper style={{marginTop: '3em', width: '40%'}}>
-                    <MatchHistory  matches={this.state.matches} />
-                </StatsWrapper>
-
                 {/*/!*TODO: Refine Chart view*!/*/}
                 {/*<GraphWrapper>*/}
                 {/*    <Chart></Chart>*/}
                 {/*</GraphWrapper>*/}
 
-                {/*/!*TODO: Implement match-history view*!/*/}
-                {/*<MatchHistoryWrapper>*/}
-                {/*    <h1> Here is the match history</h1>*/}
-                {/*</MatchHistoryWrapper>*/}
+                {/*TODO: Implement match-history view*/}
+                <MatchHistoryWrapper>
+                <MatchHistory  matches={this.state.matches} />
+                </MatchHistoryWrapper>
 
 
                 {/*Buttons for editing credentials*/}

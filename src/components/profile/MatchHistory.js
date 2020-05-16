@@ -7,15 +7,12 @@ import Col from "react-bootstrap/Col";
 
 
 const MatchHistoryWrapper = styled.div`
-    border-radius: 4pt;
     margin: 0pt;
-    margin-top: 10pt;
     // width: 100%;
     
-    background: rgba(77, 77, 77, 0.9);
     
     color: white;
-    display: flex;
+    // display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -31,9 +28,15 @@ const MatchHistoryWrapper = styled.div`
 
 
 const Match = styled.label`
+    border-radius: 4pt;
     padding-top: 10pt;
     padding-bottom: 10pt;
-    margin: 0pt;
+    margin-top: 5pt;
+    margin-left: 10pt;
+    margin-right: 10pt;
+    
+    background: rgba(77, 77, 77, 0.9);
+    // margin: 0pt;
     
     font-size: 20px;
     // width: 70%; 
@@ -63,7 +66,7 @@ const MatchHistory = ({matches}) => {
                                 </div>
                             ) : (
                                 <div>
-                                    {matches.map(matchdata => {
+                                    {matches.reverse().map(matchdata => {
                                         return (
                                             <div>
                                                 <Row>
