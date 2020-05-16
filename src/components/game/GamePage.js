@@ -27,10 +27,10 @@ import {Scrollbars} from 'react-custom-scrollbars';
 import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
 import Tooltip from "@material-ui/core/Tooltip";
 import 'react-spring';
-import {turnAnimation} from "./TurnAnimation";
 import {Transition, animated} from 'react-spring/renderprops'
 import "./styles/turn.css"
 import {BaseContainer} from "../../helpers/layout";
+
 
 import subtleClick from '../../sounds/subtle_click.wav'
 import positiveSound from '../../sounds/positive.wav'
@@ -47,14 +47,15 @@ const Container = styled(BaseContainer)`
   max-width: none;
 
 
- 
+
 `;
 
 const ChatWrapper = styled.div`
 
 margin-top: 10%;
-height: 210pt; 
+height: 150pt;
 float:left;
+width: 100%;
 `;
 
 const GameWrapper = styled.div`
@@ -84,6 +85,20 @@ const SideWrapper = styled.div`
 
     padding: 1em;
     width: 150pt;
+    height: 100%;
+
+    background: rgba(77, 77, 77, 0.5);
+    position:relative;
+
+    color: white;
+    align-items: center;
+    justify-content: center;
+`;
+const SideWrapperRight = styled.div`
+    border-radius: 4pt;
+
+    padding: 1em;
+    width: 150%;
     height: 100%;
 
     background: rgba(77, 77, 77, 0.5);
@@ -177,7 +192,7 @@ class GamePage extends React.Component {
             isOpenExchangePieceSnackbar: false,
             isOpenTurnStartSnackbar: false,
             isOpenTurnEndSnackbar: false,
-            isOpenInvalidMoveSnackbar:false,
+            isOpenInvalidMoveSnackbar: false,
             myTurn: false,
             placedLetters: [],
             placedLettersCoordinates: [],
@@ -417,7 +432,7 @@ class GamePage extends React.Component {
                 }, {piece: null, type: TILES.NT}, {piece: null, type: TILES.NT}, {piece: null, type: TILES.TW}],
             ],
             pieceBag: null,
-            show:true,
+            show: true,
 
         };
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -440,16 +455,16 @@ class GamePage extends React.Component {
         this.showScoreBoard = this.showScoreBoard.bind(this);
         this.endGameShortcut = this.endGameShortcut.bind(this);
         this.checkFirstLetterSet = this.checkFirstLetterSet.bind(this);
-        this.handleOpenGameStartSnackbar=this.handleOpenGameStartSnackbar.bind(this);
-        this.handleCloseSnackbars=this.handleCloseSnackbars.bind(this);
-        this.showSnackbar=this.showSnackbar.bind(this);
-        this.closeSnackbar=this.closeSnackbar.bind(this);
-        this.checkTurn=this.checkTurn.bind(this);
-        this.showPlayerTurn=this.showPlayerTurn.bind(this);
+        this.handleOpenGameStartSnackbar = this.handleOpenGameStartSnackbar.bind(this);
+        this.handleCloseSnackbars = this.handleCloseSnackbars.bind(this);
+        this.showSnackbar = this.showSnackbar.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
+        this.checkTurn = this.checkTurn.bind(this);
+        this.showPlayerTurn = this.showPlayerTurn.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.getMessages=this.getMessages.bind(this);
-        this.showMessages=this.showMessages.bind(this);
+        this.getMessages = this.getMessages.bind(this);
+        this.showMessages = this.showMessages.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.handleChangeChat = this.handleChangeChat.bind(this);
         this.resetPlacedPieces = this.resetPlacedPieces.bind(this);
@@ -459,14 +474,17 @@ class GamePage extends React.Component {
     componentDidMount() {
         this.getPlayers();
         this.getBoard();
+        this.getWords();
         this.getPlayerStones();
         this.getGameInfo();
         this.checkFirstLetterSet();
         this.handleOpenGameStartSnackbar();
+
         try {
             this.timerID = setInterval(async () => {
                 this.checkTurn();
                 this.getPlayers();
+                this.getWords();
                 // this.getCurrentPlayer();
                 this.getGameInfo();
                 this.checkFirstLetterSet();
@@ -489,51 +507,50 @@ class GamePage extends React.Component {
         // show snackbar if not yet shown
         if (this.state.currentPlayer === Number(localStorage.getItem("current")) && !this.state.myTurn) {
             this.setState({
-               myTurn:true
+                myTurn: true
             });
             return true;
-        } else if (this.state.currentPlayer !== Number(localStorage.getItem("current")) && this.state.myTurn){
+        } else if (this.state.currentPlayer !== Number(localStorage.getItem("current")) && this.state.myTurn) {
             this.setState({
                 myTurn: false,
             });
-    }
-    }
-
-    showPlayerTurn(){
-        if(this.state.myTurn){
-            let toggle = e => this.checkTurn()? this.setState(state => ({ show: !state.show })):null;
-                return (
-                    <div className="reveals-main">
-                        <Transition
-                            native
-                            items={this.state.show}
-                            from={{ position: 'absolute', overflow: 'hidden', height: 0 }}
-                            enter={[{ height: 'auto' }]}
-                            leave={{ height: 0 }}>
-                            {show =>
-                                show && (props => <animated.div style={props}>YOUR TURN</animated.div>)
-                            }
-                        </Transition>
-                    </div>)
-        }
-        else{
-            return(<div></div>)
         }
     }
 
+    showPlayerTurn() {
+        if (this.state.myTurn) {
+            let toggle = e => this.checkTurn() ? this.setState(state => ({show: !state.show})) : null;
+            return (
+                <div className="reveals-main">
+                    <Transition
+                        native
+                        items={this.state.show}
+                        from={{position: 'absolute', overflow: 'hidden', height: 0}}
+                        enter={[{height: 'auto'}]}
+                        leave={{height: 0}}>
+                        {show =>
+                            show && (props => <animated.div style={props}>YOUR TURN</animated.div>)
+                        }
+                    </Transition>
+                </div>)
+        } else {
+            return (<div></div>)
+        }
+    }
 
-    checkFirstLetterSet(){
+
+    checkFirstLetterSet() {
         let isSet = false;
         let board = this.state.board;
         board.map((col, i) => {
             col.map((stone, j) => {
-                if(stone.piece != null){
+                if (stone.piece != null) {
                     isSet = true;
                 }
             });
         });
         this.setState({
-           placedFirstLetter: isSet,
+            placedFirstLetter: isSet,
         });
         return isSet;
     }
@@ -750,7 +767,7 @@ class GamePage extends React.Component {
 
         console.log(requestBody);
         try {
-            await api.patch("/games/" + localStorage.getItem("currentGame") , requestBody);
+            await api.patch("/games/" + localStorage.getItem("currentGame"), requestBody);
             this.playSound(new Audio(endSound));
         } catch (error) {
             console.log(error);
@@ -762,7 +779,6 @@ class GamePage extends React.Component {
             let response = await api.get("/games/" + this.state.gameId + "/players/" + localStorage.getItem("current") + "/bag");
             let playerStonesList = response.data;
             let playerStonesBag = [];
-
 
 
             playerStonesList.map((stone, index) => {
@@ -778,8 +794,8 @@ class GamePage extends React.Component {
         }
     }
 
-    resetPlacedPieces(){
-        this.setState({ placedLetters: [],placedLettersCoordinates: []});
+    resetPlacedPieces() {
+        this.setState({placedLetters: [], placedLettersCoordinates: []});
     }
 
     drawTile(props) {
@@ -897,7 +913,6 @@ class GamePage extends React.Component {
     }
 
     async getBoard() {
-
         let response = await api.get("/games/" + this.state.gameId);
         let board = response.data.board;
         let newBoard = this.oneDimToTwoDim(board);
@@ -907,6 +922,11 @@ class GamePage extends React.Component {
 
     }
 
+    async getWords() {
+        let response = await api.get("/games/" + this.state.gameId + "/words");
+        this.setState({words: response.data})
+    }
+
     async getGameInfo() {
         let response = await api.get("/games/" + this.state.gameId);
 
@@ -914,11 +934,11 @@ class GamePage extends React.Component {
         if (response.data.currentPlayerId != this.state.currentPlayer) {
 
             // If this client is the new player
-            if(response.data.currentPlayerId == this.state.playerId){
+            if (response.data.currentPlayerId == this.state.playerId) {
                 this.playSound(new Audio(yourTurn));
-            }else{
+            } else {
                 // Only play turn sound for other players if they didn't just have their turn (else to much SFX)
-                if(this.state.currentPlayer != this.state.playerId){
+                if (this.state.currentPlayer != this.state.playerId) {
                     this.playSound(new Audio(newTurn));
                 }
             }
@@ -926,14 +946,14 @@ class GamePage extends React.Component {
             let board = response.data.board;
             let newBoard = this.oneDimToTwoDim(board);
             this.initBoard(newBoard);
-            this.setState({ placedLetters: [],placedLettersCoordinates: []});
+            this.setState({placedLetters: [], placedLettersCoordinates: []});
 
             this.getPlayerStones();
             // this.getBoard();
         }
 
         this.setState({
-            words: response.data.words, currentPlayer: response.data.currentPlayerId, stones: response.data.stones,
+            currentPlayer: response.data.currentPlayerId, stones: response.data.stones,
             gameStatus: response.data.status
         });
     }
@@ -1008,11 +1028,11 @@ class GamePage extends React.Component {
             stoneIds: stoneIds
         });
         try {
-            if(stoneIds.length > 0){
+            if (stoneIds.length > 0) {
                 await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
                 this.setState({isOpenExchangePieceSnackbar: true});
                 this.endTurn();
-            }else{
+            } else {
                 alert("You need to at least one piece to exchange!");
             }
         } catch (error) {
@@ -1042,7 +1062,7 @@ class GamePage extends React.Component {
             this.playSound(new Audio(negativeSound));
 
             this.setState({
-                isOpenInvalidMoveSnackbar:true
+                isOpenInvalidMoveSnackbar: true
             })
             console.log(error);
             this.getBoard();
@@ -1056,11 +1076,12 @@ class GamePage extends React.Component {
         this.setState({showModal: false, check: [false, false, false, false, false, false, false]});
     }
 
-    handleOpenGameStartSnackbar(){
-            this.setState({
-                isOpenGameStartSnackbar: true,
-            })
+    handleOpenGameStartSnackbar() {
+        this.setState({
+            isOpenGameStartSnackbar: true,
+        })
     }
+
     /*
     handleOpenGameStartSnackbar(){
         this.setState({
@@ -1083,29 +1104,30 @@ class GamePage extends React.Component {
         })
     }
     */
-    handleCloseSnackbars(){
+    handleCloseSnackbars() {
         this.setState({
             isOpenGameStartSnackbar: false,
             isOpenExchangePieceSnackbar: false,
             isOpenTurnStartSnackbar: false,
             isOpenTurnEndSnackbar: false,
-            isOpenInvalidMoveSnackbar:false
+            isOpenInvalidMoveSnackbar: false
         })
     }
 
 
-    showSnackbar(message, type){
+    showSnackbar(message, type) {
 
-        return SnackbarAlert({close:this.closeSnackbar, type:type ,message: message});
+        return SnackbarAlert({close: this.closeSnackbar, type: type, message: message});
 
     }
-    closeSnackbar(){
+
+    closeSnackbar() {
         this.handleCloseSnackbars();
     }
 
     // CHAT FUNCTIONALITY
 
-    handleChangeChat(e){
+    handleChangeChat(e) {
 
         this.setState({
             message: e.target.value
@@ -1122,9 +1144,9 @@ class GamePage extends React.Component {
         })
     }
 
-    async sendMessage(message){
+    async sendMessage(message) {
 
-        try{
+        try {
             const d = new Date();
             const n = d.getTime();
             const requestBody = JSON.stringify({
@@ -1133,7 +1155,7 @@ class GamePage extends React.Component {
                 message: message
             });
             let response = await api.put("/chat/" + localStorage.getItem("currentGame"), requestBody);
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
 
@@ -1144,25 +1166,26 @@ class GamePage extends React.Component {
         try {
             let response = await api.get("chat/" + localStorage.getItem("currentGame"));
             this.setState({
-                messages:response.data
+                messages: response.data
             });
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
 
     }
 
-    showMessages(){
+    showMessages() {
 
     }
+
     // Helper function to format date for the chat
-    formatDate(date){
+    formatDate(date) {
         let hours = date.getHours().toString();
         let minutes = date.getMinutes().toString();
-        if (minutes < 10){
+        if (minutes < 10) {
             minutes = "0" + minutes;
         }
-        let formatedDate = hours +":" + minutes;
+        let formatedDate = hours + ":" + minutes;
         return formatedDate;
     }
 
@@ -1180,57 +1203,17 @@ class GamePage extends React.Component {
         return (
             <Container>
 
-                {this.state.isOpenGameStartSnackbar? this.showSnackbar("Game started", "info"): null}
-                {this.state.isOpenExchangePieceSnackbar? this.showSnackbar("Pieces exchanged - your turn ends", "info"): null}
+                {this.state.isOpenGameStartSnackbar ? this.showSnackbar("Game started", "info") : null}
+                {this.state.isOpenExchangePieceSnackbar ? this.showSnackbar("Pieces exchanged - your turn ends", "info") : null}
 
-                {this.state.isOpenTurnEndSnackbar? this.showSnackbar("Your turn is over", "info"): null}
-                {this.state.isOpenInvalidMoveSnackbar? this.showSnackbar("Your move was invalid", "error"): null}
+                {this.state.isOpenTurnEndSnackbar ? this.showSnackbar("Your turn is over", "info") : null}
+                {this.state.isOpenInvalidMoveSnackbar ? this.showSnackbar("Your move was invalid", "error") : null}
 
-<GameWrapper>
-                <Row className="justify-content-md-center">
-                    <Col className="py-2 px-0" md="auto">
-                        <SideWrapper>
-                            <div style={{
-                                // These style attributes make text unselectable on most browsers & versions
-                                userSelect: 'none',
-                                webkitTouchCallout: 'none',
-                                webkitUserSelect: 'none',
-                                khtmlUserSelect: 'none',
-                                mozUserSelect: 'none',
-                                msUserSelect: 'none'
-                            }}>
-                                Remaining Stones
-                            </div>
-                            <Row>
-                                <Col>
-                                    <PieceCounter piecesLeft={this.state.stones}/>
-                                </Col>
-                            </Row>
-
-                            <div style={{
-                                // These style attributes make text unselectable on most browsers & versions
-                                userSelect: 'none',
-                                webkitTouchCallout: 'none',
-                                webkitUserSelect: 'none',
-                                khtmlUserSelect: 'none',
-                                mozUserSelect: 'none',
-                                msUserSelect: 'none'
-                            }}>
-                                Played Words
-                            </div>
-
-                            <Scrollbars
-                                // This will activate auto-height
-                                autoHeight
-                                autoHeightMin={410}
-                                autoHeightMax={450}
-                                renderTrackVertical={this.renderTrackVertical}
-
-                                renderThumbVertical={this.renderThumbVertical}
-                                style={{overflow: 'hidden'}}
-                            >
-                                {/*<CompletedWords gameId={this.state.gameId}/>*/}
-                                <CompletedWords style={{
+                <GameWrapper>
+                    <Row className="justify-content-md-center">
+                        <Col className="py-2 px-0" md="auto">
+                            <SideWrapper>
+                                <div style={{
                                     // These style attributes make text unselectable on most browsers & versions
                                     userSelect: 'none',
                                     webkitTouchCallout: 'none',
@@ -1238,60 +1221,54 @@ class GamePage extends React.Component {
                                     khtmlUserSelect: 'none',
                                     mozUserSelect: 'none',
                                     msUserSelect: 'none'
-                                }} words={this.state.words}/>
-                            </Scrollbars>
-                            {this.showPlayerTurn()}
-                        </SideWrapper>
-                    </Col>
-
-                    <Col className="p-2" md="auto">
-                        <BoardWrapper style={{
-                            // These style attributes make text unselectable on most browsers & versions
-                            userSelect: 'none',
-                            webkitTouchCallout: 'none',
-                            webkitUserSelect: 'none',
-                            khtmlUserSelect: 'none',
-                            mozUserSelect: 'none',
-                            msUserSelect: 'none'
-                        }}>
-                            <DndProvider backend={Backend}>
-                                <div>
-                                    <Grid container className="flex-grow-1" spacing={0}>
-
-                                        {board.map((row, i) => (
-                                            <Grid item xs={12} key={i} container justify="center" spacing={0}>
-                                                {row.map((col, j) => (
-                                                    <Grid key={j} item>
-                                                        <Square props={col} row={i} column={j} placedFirstLetter={this.state.placedFirstLetter}
-                                                                onDrop={(item) => this.handleDrop(i, j, item)}/>
-                                                    </Grid>
-                                                ))}
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-
-
-                                    <DeckWrapper>
-
-                                        <div style={{overflow: 'hidden', clear: 'both', margin: "auto"}}>
-                                            {this.state.boxes.map(({piece}, index) => (
-                                                <LetterBox
-                                                    piece={piece}
-                                                    isDropped={this.isDropped(piece, index)}
-                                                    key={index}
-                                                />
-                                            ))}
-                                        </div>
-                                    </DeckWrapper>
+                                }}>
+                                    Remaining Stones
                                 </div>
-                            </DndProvider>
-                        </BoardWrapper>
+                                <Row>
+                                    <Col>
+                                        <PieceCounter piecesLeft={this.state.stones}/>
+                                    </Col>
+                                </Row>
 
-                    </Col>
+                                <div style={{
+                                    // These style attributes make text unselectable on most browsers & versions
+                                    userSelect: 'none',
+                                    webkitTouchCallout: 'none',
+                                    webkitUserSelect: 'none',
+                                    khtmlUserSelect: 'none',
+                                    mozUserSelect: 'none',
+                                    msUserSelect: 'none'
+                                }}>
+                                    Played Words
+                                </div>
 
-                    <Col className="py-2 px-0" md="auto">
-                        <SideWrapper>
-                            <div style={{
+                                <Scrollbars
+                                    // This will activate auto-height
+                                    autoHeight
+                                    autoHeightMin={410}
+                                    autoHeightMax={450}
+                                    renderTrackVertical={this.renderTrackVertical}
+
+                                    renderThumbVertical={this.renderThumbVertical}
+                                    style={{overflow: 'hidden'}}
+                                >
+                                    {/*<CompletedWords gameId={this.state.gameId}/>*/}
+                                    <CompletedWords style={{
+                                        // These style attributes make text unselectable on most browsers & versions
+                                        userSelect: 'none',
+                                        webkitTouchCallout: 'none',
+                                        webkitUserSelect: 'none',
+                                        khtmlUserSelect: 'none',
+                                        mozUserSelect: 'none',
+                                        msUserSelect: 'none'
+                                    }} words={this.state.words}/>
+                                </Scrollbars>
+                                {this.showPlayerTurn()}
+                            </SideWrapper>
+                        </Col>
+
+                        <Col className="p-2" md="auto">
+                            <BoardWrapper style={{
                                 // These style attributes make text unselectable on most browsers & versions
                                 userSelect: 'none',
                                 webkitTouchCallout: 'none',
@@ -1300,35 +1277,91 @@ class GamePage extends React.Component {
                                 mozUserSelect: 'none',
                                 msUserSelect: 'none'
                             }}>
-                                Scoreboard
-                            </div>
-                            <ScoreBoard style={{
-                                // These style attributes make text unselectable on most browsers & versions
-                                userSelect: 'none',
-                                webkitTouchCallout: 'none',
-                                webkitUserSelect: 'none',
-                                khtmlUserSelect: 'none',
-                                mozUserSelect: 'none',
-                                msUserSelect: 'none'
-                            }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
+                                <DndProvider backend={Backend}>
+                                    <div>
+                                        <Grid container className="flex-grow-1" spacing={0}>
 
-                            {/*TODO: Remove shortcut after presentation*/}
-                            <Tooltip title="End Game prematurely">
-                                <Button variant="danger" size="sm" block onClick={this.endGameShortcut} style={{marginTop:"20pt"}}>
-                                    End Game
-                                </Button>
-                            </Tooltip>
+                                            {board.map((row, i) => (
+                                                <Grid item xs={12} key={i} container justify="center" spacing={0}>
+                                                    {row.map((col, j) => (
+                                                        <Grid key={j} item>
+                                                            <Square props={col} row={i} column={j}
+                                                                    placedFirstLetter={this.state.placedFirstLetter}
+                                                                    onDrop={(item) => this.handleDrop(i, j, item)}/>
+                                                        </Grid>
+                                                    ))}
+                                                </Grid>
+                                            ))}
+                                        </Grid>
 
 
-                            <Tooltip title="Reset your placed letters">
-                                <Button variant="dark" size="sm" block onClick={() => { this.playSound(new Audio(subtleClick)); this.getBoard(); this.getPlayerStones(); this.resetPlacedPieces();}}
-                                        disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
-                                    Reset
-                                </Button>
-                            </Tooltip>
+                                        <DeckWrapper>
+
+                                            <div style={{overflow: 'hidden', clear: 'both', margin: "auto"}}>
+                                                {this.state.boxes.map(({piece}, index) => (
+                                                    <LetterBox
+                                                        piece={piece}
+                                                        isDropped={this.isDropped(piece, index)}
+                                                        key={index}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </DeckWrapper>
+                                    </div>
+                                </DndProvider>
+                            </BoardWrapper>
+
+                        </Col>
+
+                        <Col className="py-2 px-0" md="auto">
+                            <SideWrapper>
+                                <div style={{
+                                    // These style attributes make text unselectable on most browsers & versions
+                                    userSelect: 'none',
+                                    webkitTouchCallout: 'none',
+                                    webkitUserSelect: 'none',
+                                    khtmlUserSelect: 'none',
+                                    mozUserSelect: 'none',
+                                    msUserSelect: 'none'
+                                }}>
+                                    Scoreboard
+                                </div>
+                                <ScoreBoard style={{
+                                    // These style attributes make text unselectable on most browsers & versions
+                                    userSelect: 'none',
+                                    webkitTouchCallout: 'none',
+                                    webkitUserSelect: 'none',
+                                    khtmlUserSelect: 'none',
+                                    mozUserSelect: 'none',
+                                    msUserSelect: 'none'
+                                }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
+
+                                {/*TODO: Remove shortcut after presentation*/}
+                                <Tooltip title="End Game prematurely">
+                                    <Button variant="danger" size="sm" block onClick={this.endGameShortcut}
+                                            style={{marginTop: "20pt"}}>
+                                        End Game
+                                    </Button>
+                                </Tooltip>
+
+
+                                <Tooltip title="Reset your placed letters">
+                                    <Button variant="dark" size="sm" block onClick={() => {
+                                        this.playSound(new Audio(subtleClick));
+                                        this.getBoard();
+                                        this.getPlayerStones();
+                                        this.resetPlacedPieces();
+                                    }}
+                                            disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
+                                        Reset
+                                    </Button>
+                                </Tooltip>
 
                                 <Tooltip title="Swap letters (ends your turn)">
-                                    <Button variant="dark" size="sm" block onClick={() => { this.playSound(new Audio(subtleClick)); this.handleOpenModal(); }}
+                                    <Button variant="dark" size="sm" block onClick={() => {
+                                        this.playSound(new Audio(subtleClick));
+                                        this.handleOpenModal();
+                                    }}
                                             disabled={this.state.placedLetters.length !== 0 || !(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
                                         Swap
                                     </Button>
@@ -1336,52 +1369,52 @@ class GamePage extends React.Component {
 
 
                                 <view style={{margin: 4}}/>
-                            <Tooltip title="End your turn">
-                                <Button variant="success" size="sm" block onClick={this.endTurn}
-                                        disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
-                                    End Turn
-                                </Button>
-                            </Tooltip>
-                            <ChatWrapper style={{
-                                // These style attributes make text unselectable on most browsers & versions
-                                userSelect: 'none',
-                                webkitTouchCallout: 'none',
-                                webkitUserSelect: 'none',
-                                khtmlUserSelect: 'none',
-                                mozUserSelect: 'none',
-                                msUserSelect: 'none'
-                            }}>
-                                <Title />
-                                <ul className="message-list">
-                                    { this.state.messages.map((message, index) => {
-                                        let date = new Date(message.time);
-                                        let dateFormated = this.formatDate(date);
-                                        return (
+                                <Tooltip title="End your turn">
+                                    <Button variant="success" size="sm" block onClick={this.endTurn}
+                                            disabled={!(this.state.currentPlayer === Number(localStorage.getItem("current")))}>
+                                        End Turn
+                                    </Button>
+                                </Tooltip>
+                                <ChatWrapper style={{
+                                    // These style attributes make text unselectable on most browsers & versions
+                                    userSelect: 'none',
+                                    webkitTouchCallout: 'none',
+                                    webkitUserSelect: 'none',
+                                    khtmlUserSelect: 'none',
+                                    mozUserSelect: 'none',
+                                    msUserSelect: 'none'
+                                }}>
+                                    <Title/>
+                                    <ul className="message-list">
+                                        {this.state.messages.map((message, index) => {
+                                            let date = new Date(message.time);
+                                            let dateFormated = this.formatDate(date);
+                                            return (
 
-                                            <li   className="message">
-                                                <div>{message.username + " - " + dateFormated}</div>
-                                                <div>{message.message}</div>
+                                                <li className="message">
+                                                    <div>{message.username + " - " + dateFormated}</div>
+                                                    <div>{message.message}</div>
 
 
-                                            </li>
-                                        )
-                                    })}
-                                </ul>
-                                <form
-                                    onSubmit={this.handleSubmit}
-                                    className="send-message-form">
-                                    <input
-                                        onChange={this.handleChangeChat}
-                                        value={this.state.message}
-                                        placeholder="Type your message and hit ENTER"
-                                        type="text" />
-                                </form>
-                            </ChatWrapper>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                    <form
+                                        onSubmit={this.handleSubmit}
+                                        className="send-message-form">
+                                        <input
+                                            onChange={this.handleChangeChat}
+                                            value={this.state.message}
+                                            placeholder="Type your message and hit ENTER"
+                                            type="text"/>
+                                    </form>
+                                </ChatWrapper>
 
-                        </SideWrapper>
-                    </Col>
-                </Row>
-</GameWrapper>
+                            </SideWrapper>
+                        </Col>
+                    </Row>
+                </GameWrapper>
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="Inline Styles Modal GameBoard"

@@ -107,6 +107,7 @@ class LoginPage extends React.Component {
         this.state = {
             password: null,
             username: null,
+            guestname: null,
             fromSignup: this.fromSignup()
         };
         console.log(this.state);
@@ -156,6 +157,37 @@ class LoginPage extends React.Component {
     }
 
     async loginGuest() {
+        try {
+            const requestBodyRegister = JSON.stringify({
+                username: this.state.guestname,
+                password: ""
+            });
+
+            await api.post("/users", requestBodyRegister);
+
+            const requestBodyLogin = JSON.stringify({
+                username: this.state.guestname,
+                password: "",
+            });
+
+            // send request to backend
+            const response = await api.put('/login', requestBodyLogin);
+
+            const user = response.data
+
+            // Store the token into the local storage.
+            localStorage.setItem('current', user.id);
+            localStorage.setItem("name", user.username);
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("fromLogin", "true");
+            // LoginPage successfully worked --> navigate to the route /game in the GameRouter
+
+            this.props.history.push(
+                {pathname: `/game`}
+            );
+        } catch (error) {
+            alert(`Something went wrong during the login: \n${handleError(error)}`);
+        }
         // TODO: Do LoginPage as guest
     }
 
@@ -220,10 +252,15 @@ class LoginPage extends React.Component {
                                 No statistics will be saved when playing with guest account
                             </Form.Text>
                             <Form.Group controlId="formTemporaryUsername">
-                                <Form.Control type="name" placeholder="Enter temporary username"/>
+                                <Form.Control onChange={e => {
+                                    this.handleInputChange('guestname', e.target.value);
+                                }}
+                                              type="name" placeholder="Enter temporary username"/>
                             </Form.Group>
 
                             <Button variant="primary" type="button" size="lg"
+                                    disabled={!this.state.guestname
+                                    || !!this.state.guestname.match(/^[\s]*$/i)}
                                     onClick={() => {
                                         this.playSound(new Audio(subtleClick));
                                         this.loginGuest();

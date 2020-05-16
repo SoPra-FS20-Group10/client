@@ -62,7 +62,8 @@ class EndScreenPage extends React.Component {
             players: null,
             gameId: localStorage.getItem("currentGame"),
             playerId: localStorage.getItem("current"),
-            playerName: localStorage.getItem("name")
+            playerName: localStorage.getItem("name"),
+            deleteGame: null,
         }
 
         this.leaveGame = this.leaveGame.bind(this);
@@ -85,10 +86,8 @@ class EndScreenPage extends React.Component {
     componentDidMount() {
         try {
             this.timerID = setInterval(async () => {
-                if (this._isMounted) {
                     this.fetchPlayers();
-                }
-            }, 5000);
+            }, 1000);
         } catch (e) {
             console.log(e);
         }
@@ -109,6 +108,8 @@ class EndScreenPage extends React.Component {
         try {
             const response = await api.get("/games/" + this.state.gameId + "/players");
             this.setState({players: response.data.sort(this.compare)})
+            console.log(this.state.gameId);
+
         } catch (error) {
             console.log(error);
         }
@@ -117,6 +118,7 @@ class EndScreenPage extends React.Component {
 
     showPlayers() {
         if (this.state.players) {
+            console.log(this.state.players);
             return (
                 <table className="table" id='leaderboard'>
                     <tbody block>
@@ -133,7 +135,12 @@ class EndScreenPage extends React.Component {
 
     async leaveGame() {
         this.playSound(new Audio(subtleClick));
-
+        let deleteGame = null;
+        alert(this.state.players.length);
+        if (this.state.players.length === 1){
+            alert("setting deletegame to" + this.state.gameId.toString());
+            deleteGame = this.state.gameId;
+        }
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token")
         });
@@ -142,14 +149,14 @@ class EndScreenPage extends React.Component {
             // Log out user in backend
             await api.delete("/games/" + localStorage.getItem("currentGame") + "/players/" + localStorage.getItem("current"), {data: requestBody});
             localStorage.removeItem("currentGame");
-            // await api.delete("/games/" + this.state.gameId);
-            console.log(this.state.players)
-            this.props.history.push(
+
+                this.props.history.push(
                 {
                     pathname: `/game/overview/`,
                     state: {
                         playerId: this.state.playerId,
-                        playerName: this.state.playerName
+                        playerName: this.state.playerName,
+                        deleteGame: deleteGame,
                     }
                 });
             window.location.reload();
@@ -159,6 +166,8 @@ class EndScreenPage extends React.Component {
         }
 
     }
+
+
 
     /*
     this.props.history.push(

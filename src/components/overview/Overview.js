@@ -86,6 +86,7 @@ class Overview extends React.Component {
         this.closeSnackbar = this.closeSnackbar.bind(this);
         this.showSnackbar = this.showSnackbar.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
+        this.deleteGame = this.deleteGame.bind(this);
     }
 
     componentDidMount() {
@@ -99,12 +100,24 @@ class Overview extends React.Component {
         } catch (e) {
             console.log(e);
         }
-
+        console.log(this.props)
+        if(this.props.history.location.state){
+            this.deleteGame(this.props.history.location.state.deleteGame);
+        }
     }
 
     componentWillUnmount() {
         clearInterval(this.timerID);
     }
+
+    async deleteGame(gameId) {
+        try {
+            console.log(gameId);
+            await api.delete("/games/" + gameId);
+        }catch(error){
+            console.log(error);
+        }
+        }
 
     fromLogin() {
         if (localStorage.getItem("fromLogin") === "true") {
