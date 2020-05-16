@@ -211,6 +211,7 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
+            console.log(response)
 
             this.setState({userName: response.data.username})
             this.setState({overallScore: response.data.overallScore})
@@ -298,19 +299,13 @@ class ProfilePage extends React.Component {
 
                 {/*/!*TODO: Refine Chart view*!/*/}
 
-                {/*<GraphWrapper>*/}
-                {/*    <Chart></Chart>*/}
-                {/*</GraphWrapper>*/}
+                <GraphWrapper>
+                    <Chart matches={this.state.matches}/>
+                </GraphWrapper>
 
                 {/*TODO: Implement match-history view*/}
                 <MatchHistoryWrapper>
-                <MatchHistory  matches={this.state.matches} />
-
-
-                    <Chart matches={this.state.matches}/>
-
-
-
+                    <MatchHistory matches={this.state.matches}/>
                 </MatchHistoryWrapper>
 
 
