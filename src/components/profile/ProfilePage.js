@@ -190,7 +190,7 @@ class ProfilePage extends React.Component {
 
     }
 
-    async componentDidMount() {
+     componentDidMount() {
         this.fetchUser();
         try {
             this.timerID = setInterval(() => {

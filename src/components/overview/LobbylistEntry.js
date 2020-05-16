@@ -31,7 +31,6 @@ margin-bottom: 10pt;
 `;
 
 
-
 const Label = styled.label`
   color: white;
   margin-bottom: 10px;
@@ -42,8 +41,7 @@ const Label = styled.label`
 `;
 
 
-
-class LobbylistEntry extends React.Component{
+class LobbylistEntry extends React.Component {
 
     constructor(props) {
 
@@ -59,8 +57,8 @@ class LobbylistEntry extends React.Component{
             lobbyPassword: ""
         };
 
-        this.goToLobby=this.goToLobby.bind(this);
-        this.getLobbyPlayers=this.getLobbyPlayers.bind(this);
+        this.goToLobby = this.goToLobby.bind(this);
+        this.getLobbyPlayers = this.getLobbyPlayers.bind(this);
 
     }
 
@@ -69,38 +67,47 @@ class LobbylistEntry extends React.Component{
         this.setState({[key]: value});
     }
 
-     componentDidMount() {
+    componentDidMount() {
 
         this.setState({
-            lobbyId:this.props.lobbyId,
-            ownerId:this.props.ownerId
+            lobbyId: this.props.lobbyId,
+            ownerId: this.props.ownerId
         })
-         try {
-             this.timerID = setInterval(async () => {
-                 this.getLobbyPlayers();
-             }, 500);
-         } catch (e) {
-             console.log(e);
-         }
+        try {
+            this.timerID = setInterval(async () => {
+                this.getLobbyPlayers();
+            }, 500);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
-    async getLobbyPlayers(){
-        let response = await api.get("/games/" + this.state.lobbyId + "/players");
-        this.setState({playerCount : response.data.length});
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
+
+    async getLobbyPlayers() {
+        try {
+            let response = await api.get("/games/" + this.state.lobbyId + "/players");
+            this.setState({playerCount: response.data.length});
+        } catch (error) {
+            // Nothing bad happens as the lobby entry won't show anymore in a few milliseconds...
+        }
     }
 
     // Join LobbylistEntry
 
-    async goToLobby(){
+    async goToLobby() {
         this.playSound(new Audio(subtleClick));
 
         // Check if there's space for the player in the lobby
-        if (this.state.playerCount >= this.state.maxPlayerCount){
+        if (this.state.playerCount >= this.state.maxPlayerCount) {
             return alert("The LobbylistEntry is full!");
         }
 
         // Join - Pass lobbyId
-        else{
+        else {
 
 
             const requestBody = JSON.stringify({
@@ -109,21 +116,23 @@ class LobbylistEntry extends React.Component{
             });
 
 
-            try{
+            try {
 
-            await api.put("/games/" + this.state.lobbyId +"/players", requestBody);
+                await api.put("/games/" + this.state.lobbyId + "/players", requestBody);
 
-            this.props.history.push(
-                {pathname: `/game/lobby/${this.state.lobbyId}`,
-                    state: { lobbyId: this.state.lobbyId,
-                        lobbyPassword: this.state.lobbyPassword,
-                        lobbyName: this.state.lobbyName,
-                        playerId: this.state.playerId,
-                        playerName: this.state.playerName,
-                        ownerId: null}
-                });
-            }
-            catch(error){
+                this.props.history.push(
+                    {
+                        pathname: `/game/lobby/${this.state.lobbyId}`,
+                        state: {
+                            lobbyId: this.state.lobbyId,
+                            lobbyPassword: this.state.lobbyPassword,
+                            lobbyName: this.state.lobbyName,
+                            playerId: this.state.playerId,
+                            playerName: this.state.playerName,
+                            ownerId: null
+                        }
+                    });
+            } catch (error) {
                 alert("Could not join the lobby.");
             }
 
@@ -151,27 +160,28 @@ class LobbylistEntry extends React.Component{
 
 
                     <Label>Players: {this.state.playerCount}/4</Label>
-<Form>
-                    <Form.Group controlId="formPassword">
-                        <Form.Control
-                            onChange={e => {
-                                this.handleInputChange('lobbyPassword', e.target.value);
-                            }}
-                            type="email" placeholder="Enter password"/>
-                    </Form.Group>
-</Form>
-                <ButtonContainer>
-                <Button variant="success" size="sm" block onClick={this.goToLobby}>
-                   Join
-                </Button>
+                    <Form>
+                        <Form.Group controlId="formPassword">
+                            <Form.Control
+                                onChange={e => {
+                                    this.handleInputChange('lobbyPassword', e.target.value);
+                                }}
+                                type="email" placeholder="Enter password"/>
+                        </Form.Group>
+                    </Form>
+                    <ButtonContainer>
+                        <Button variant="success" size="sm" block onClick={this.goToLobby}>
+                            Join
+                        </Button>
                     </ButtonContainer>
 
-                    </LobbyContainer>
+                </LobbyContainer>
             </BaseContainer>
         );
     }
 
 }
+
 export default LobbylistEntry;
 
 

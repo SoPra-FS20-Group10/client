@@ -84,6 +84,7 @@ class EndScreenPage extends React.Component {
     }
 
     componentDidMount() {
+        this.fetchPlayers();
         try {
             this.timerID = setInterval(async () => {
                     this.fetchPlayers();
