@@ -12,15 +12,15 @@ For code quality analysis, we use SonarQube.
 
 ##  High-level components
 
-# GamePage [GamePage.js](src/components/game/GamePage.js)
+### GamePage [GamePage.js](src/components/game/GamePage.js)
 
 The GamePage Class is where the main functionality for the game is implemented in the frontend. The board is obtained from the backend through the getBoard() and initBoard() functions.
 
-# Lobbylist [Lobbylist.js](src/components/overview/Lobbylist.js)
+###  Lobbylist [Lobbylist.js](src/components/overview/Lobbylist.js)
 
 The Lobbylist class offers the Lobby join functionality. For all existing Lobbies, it lists a corresponding LobbylistEntry, where the user has to type the Lobby password (if it exists) in order to join an existing Lobby. The Lobby can only be joined if it's not already running.
 
-# LobbyPage [Lobbypage.js](src/components/lobby/LobbyPage.js)
+###  LobbyPage [Lobbypage.js](src/components/lobby/LobbyPage.js)
 
 The LobbyPage class is used for the Lobby functionality. All the players in the lobby are listed. The players can set their own readystatus, which is also shown to the other players in the lobby. When 2-4 players are in the lobby and all players are ready, the lobbyleader can start the game and all players will be redirected to the GamePage.
 
