@@ -133,7 +133,7 @@ class LobbylistEntry extends React.Component {
                         }
                     });
             } catch (error) {
-                alert("Could not join the lobby.");
+                alert("Wrong password, could not join the lobby.");
             }
 
 
