@@ -1,8 +1,8 @@
-## Introduction: the project’s aim
+## Introduction
 
 This Scrabble game is a project for the course "SoPra" from the spring semester 2020 at the University of Zurich. Our aim was to create a functionning Scrabble game which can be played with two up to four people. The application provides other useful functionality such as account creating, leaderboard, chat, lobbies, etc.
 
-##  Technologies used (short)
+##  Technologies used
 
 The game is implemented with React in the frontend. It uses a RESTful API.
 The server is implemented in java.
@@ -30,7 +30,7 @@ The LobbyPage class is used for the Lobby functionality. All the players in the 
 How are they correlated? Reference the main class, file or function in the README text
 with a link.
 
-##  Launch & Deployment: 
+##  Launch & Deployment
 
 For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
 
@@ -100,19 +100,19 @@ After entering a lobby or creating a lobby, you can do the following things:
 When the lobbyleader starts the game, you will enter the GamePage. Here the game itself takes place.
 You can do the following actions:
 
-Left UI:
+### Left UI:
 
 * See the remaining stones
 * See the played words
 * See if it's your turn
 
-Middle UI:
+### Middle UI:
 
 * See the board
 * See the placed stones
 * See your own stones (bottom)
 
-* Right UI:
+### Right UI:
 
 * See the Scores of each player in the game
 * End game prematurely
