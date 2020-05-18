@@ -76,7 +76,7 @@ class LobbylistEntry extends React.Component {
         try{
             let response = await api.get("/games/" + this.state.lobbyId);
 
-            
+
             let status = response.data.status;
             console.log(status);
             if (status === "RUNNING"){

@@ -29,7 +29,7 @@ class App extends Component {
     return (
 
         <div className='animated-gradient'>
-        <AppRouter />
+            <AppRouter />
         </div>
 
 

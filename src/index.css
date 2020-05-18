@@ -64,9 +64,10 @@ tr.winner{
   position: fixed;
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   color: #fff;
+  overflow-y: scroll;
 
   /*background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);*/
   background: linear-gradient(-45deg, #5d01ad, #1c22ff, #1ab8cf, #00da8d);
