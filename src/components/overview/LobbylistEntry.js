@@ -56,14 +56,39 @@ class LobbylistEntry extends React.Component{
             playerName: localStorage.getItem("name"),
             lobbyId: this.props.lobbyId,
             lobbyName: this.props.lobbyName,
-            lobbyPassword: ""
+            lobbyPassword: "",
+            isRunning: false,
         };
-
+        try {
+            this.timerID = setInterval(async () => {
+                this.updateRunning();
+            }, 1000);
+        } catch (e) {
+            console.log(e);
+        }
         this.goToLobby=this.goToLobby.bind(this);
         this.getLobbyPlayers=this.getLobbyPlayers.bind(this);
-
+        this.updateRunning=this.updateRunning.bind(this);
     }
 
+    async updateRunning(){
+
+        try{
+            let response = await api.get("/games/" + this.state.lobbyId);
+            let status = response.data.status;
+            console.log(status);
+            if (status === "RUNNING"){
+                this.setState({
+                    isRunning: true,
+                })
+            }
+        }catch(error){
+            console.log(error);
+        }
+
+
+
+    }
 
     handleInputChange(key, value) {
         this.setState({[key]: value});
@@ -161,7 +186,7 @@ class LobbylistEntry extends React.Component{
                     </Form.Group>
 </Form>
                 <ButtonContainer>
-                <Button variant="success" size="sm" block onClick={this.goToLobby}>
+                <Button variant="success" size="sm" block onClick={this.goToLobby} disabled={this.state.isRunning}>
                    Join
                 </Button>
                     </ButtonContainer>
