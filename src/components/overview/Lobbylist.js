@@ -147,7 +147,7 @@ class Lobbylist extends React.Component {
             this.timerID = setInterval(async () => {
                 this.fetchLobbies();
                 this.setState({state: this.state});
-            }, 1000);
+            }, 300);
         } catch (e) {
             console.log(e);
         }
