@@ -362,7 +362,7 @@ class ProfilePage extends React.Component {
 
                 <GraphWrapper>
                     <Paper elevation={3}>
-                        <div style={{margin: '5pt'}}>
+                        <div>
                             <Chart matches={this.state.matchesScore}/>
                         </div>
                     </Paper>

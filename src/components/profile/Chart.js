@@ -87,6 +87,7 @@ const Chart = ({matches}) => {
         ]
     }
     return (
+        <div style={{padding:'2em'}}>
         <Line
             options={{
                 legend: {
@@ -107,7 +108,7 @@ const Chart = ({matches}) => {
                             fontSize: 10
                         },
                         ticks: {
-                            reverse: true,
+                            // reverse: true,
                             fontColor: "rgba(0, 0, 0, 0.87)",
                             fontSize: 14
                         },
@@ -139,6 +140,7 @@ const Chart = ({matches}) => {
             }}
             data={data}
         />
+        </div>
     )
     // }
 }
