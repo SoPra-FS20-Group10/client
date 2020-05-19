@@ -26,6 +26,7 @@ import FormatItalicIcon from '@material-ui/icons/FormatItalic';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
+import NameLengthChecker from "../shared/Other/NameLengthChecker";
 
 const NameWrapper = styled.div`
     border-radius: 4pt;
@@ -296,7 +297,7 @@ class ProfilePage extends React.Component {
                 {/*Username*/}
                 <NameWrapper>
                     <Typography variant="h1" component="h2">
-                        Profile of {this.state.userName}
+                        Profile of {NameLengthChecker(this.state.userName)}
                     </Typography>
                 </NameWrapper>
 

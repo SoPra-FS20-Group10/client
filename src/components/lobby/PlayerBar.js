@@ -12,6 +12,7 @@ import activateSFX from "../../sounds/activate.wav";
 import deactivateSFX from "../../sounds/deactivate.wav";
 import subtleClick from "../../sounds/subtle_click.wav";
 
+import NameLengthChecker from "../shared/Other/NameLengthChecker";
 /**
  * LobbylistEntry Model
  */
@@ -190,7 +191,7 @@ class PlayerBar extends React.Component {
 
                 <PlayerBarContainer>
 
-                    <Label>Player Name: {this.state.playerName}</Label>
+                    <Label>Player Name: {NameLengthChecker(this.state.playerName)}</Label>
                     <Label>Player ID: {this.state.playerId}</Label>
 
                     <ButtonContainer>

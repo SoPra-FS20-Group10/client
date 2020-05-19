@@ -10,6 +10,7 @@ import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NameLengthChecker from "../shared/Other/NameLengthChecker";
 
 
 const ScoreBoardWrapper = styled.div`
@@ -53,8 +54,8 @@ const Username = styled.label`
 
 const HighlightWrapper = styled.div`
     border-radius: 4pt;
-    padding-left: 4em;
-    padding-right: 4em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
     border: 1px solid white;
    
 `;
@@ -166,7 +167,7 @@ class ScoreBoard extends React.Component {
                                     {this.state.currentPlayerId == player.id ? (
                                     <HighlightWrapper key={player.id} >
                                         <Row >
-                                            <UsernameHighlighted> {player.username}</UsernameHighlighted>
+                                            <UsernameHighlighted> {NameLengthChecker(player.username)}</UsernameHighlighted>
                                         </Row>
                                         <Row className='text-center'>
                                             <ScoreHighlighted>Points: {player.score}</ScoreHighlighted>
@@ -175,7 +176,7 @@ class ScoreBoard extends React.Component {
                                 ) : (
                                     <div key={player.id}>
                                         <Row>
-                                            <Username> {player.username}</Username>
+                                            <Username> {NameLengthChecker(player.username)}</Username>
                                         </Row>
                                         <Row className='text-center'>
                                             <Score>Points: {player.score}</Score>

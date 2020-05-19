@@ -11,6 +11,7 @@ import {CloseButton} from "react-bootstrap";
 import LobbyList from "../overview/Lobbylist";
 
 import subtleClick from '../../sounds/subtle_click.wav'
+import NameLengthChecker from "../shared/Other/NameLengthChecker";
 
 const Container = styled(BaseContainer)`
     color: white;
@@ -190,7 +191,7 @@ class EndScreenPage extends React.Component {
                     return (
                         <tr className='winner' key={id}>
                             <td>{id}</td>
-                            <td>{username}</td>
+                            <td>{NameLengthChecker(username)}</td>
                             <td>{status}</td>
                             <td>{score}</td>
                         </tr>
@@ -200,7 +201,7 @@ class EndScreenPage extends React.Component {
                     return (
                         <tr className='light' key={id}>
                             <td>{id}</td>
-                            <td>{username}</td>
+                            <td>{NameLengthChecker(username)}</td>
                             <td>{status}</td>
                             <td>{score}</td>
                         </tr>
@@ -209,7 +210,7 @@ class EndScreenPage extends React.Component {
                     return (
                         <tr className='dark' key={id}>
                             <td>{id}</td>
-                            <td>{username}</td>
+                            <td>{NameLengthChecker(username)}</td>
                             <td>{status}</td>
                             <td>{score}</td>
                         </tr>
