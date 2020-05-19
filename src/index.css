@@ -36,22 +36,22 @@ button {
   box-sizing: border-box;
 }
 
-/*Table Header*/
-th {
-  background-color: rgb(90, 93, 99);
-}
+/*!*Table Header*!*/
+/*th {*/
+/*  background-color: rgb(90, 93, 99);*/
+/*}*/
 
-/*Table entry with uneven index*/
-tr.light{
-  background: rgba(150, 150, 150, 0.5);
-  color: white;
-}
+/*!*Table entry with uneven index*!*/
+/*tr.light{*/
+/*  background: rgba(150, 150, 150, 0.5);*/
+/*  color: white;*/
+/*}*/
 
-/*Table entry with even index*/
-tr.dark{
-  background: rgba(100, 100, 100, 0.5);;
-  color: white;
-}
+/*!*Table entry with even index*!*/
+/*tr.dark{*/
+/*  background: rgba(100, 100, 100, 0.5);;*/
+/*  color: white;*/
+/*}*/
 
 /*Table entry for winner on endscreen*/
 tr.winner{

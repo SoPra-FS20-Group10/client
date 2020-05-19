@@ -141,7 +141,7 @@ class Lobbylist extends React.Component {
         this.handleOpenLobbyCreateSnackBar = this.handleOpenLobbyCreateSnackBar.bind(this);
     }
 
-    async componentDidMount() {
+     componentDidMount() {
         this.fetchLobbies();
         try {
             this.timerID = setInterval(async () => {

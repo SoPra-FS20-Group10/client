@@ -169,7 +169,8 @@ class ProfilePage extends React.Component {
             playtime: null,
             winPercentage: null,
             wonGames: null,
-            matches: null,
+            matchesScore: [],
+            matchesTime: [],
 
 
             // example data for the stat overview
@@ -211,7 +212,7 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
-            // console.log(response)
+            console.log(response)
 
             this.setState({userName: response.data.username})
             this.setState({overallScore: response.data.overallScore})
@@ -219,12 +220,12 @@ class ProfilePage extends React.Component {
             this.setState({playtime: response.data.playtime})
             this.setState({winPercentage: response.data.winPercentage})
             this.setState({wonGames: response.data.wonGames})
-            this.setState({matches: response.data.historyList})
+            this.setState({matchesScore: response.data.historyList})
+            this.setState({matchesTime: response.data.historyTimeList})
         } catch (error) {
             alert(error);
         }
     }
-
 
     handleInputChange(key, value) {
         this.setState({[key]: value});
@@ -300,12 +301,12 @@ class ProfilePage extends React.Component {
                 {/*/!*TODO: Refine Chart view*!/*/}
 
                 <GraphWrapper>
-                    <Chart matches={this.state.matches}/>
+                    <Chart matches={this.state.matchesScore}/>
                 </GraphWrapper>
 
                 {/*TODO: Implement match-history view*/}
                 <MatchHistoryWrapper>
-                    <MatchHistory matches={this.state.matches}/>
+                    <MatchHistory matches={this.state.matchesScore} times={this.state.matchesTime}/>
                 </MatchHistoryWrapper>
 
 
