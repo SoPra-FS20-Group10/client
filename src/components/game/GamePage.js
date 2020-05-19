@@ -1031,7 +1031,7 @@ class GamePage extends React.Component {
             if (stoneIds.length > 0) {
                 await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
                 this.setState({isOpenExchangePieceSnackbar: true});
-                this.endTurn();
+               
             } else {
                 alert("You need to at least one piece to exchange!");
             }

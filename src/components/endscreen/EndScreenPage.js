@@ -137,9 +137,7 @@ class EndScreenPage extends React.Component {
     async leaveGame() {
         this.playSound(new Audio(subtleClick));
         let deleteGame = null;
-        alert(this.state.players.length);
         if (this.state.players.length === 1){
-            alert("setting deletegame to" + this.state.gameId.toString());
             deleteGame = this.state.gameId;
         }
         const requestBody = JSON.stringify({
