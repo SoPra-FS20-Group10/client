@@ -264,7 +264,7 @@ class ProfilePage extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <NavigationBar history={this.props} value={1} playerId={localStorage.getItem("current")}/>
+                <NavigationBar history={this.props} value={2} playerId={localStorage.getItem("current")}/>
 
                 {/*Username*/}
                 <NameWrapper>{this.state.userName}'s Profile</NameWrapper>
