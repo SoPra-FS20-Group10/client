@@ -12,39 +12,43 @@ import Modal from "react-modal";
 import {api} from "../../helpers/api";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-
+import Paper from '@material-ui/core/Paper';
 import subtleClick from "../../sounds/subtle_click.wav";
 import MatchHistory from "./MatchHistory";
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import 'typeface-roboto';
+import Typography from '@material-ui/core/Typography';
+import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
+import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
+import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
+import FormatBoldIcon from '@material-ui/icons/FormatBold';
+import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
+import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 
 const NameWrapper = styled.div`
     border-radius: 4pt;
-    margin-top: 2%;
+    margin-top: 5em;
     margin-bottom: 1em;
     margin-left: 5%;
     padding: 2%;
-    background: grey;
-    float:left;
-    text-align:left;
+    float:center;
+    text-align:center;
 `;
 
 const StatsWrapper = styled.div`
     border-radius: 4pt;
-    margin-left: 5%;
-    padding: 2%;
-    width: 90%;
-    background: grey;
-    float:left;
-    text-align:left;
+    width: 100%;
+    float:center;
+    text-align:center;
 `;
 
 const GraphWrapper = styled.div`
     border-radius: 4pt;
     margin-top: 5%;
-    margin-left: 5%;
-    padding: 5%;
     width: 60%;
     // height: 500pt;
-    background: grey;
     float:left;
     color: white;
      
@@ -54,7 +58,7 @@ const MatchHistoryWrapper = styled.div`
     border-radius: 4pt;
     margin-top: 5%;
     margin-left: 5%;
-    width: 25%;
+    width: 35%;
     // height: 500pt;
     background: grey;
     float:left;
@@ -88,6 +92,9 @@ const ButtonContainer3 = styled.div`
     margin-top: 2%;
     margin-left: 5%;
     float:left;
+    width: 100%;
+    align-items:left;
+    justify-items: left;
 `;
 
 const CredentialsPopupWrapper = styled.div`
@@ -154,6 +161,23 @@ const customStyles = {
     }
 };
 
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: 'fit-content',
+        border: `1px solid ${theme.palette.divider}`,
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: theme.palette.background.paper,
+        color: theme.palette.text.secondary,
+        '& svg': {
+            margin: theme.spacing(1.5),
+        },
+        '& hr': {
+            margin: theme.spacing(0, 0.5),
+        },
+    },
+}));
+
 // TODO: Functionality behind changing credentials
 // TODO: Fix scaling of charts (when resizing page)
 class ProfilePage extends React.Component {
@@ -191,7 +215,7 @@ class ProfilePage extends React.Component {
 
     }
 
-     componentDidMount() {
+    componentDidMount() {
         this.fetchUser();
         try {
             this.timerID = setInterval(() => {
@@ -259,6 +283,7 @@ class ProfilePage extends React.Component {
     }
 
     render() {
+
         // boolean that is true if player is on his / her own profile
         const isUser = this.state.userId == localStorage.getItem("current");
         return (
@@ -267,42 +292,82 @@ class ProfilePage extends React.Component {
                 <div className="bg-image"></div>
                 <NavigationBar history={this.props} value={2} playerId={localStorage.getItem("current")}/>
 
+
                 {/*Username*/}
-                <NameWrapper>{this.state.userName}'s Profile</NameWrapper>
+                <NameWrapper>
+                    <Typography variant="h1" component="h2">
+                        Profile of {this.state.userName}
+                    </Typography>
+                </NameWrapper>
 
                 {/*TODO: Implement stats overview*/}
                 <StatsWrapper>
-                    <Row>
-                        <Col>Overall Score</Col>
-                        <Col>{this.state.overallScore} </Col>
-                    </Row>
 
-                    <Row>
-                        <Col># Played Games</Col>
-                        <Col>{this.state.playedGames} </Col>
-                    </Row>
+                    <Paper elevation={3}>
+                        <Grid container alignItems="center" style={{justifyContent: 'space-evenly'}}>
+                            <div style={{
+                                display: 'flex',
+                                padding: '2em',
+                                flexDirection: 'row',
+                                flexFlow: 'column wrap'
+                            }}>
+                                <div>Overall Score</div>
+                                <div>{this.state.overallScore}</div>
+                            </div>
+                            <Divider orientation="vertical" flexItem/>
+                            <div style={{
+                                display: 'flex',
+                                padding: '2em',
+                                flexDirection: 'row',
+                                flexFlow: 'column wrap'
+                            }}>
+                                <div>Played Games</div>
+                                <div>{this.state.playedGames}</div>
+                            </div>
+                            <Divider orientation="vertical" flexItem/>
+                            <div style={{
+                                display: 'flex',
+                                padding: '2em',
+                                flexDirection: 'row',
+                                flexFlow: 'column wrap'
+                            }}>
+                                <div>Won Games</div>
+                                <div>{this.state.wonGames}</div>
+                            </div>
+                        </Grid>
+                    </Paper>
 
-                    <Row>
-                        <Col>Playtime</Col>
-                        <Col>{this.state.playtime} </Col>
-                    </Row>
+                    {/*<Row>*/}
+                    {/*    <Col># Played Games</Col>*/}
+                    {/*    <Col>{this.state.playedGames} </Col>*/}
+                    {/*</Row>*/}
 
-                    <Row>
-                        <Col>Win-%</Col>
-                        <Col>{this.state.winPercentage} </Col>
-                    </Row>
+                    {/*<Row>*/}
+                    {/*    <Col>Playtime</Col>*/}
+                    {/*    <Col>{this.state.playtime} </Col>*/}
+                    {/*</Row>*/}
 
-                    <Row>
-                        <Col># Won Games</Col>
-                        <Col>{this.state.wonGames} </Col>
-                    </Row>
+                    {/*<Row>*/}
+                    {/*    <Col>Win-%</Col>*/}
+                    {/*    <Col>{this.state.winPercentage} </Col>*/}
+                    {/*</Row>*/}
+
+                    {/*<Row>*/}
+                    {/*    <Col># Won Games</Col>*/}
+                    {/*    <Col>{this.state.wonGames} </Col>*/}
+                    {/*</Row>*/}
                 </StatsWrapper>
 
                 {/*/!*TODO: Refine Chart view*!/*/}
 
                 <GraphWrapper>
-                    <Chart matches={this.state.matchesScore}/>
+                    <Paper elevation={3}>
+                        <div style={{margin: '5pt'}}>
+                            <Chart matches={this.state.matchesScore}/>
+                        </div>
+                    </Paper>
                 </GraphWrapper>
+
 
                 {/*TODO: Implement match-history view*/}
                 <MatchHistoryWrapper>

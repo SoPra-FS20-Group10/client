@@ -92,7 +92,7 @@ const Chart = ({matches}) => {
                 legend: {
                     display: false,
                     labels: {
-                        fontColor: "white",
+                        fontColor: "rgba(0, 0, 0, 0.87)",
                         fontSize: 18
                     }
                 },
@@ -103,16 +103,16 @@ const Chart = ({matches}) => {
                         scaleLabel: {
                             display: true,
                             labelString: 'Past 10 Games',
-                            fontColor: 'white',
+                            fontColor: 'rgba(0, 0, 0, 0.87)',
                             fontSize: 10
                         },
                         ticks: {
                             reverse: true,
-                            fontColor: "white",
+                            fontColor: "rgba(0, 0, 0, 0.87)",
                             fontSize: 14
                         },
                         gridLines: {
-                            color: 'white',
+                            color: 'rgba(0, 0, 0, 0.87)',
                             drawOnChartArea: false
                         }
                     }],
@@ -121,16 +121,16 @@ const Chart = ({matches}) => {
                         scaleLabel: {
                             display: true,
                             labelString: 'Score',
-                            fontColor: 'white',
+                            fontColor: 'rgba(0, 0, 0, 0.87)',
                             fontSize: 10
                         },
                         ticks: {
                             beginAtZero: true,
-                            fontColor: "white",
+                            fontColor: "rgba(0, 0, 0, 0.87)",
                             fontSize: 14
                         },
                         gridLines: {
-                            color: 'white',
+                            color: 'rgba(0, 0, 0, 0.87)',
                             drawOnChartArea: false
                         }
                     }]
