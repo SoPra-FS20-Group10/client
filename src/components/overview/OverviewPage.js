@@ -76,7 +76,7 @@ class OverviewPage extends React.Component {
     return (
       <Container>
         {/*<div className="bg-image"></div>*/}
-        <NavigationBar playerId={localStorage.getItem("current")}/>
+        <NavigationBar history={this.props} value={0} playerId={localStorage.getItem("current")}/>
           {this.currentDisplay()}
       </Container>
     );

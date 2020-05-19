@@ -1,36 +1,22 @@
 import React from 'react';
-import styled from 'styled-components';
-
-
 import {withRouter} from 'react-router-dom';
-
 import 'react-tabs/style/react-tabs.css';
-
-import Button from 'react-bootstrap/Button'
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BaseContainer} from "../helpers/layout";
-import {CloseButton} from "react-bootstrap";
-
 import subtleClick from "../sounds/subtle_click.wav";
-
-
-const Container = styled(BaseContainer)`
-  color: white;
-  text-align: center;
-  width:100%;
-  margin:auto;
-`;
-
-
-const ButtonContainer = styled.div`
-  width: 33.3%;
-  float:left;
-`;
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 
 class NavigationBar extends React.Component {
-   goToMainPage = () => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: props.value
+        };
+    }
+
+    goToMainPage = () => {
         this.playSound(new Audio(subtleClick));
         this.props.history.push({
             pathname: '/game/overview',
@@ -67,27 +53,37 @@ class NavigationBar extends React.Component {
         };
     }
 
+    handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+        this.setState({value: newValue})
+        console.log(newValue)
+        switch (newValue) {
+            case 0:
+                this.goToMainPage()
+                break
+            case 1:
+                this.goToLeaderboard()
+                break
+            case 2:
+                this.goToProfile()
+                break
+        }
+    };
+    
     render() {
-
         return (
-            <Container>
-                <ButtonContainer>
-                    <Button variant="outline-warning" size="lg" block onClick={this.goToMainPage}>
-                        Overview
-                    </Button>
-                </ButtonContainer>
-                <ButtonContainer>
-                    <Button variant="outline-warning" size="lg" block onClick={this.goToLeaderboard}>
-                        Leaderboard
-                    </Button>
-                </ButtonContainer>
-                <ButtonContainer>
-                    <Button variant="outline-warning" size="lg" block onClick={this.goToProfile}>
-                        Profile
-                    </Button>
-                </ButtonContainer>
-
-            </Container>
+            <Paper>
+                <Tabs
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered
+                >
+                    <Tab label="Overview"/>
+                    <Tab label="Leaderboard"/>
+                    <Tab label="Profile"/>
+                </Tabs>
+            </Paper>
         );
     }
 }

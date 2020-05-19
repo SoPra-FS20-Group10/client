@@ -165,7 +165,7 @@ class LeaderboardPage extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <NavigationBar playerId={localStorage.getItem("current")}/>
+                <NavigationBar  history={this.props} value={1} playerId={localStorage.getItem("current")}/>
 
                 {/*leaderboard*/}
                 <div>
