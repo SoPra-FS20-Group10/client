@@ -129,14 +129,15 @@ class Overview extends React.Component {
         try {
             this.timerID = setInterval(async () => {
                 this.getMessages();
+                // if(this.props.history.location.state){
+                //     this.deleteGame(this.props.history.location.state.deleteGame);
+                // }
             }, 500);
         } catch (e) {
             console.log(e);
         }
-        console.log(this.props)
-        if(this.props.history.location.state){
-            this.deleteGame(this.props.history.location.state.deleteGame);
-        }
+        // console.log(this.props)
+
     }
 
     componentWillUnmount() {

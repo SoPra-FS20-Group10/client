@@ -58,45 +58,21 @@ class LobbylistEntry extends React.Component {
             isRunning: false,
         };
 
-        try {
-            this.timerID = setInterval(async () => {
-                this.updateRunning();
-            }, 1000);
-        } catch (e) {
-            console.log(e);
-        }
-        this.goToLobby=this.goToLobby.bind(this);
-        this.getLobbyPlayers=this.getLobbyPlayers.bind(this);
-        this.updateRunning=this.updateRunning.bind(this);
+        // try {
+        //     this.timerID = setInterval(async () => {
+        //     }, 1000);
+        // } catch (e) {
+        //     console.log(e);
+        // }
+        this.goToLobby = this.goToLobby.bind(this);
+        this.getLobbyPlayers = this.getLobbyPlayers.bind(this);
+        this.updateRunning = this.updateRunning.bind(this);
 
-    }
-
-    async updateRunning(){
-
-        try{
-            let response = await api.get("/games/" + this.state.lobbyId);
-
-
-            let status = response.data.status;
-            console.log(status);
-            if (status === "RUNNING"){
-                this.setState({
-                    isRunning: true,
-                })
-            }
-        }catch(error){
-            console.log(error);
-        }
-
-
-
-    }
-
-    handleInputChange(key, value) {
-        this.setState({[key]: value});
     }
 
     componentDidMount() {
+        this.getLobbyPlayers();
+        this.updateRunning();
 
         this.setState({
             lobbyId: this.props.lobbyId,
@@ -105,6 +81,7 @@ class LobbylistEntry extends React.Component {
         try {
             this.timerID = setInterval(async () => {
                 this.getLobbyPlayers();
+                this.updateRunning();
             }, 500);
         } catch (e) {
             console.log(e);
@@ -113,6 +90,32 @@ class LobbylistEntry extends React.Component {
 
     componentWillUnmount() {
         clearInterval(this.timerID);
+    }
+
+    async updateRunning() {
+
+        try {
+            let response = await api.get("/games/" + this.state.lobbyId);
+
+            let status = response.data.status;
+            if(status=="ENDED"){
+                this.componentWillUnmount()
+            }
+
+            if (status === "RUNNING") {
+                this.setState({
+                    isRunning: true,
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+
+    }
+
+    handleInputChange(key, value) {
+        this.setState({[key]: value});
     }
 
 
@@ -190,19 +193,20 @@ class LobbylistEntry extends React.Component {
 
                     <Label>Players: {this.state.playerCount}/4</Label>
 
-<Form>
-                    <Form.Group controlId="formPassword">
-                        <Form.Control
-                            onChange={e => {
-                                this.handleInputChange('lobbyPassword', e.target.value);
-                            }}
-                            type="email" placeholder="Enter password"/>
-                    </Form.Group>
-</Form>
-                <ButtonContainer>
-                <Button variant="success" size="sm" block onClick={this.goToLobby} disabled={this.state.isRunning}>
-                   Join
-                </Button>
+                    <Form>
+                        <Form.Group controlId="formPassword">
+                            <Form.Control
+                                onChange={e => {
+                                    this.handleInputChange('lobbyPassword', e.target.value);
+                                }}
+                                type="email" placeholder="Enter password"/>
+                        </Form.Group>
+                    </Form>
+                    <ButtonContainer>
+                        <Button variant="success" size="sm" block onClick={this.goToLobby}
+                                disabled={this.state.isRunning}>
+                            Join
+                        </Button>
 
                     </ButtonContainer>
 

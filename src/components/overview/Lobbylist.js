@@ -172,6 +172,7 @@ class Lobbylist extends React.Component {
         // POST --> Return Free LobbylistEntry ID
         try {
             const response = await api.get("/games/");
+
             this.setState({allLobbies: response.data})
             // return response.data;
         } catch (error) {
@@ -236,13 +237,19 @@ class Lobbylist extends React.Component {
         })
     }
 
-    // TODO: Find method to not render this at 60Hz
     showLobbies() {
-        // this.fetchLobbies();
-
         if (this.state.allLobbies) {
 
             let lobbies = this.state.allLobbies;
+
+            // remove games that are running / ended from list of lobbies which are to be shown
+            for (var i = 0; i < lobbies.length; i++) {
+                if(lobbies[0]['status'] == 'ENDED'){
+                    if (i > -1) {
+                        lobbies.splice(i, 1);
+                    }
+                }
+            }
 
             let listLobbies = lobbies.map((lobby) =>
 

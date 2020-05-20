@@ -64,7 +64,7 @@ class EndScreenPage extends React.Component {
             gameId: localStorage.getItem("currentGame"),
             playerId: localStorage.getItem("current"),
             playerName: localStorage.getItem("name"),
-            deleteGame: null,
+            // deleteGame: null,
         }
 
         this.leaveGame = this.leaveGame.bind(this);
@@ -137,10 +137,10 @@ class EndScreenPage extends React.Component {
 
     async leaveGame() {
         this.playSound(new Audio(subtleClick));
-        let deleteGame = null;
-        if (this.state.players.length === 1){
-            deleteGame = this.state.gameId;
-        }
+        // let deleteGame = null;
+        // if (this.state.players.length === 1){
+        //     deleteGame = this.state.gameId;
+        // }
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token")
         });
@@ -156,10 +156,10 @@ class EndScreenPage extends React.Component {
                     state: {
                         playerId: this.state.playerId,
                         playerName: this.state.playerName,
-                        deleteGame: deleteGame,
+                        // deleteGame: deleteGame,
                     }
                 });
-            window.location.reload();
+            // window.location.reload();
 
         } catch (error) {
             console.log(error);
