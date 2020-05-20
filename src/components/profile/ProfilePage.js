@@ -224,7 +224,7 @@ class ProfilePage extends React.Component {
                     this.setState({userId: parseInt(window.location.href.split('/').pop(), 10)})
                 }
                 this.fetchUser();
-            }, 500);
+            }, 2000);
         } catch (e) {
             console.log(e);
         }
@@ -237,16 +237,18 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
-            console.log(response)
+            // console.log(response)
 
-            this.setState({userName: response.data.username})
-            this.setState({overallScore: response.data.overallScore})
-            this.setState({playedGames: response.data.playedGames})
-            this.setState({playtime: response.data.playtime})
-            this.setState({winPercentage: response.data.winPercentage})
-            this.setState({wonGames: response.data.wonGames})
-            this.setState({matchesScore: response.data.historyList})
-            this.setState({matchesTime: response.data.historyTimeList})
+            this.setState({
+                userName: response.data.username,
+                overallScore: response.data.overallScore,
+                playedGames: response.data.playedGames,
+                playtime: response.data.playtime,
+                winPercentage: response.data.winPercentage,
+                wonGames: response.data.wonGames,
+                matchesScore: response.data.historyList.reverse(),
+                matchesTime: response.data.historyTimeList.reverse(),
+            })
         } catch (error) {
             alert(error);
         }
@@ -281,6 +283,41 @@ class ProfilePage extends React.Component {
         sfx.onended = function () {
             sfx.remove() //Remove when played.
         };
+    }
+
+    async changeName() {
+        const requestBody = JSON.stringify({
+            id: Number(localStorage.getItem("current")),
+            username: this.state.tempUsername,
+            password: null,
+            birthday: null
+        });
+
+        try {
+            await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
+            this.fetchUser();
+            this.handleCloseModalName();
+        } catch (error) {
+            alert(error);
+        }
+    }
+
+
+    async changePassword() {
+        const requestBody = JSON.stringify({
+            id: Number(localStorage.getItem("current")),
+            username: null,
+            password: this.state.tempPwA,
+            birthday: null
+        });
+
+        try {
+            await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
+            this.fetchUser();
+            this.handleCloseModalPassword();
+        } catch (error) {
+            alert(error);
+        }
     }
 
     render() {
@@ -459,41 +496,6 @@ class ProfilePage extends React.Component {
 
             </Container>
         );
-    }
-
-    async changeName() {
-        const requestBody = JSON.stringify({
-            id: Number(localStorage.getItem("current")),
-            username: this.state.tempUsername,
-            password: null,
-            birthday: null
-        });
-
-        try {
-            await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
-            this.fetchUser();
-            this.handleCloseModalName();
-        } catch (error) {
-            alert(error);
-        }
-    }
-
-
-    async changePassword() {
-        const requestBody = JSON.stringify({
-            id: Number(localStorage.getItem("current")),
-            username: null,
-            password: this.state.tempPwA,
-            birthday: null
-        });
-
-        try {
-            await api.put("/users/" + Number(localStorage.getItem("current")), requestBody);
-            this.fetchUser();
-            this.handleCloseModalPassword();
-        } catch (error) {
-            alert(error);
-        }
     }
 }
 
