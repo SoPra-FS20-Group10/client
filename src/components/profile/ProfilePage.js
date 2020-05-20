@@ -67,7 +67,7 @@ const MatchHistoryWrapper = styled.div`
 
 const Container = styled(BaseContainer)`
     color: white;
-    text-align: center;
+    // text-align: center;
     width:100%;
     margin:auto;
     
@@ -91,7 +91,6 @@ const ButtonContainer = styled.div`
 
 const ButtonContainer3 = styled.div`
     margin-top: 2%;
-    margin-left: 5%;
     float:left;
     width: 100%;
     align-items:left;
@@ -237,7 +236,7 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
-            // console.log(response)
+            console.log(response)
 
             this.setState({
                 userName: response.data.username,
@@ -451,7 +450,8 @@ class ProfilePage extends React.Component {
                     </CredentialsPopupWrapper>
                     <ButtonContainer>
                         <Button
-                            disabled={!this.state.tempUsername}
+                            disabled={!this.state.tempUsername
+                            || !!this.state.tempUsername.match(/^[\s]*$/i)}
                             variant="dark" size="sm" block onClick={this.changeName}>
                             Save Changes
                         </Button>
@@ -486,7 +486,8 @@ class ProfilePage extends React.Component {
                     </CredentialsPopupWrapper>
                     <ButtonContainer>
                         <Button
-                            disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null}
+                            disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null
+                            || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}
                             variant="dark" size="sm" block onClick={this.changePassword}>
                             Save Changes
                         </Button>
