@@ -120,12 +120,13 @@ class Overview extends React.Component {
         this.deleteGame = this.deleteGame.bind(this);
         this.handleOpenRules=this.handleOpenRules.bind(this);
         this.handleCloseRules=this.handleCloseRules.bind(this);
-    }
-
-    componentDidMount() {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getMessages = this.getMessages.bind(this);
+    }
+
+    componentDidMount() {
+        this.getMessages()
         try {
             this.timerID = setInterval(async () => {
                 this.getMessages();
@@ -241,7 +242,7 @@ class Overview extends React.Component {
                 time: n,
                 message: message
             });
-            let response = await api.put("/chat/", requestBody);
+            let response = await api.put("/chat", requestBody);
         } catch (error) {
             console.log(error);
         }
@@ -251,7 +252,7 @@ class Overview extends React.Component {
 
     async getMessages() {
         try {
-            let response = await api.get("chat/");
+            let response = await api.get("/chat");
             this.setState({
                 messages: response.data
             });
