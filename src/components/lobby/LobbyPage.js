@@ -206,30 +206,69 @@ class LobbyPage extends React.Component {
 
     async leaveLobby() {
 
+
+        console.log(this.state);
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
         });
         const headers = {
             'Authorization': null,
         };
-        try {
-            let audio = new Audio(subtleClick);
-            this.playSound(audio);
 
-            // Log out user in backend
-            await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
-            this.props.history.push(
-                {
-                    pathname: `/game/overview`,
-                    state: {
-                        playerId: this.state.playerId,
-                        playerName: this.state.playerName
-                    }
+        // If lobbyleader leaves the game, logout all users and delete the game
+        if (this.state.isLobbyLeader) {
+
+
+            let allReady = this.allPlayersReady();
+            if (allReady) {
+                const requestBody = JSON.stringify({
+                    token: localStorage.getItem("token"),
                 });
-        } catch (error) {
-            console.log(error);
+
+                try {
+                    // Start game in backend
+                    await api.put("/games/" + this.state.lobbyId, requestBody);
+                } catch (error) {
+                    console.log(error);
+                }
+
+                try {
+                    // Log out user in backend
+                    await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
+                } catch (error) {
+                    console.log(error);
+                }
+
+                try {
+
+                    await api.delete("/games/" + this.state.lobbyId);
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         }
-    }
+
+        // if not lobbyleader, leave lobby without deletion
+        else {
+            try {
+                let audio = new Audio(subtleClick);
+                this.playSound(audio);
+
+                // Log out user in backend
+                await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
+                this.props.history.push(
+                    {
+                        pathname: `/game/overview`,
+                        state: {
+                            playerId: this.state.playerId,
+                            playerName: this.state.playerName
+                        }
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        }
 
     checkLobbyLeader() {
 
