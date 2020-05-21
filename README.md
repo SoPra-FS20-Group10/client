@@ -1,36 +1,33 @@
 ## Introduction
 
+![Game](/readme_images/Introduction.png?raw=true "Optional Title")
+
 This Scrabble game is a project for the course "SoPra" from the spring semester 2020 at the University of Zurich. Our aim was to create a functionning Scrabble game which can be played with two up to four people. The application provides other useful functionality such as account creating, leaderboard, chat, lobbies, etc.
 
-##  Technologies used
+## Technologies used
 
-The game is implemented with React in the frontend. It uses a RESTful API.
-The server is implemented in java.
-We use Gradlew as our Build-Management-Automation-Tool.
+The game is implemented with:
+* React in the frontend - [React](https://www.reactjs.com).
+* Using a RESTful API - [REST](https://restfulapi.net/).
+* The server is implemented in Java - [Java](https://www.java.com).
+* Gradle as our Build-Management-Automation-Tool - [Gradle](https://www.Gradle.com).
+* For code quality analysis, we use SonarQube - [SonarQube](https://www.sonarQube.org).
 
-For code quality analysis, we use SonarQube.
-
-##  High-level components
+## High-level components
 
 ### GamePage [GamePage.js](src/components/game/GamePage.js)
 
 The GamePage Class is where the main functionality for the game is implemented in the frontend. The board is obtained from the backend through the getBoard() and initBoard() functions.
 
-###  Lobbylist [Lobbylist.js](src/components/overview/Lobbylist.js)
+### Lobbylist [Lobbylist.js](src/components/overview/Lobbylist.js)
 
 The Lobbylist class offers the Lobby join functionality. For all existing Lobbies, it lists a corresponding LobbylistEntry, where the user has to type the Lobby password (if it exists) in order to join an existing Lobby. The Lobby can only be joined if it's not already running.
 
-###  LobbyPage [Lobbypage.js](src/components/lobby/LobbyPage.js)
+### LobbyPage [Lobbypage.js](src/components/lobby/LobbyPage.js)
 
 The LobbyPage class is used for the Lobby functionality. All the players in the lobby are listed. The players can set their own readystatus, which is also shown to the other players in the lobby. When 2-4 players are in the lobby and all players are ready, the lobbyleader can start the game and all players will be redirected to the GamePage.
 
-
-
-
-How are they correlated? Reference the main class, file or function in the README text
-with a link.
-
-##  Launch & Deployment
+## Launch & Deployment
 
 For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
 
@@ -51,10 +48,7 @@ You will also see any lint errors in the console (use Google Chrome!).
 
 
 
-##  Illustrations: In your client repository only, briefly describe and illustrate the main user
-flow(s) of your interface. How does it work (without going into too much detail)? Feel free
-to include a few screenshots of your application.
-
+## Illustrations
 
 This is the login screen of the game. It shows up when you open the game for the first time. You have two options:
 1. Login as a guest. If you do so, your stats wont be persisted.
@@ -110,21 +104,29 @@ You can do the following actions:
 ![game](/readme_images/game.png?raw=true "Optional Title")
 
 
-##  Roadmap
+## Roadmap
 
 Some additional features which would be nice to have would be:
 
-* Spectator Mode
-* Password Recovery System
-* Registering with Email
+### Spectator Mode
+
+With the spectator mode, players would be able to join a running game / lobby to be able to watch the whole game without participating. This would bee useful for tournaments.
+
+### Password Recovery System
+
+With the password recovery system, players would be able to recover their password. This can be done either through mail (see next) or some kind of personal question like "What's the name of your first friend?"
+
+### Registering with Email
+
+If the user can register with the mail (which he would have to confirm), he could reset his password. Also, he can be notified about changes.
 
 
-##  Authors and acknowledgement
+## Authors and acknowledgement
 
-Patrick Looser
-Pascal Marty
-Jan Schnyder
-Tim Brunner
+* [Patrick Looser](https://github.com/ploose)
+* [Pascal Marty](https://github.com/Wassermalone)
+* [Jan Schnyder](https://github.com/shnippi)
+* [Tim Brunner](https://github.com/Tannebaum007)
 
 
 ##  License
@@ -142,4 +144,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-You find a good template4, as well as a curated list of good READMEs5 online.
