@@ -9,7 +9,7 @@ import Chart from "./Chart";
 import NavigationBar from "../../views/NavigationBar";
 import {CloseButton} from "react-bootstrap";
 import Modal from "react-modal";
-import {api} from "../../helpers/api";
+import {api, handleError} from "../../helpers/api";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Paper from '@material-ui/core/Paper';
@@ -27,6 +27,18 @@ import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import NameLengthChecker from "../shared/Other/NameLengthChecker";
+import TextField from '@material-ui/core/TextField';
+
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/ExitToApp';
+import {ExitIcon} from "@livechat/ui-kit";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@material-ui/icons/Check';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import DoneIcon from '@material-ui/icons/Done';
+import {TextFields} from "@material-ui/icons";
 
 const NameWrapper = styled.div`
     border-radius: 4pt;
@@ -156,8 +168,9 @@ const customStyles = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        padding: "0pt",
-        width: "55%"
+        padding: 0,
+        border: 'none'
+        // width: "55%"
     }
 };
 
@@ -178,6 +191,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const useStylesPopup = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            '& .MuiTextField-root': {
+                margin: theme.spacing(1),
+                width: 200,
+            },
+        },
+    }),
+);
+
 // TODO: Functionality behind changing credentials
 // TODO: Fix scaling of charts (when resizing page)
 class ProfilePage extends React.Component {
@@ -195,6 +219,7 @@ class ProfilePage extends React.Component {
             wonGames: null,
             matchesScore: [],
             matchesTime: [],
+            modalErrorMsg: null,
 
 
             // example data for the stat overview
@@ -216,6 +241,7 @@ class ProfilePage extends React.Component {
     }
 
     componentDidMount() {
+        this.handleOpenModalName()
         this.fetchUser();
         try {
             this.timerID = setInterval(() => {
@@ -249,12 +275,12 @@ class ProfilePage extends React.Component {
                 matchesTime: response.data.historyTimeList.reverse(),
             })
         } catch (error) {
-            alert(error);
+            console.log(error)
         }
     }
 
     handleInputChange(key, value) {
-        this.setState({[key]: value});
+        this.setState({[key]: value.split(" ").join("")});
     }
 
     handleOpenModalName() {
@@ -264,7 +290,7 @@ class ProfilePage extends React.Component {
 
     handleCloseModalName() {
         this.playSound(new Audio(subtleClick));
-        this.setState({showModalName: false});
+        this.setState({showModalName: false, tempUsername: null, modalErrorMsg: null});
     }
 
     handleOpenModalPassword() {
@@ -274,7 +300,7 @@ class ProfilePage extends React.Component {
 
     handleCloseModalPassword() {
         this.playSound(new Audio(subtleClick));
-        this.setState({showModalPassword: false});
+        this.setState({showModalPassword: false, tempPwA: null, tempPwB: null, modalErrorMsg: null});
     }
 
     playSound(sfx) {
@@ -283,6 +309,7 @@ class ProfilePage extends React.Component {
             sfx.remove() //Remove when played.
         };
     }
+
 
     async changeName() {
         const requestBody = JSON.stringify({
@@ -297,7 +324,9 @@ class ProfilePage extends React.Component {
             this.fetchUser();
             this.handleCloseModalName();
         } catch (error) {
-            alert(error);
+            this.setState({modalErrorMsg: error.response.data.message})
+            console.log(this.state.modalErrorMsg)
+            // console.log(handleError(error))
         }
     }
 
@@ -315,7 +344,9 @@ class ProfilePage extends React.Component {
             this.fetchUser();
             this.handleCloseModalPassword();
         } catch (error) {
-            alert(error);
+            this.setState({modalErrorMsg: error.response.data.message})
+            console.log(this.state.modalErrorMsg)
+            // alert(error);
         }
     }
 
@@ -374,28 +405,7 @@ class ProfilePage extends React.Component {
                         </Grid>
                     </Paper>
 
-                    {/*<Row>*/}
-                    {/*    <Col># Played Games</Col>*/}
-                    {/*    <Col>{this.state.playedGames} </Col>*/}
-                    {/*</Row>*/}
-
-                    {/*<Row>*/}
-                    {/*    <Col>Playtime</Col>*/}
-                    {/*    <Col>{this.state.playtime} </Col>*/}
-                    {/*</Row>*/}
-
-                    {/*<Row>*/}
-                    {/*    <Col>Win-%</Col>*/}
-                    {/*    <Col>{this.state.winPercentage} </Col>*/}
-                    {/*</Row>*/}
-
-                    {/*<Row>*/}
-                    {/*    <Col># Won Games</Col>*/}
-                    {/*    <Col>{this.state.wonGames} </Col>*/}
-                    {/*</Row>*/}
                 </StatsWrapper>
-
-                {/*/!*TODO: Refine Chart view*!/*/}
 
                 <GraphWrapper>
                     <Paper elevation={3}>
@@ -405,16 +415,12 @@ class ProfilePage extends React.Component {
                     </Paper>
                 </GraphWrapper>
 
-
-                {/*TODO: Implement match-history view*/}
                 <MatchHistoryWrapper>
                     <MatchHistory matches={this.state.matchesScore} times={this.state.matchesTime}/>
                 </MatchHistoryWrapper>
 
 
                 {/*Buttons for editing credentials*/}
-
-
                 {isUser ?
                     <ButtonContainer3>
 
@@ -434,29 +440,55 @@ class ProfilePage extends React.Component {
                     contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
-                    <CredentialsPopupWrapper>
-                        <CloseButton onClick={this.handleCloseModalName}/>
-                        <Title>
-                            <Label>Change Username</Label>
-                        </Title>
-                        {/*<MyInputLabel> LOBBY NAME</MyInputLabel>*/}
-                        <InputFieldWrapper>
-                            <InputField
-                                placeholder="New Username"
-                                onChange={e => {
-                                    this.handleInputChange('tempUsername', e.target.value);
-                                }}/>
-                        </InputFieldWrapper>
-                    </CredentialsPopupWrapper>
-                    <ButtonContainer>
-                        <Button
-                            disabled={!this.state.tempUsername
-                            || !!this.state.tempUsername.match(/^[\s]*$/i)}
-                            variant="dark" size="sm" block onClick={this.changeName}>
-                            Save Changes
-                        </Button>
-                    </ButtonContainer>
+                    <Paper elevation={3} style={{padding: '1em'}}>
+                        <form className={useStylesPopup} noValidate autoComplete="off">
+                            <div>
+                                <Typography variant="body1" component="h2">
+                                    Enter new username
+                                </Typography>
+                                <TextField
+                                    id="standard-password-input"
+                                    label="New Username"
+                                    type="name"
+                                    fullWidth
+                                    margin="normal"
+                                    variant="outlined"
+                                    value={this.state.tempUsername}
+                                    error={this.state.modalErrorMsg != null
+                                    && !this.state.modalErrorMsg !== 'Username exists already, please choose another one.'
+                                    }
+                                    helperText={this.state.modalErrorMsg != null
+                                    && !this.state.modalErrorMsg !== 'Username exists already, please choose another one.'
+                                        ? 'Username is already taken' : null
+                                    }
+
+                                    onChange={e => {
+                                        this.handleInputChange('tempUsername', e.target.value);
+                                    }}
+                                />
+
+                            </div>
+
+                            <div>
+                                <IconButton aria-label="delete">
+                                    <ArrowBackIcon
+                                        onClick={this.handleCloseModalName}
+                                    />
+                                </IconButton>
+
+                                <IconButton
+                                    style={{float: 'right'}}
+                                    disabled={!this.state.tempUsername || !!this.state.tempUsername.match(/^[\s]*$/i)}
+                                    onClick={this.changeName}
+                                >
+                                    <CheckCircleOutlineIcon/>
+                                </IconButton>
+                            </div>
+
+                        </form>
+                    </Paper>
                 </Modal>
+
 
                 {/*Modal for Password-Popup*/}
                 <Modal
