@@ -241,7 +241,7 @@ class ProfilePage extends React.Component {
     }
 
     componentDidMount() {
-        this.handleOpenModalName()
+        this.handleOpenModalPassword()
         this.fetchUser();
         try {
             this.timerID = setInterval(() => {
@@ -332,6 +332,10 @@ class ProfilePage extends React.Component {
 
 
     async changePassword() {
+        if(this.state.tempPwA != this.state.tempPwB){
+            this.setState({modalErrorMsg: "Passwords don't match!"})
+            return
+        }
         const requestBody = JSON.stringify({
             id: Number(localStorage.getItem("current")),
             username: null,
@@ -444,10 +448,9 @@ class ProfilePage extends React.Component {
                         <form className={useStylesPopup} noValidate autoComplete="off">
                             <div>
                                 <Typography variant="body1" component="h2">
-                                    Enter new username
+                                    Choose new username
                                 </Typography>
                                 <TextField
-                                    id="standard-password-input"
                                     label="New Username"
                                     type="name"
                                     fullWidth
@@ -466,7 +469,6 @@ class ProfilePage extends React.Component {
                                         this.handleInputChange('tempUsername', e.target.value);
                                     }}
                                 />
-
                             </div>
 
                             <div>
@@ -496,34 +498,100 @@ class ProfilePage extends React.Component {
                     contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
-                    <CredentialsPopupWrapper>
-                        <CloseButton onClick={this.handleCloseModalPassword}/>
-                        <Title>
-                            <Label>Change Password</Label>
-                        </Title>
-                        <InputFieldWrapper>
-                            <InputField
-                                placeholder="New Password"
-                                onChange={e => {
-                                    this.handleInputChange('tempPwA', e.target.value);
-                                }}/>
-                        </InputFieldWrapper>
-                        <InputFieldWrapper>
-                            <InputField
-                                placeholder="Repeat Password"
-                                onChange={e => {
-                                    this.handleInputChange('tempPwB', e.target.value);
-                                }}/>
-                        </InputFieldWrapper>
-                    </CredentialsPopupWrapper>
-                    <ButtonContainer>
-                        <Button
-                            disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null
-                            || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}
-                            variant="dark" size="sm" block onClick={this.changePassword}>
-                            Save Changes
-                        </Button>
-                    </ButtonContainer>
+                    <Paper elevation={3} style={{padding: '1em'}}>
+                        <form className={useStylesPopup} noValidate autoComplete="off">
+                            <div>
+                                <Typography variant="body1" component="h2">
+                                    Choose new password
+                                </Typography>
+                                <TextField
+                                    label="New Password"
+                                    type="password"
+                                    fullWidth
+                                    margin="normal"
+                                    variant="outlined"
+                                    value={this.state.tempPwA}
+
+                                    error={this.state.modalErrorMsg != null
+                                    && !this.state.modalErrorMsg !== "Passwords don't match!"
+                                    }
+
+                                    onChange={e => {
+                                        this.handleInputChange('tempPwA', e.target.value);
+                                    }}
+                                />
+                                <TextField
+                                    label="Repeat Password"
+                                    type="password"
+                                    fullWidth
+                                    margin="normal"
+                                    variant="outlined"
+                                    value={this.state.tempPwB}
+
+                                    error={this.state.modalErrorMsg != null
+                                    && !this.state.modalErrorMsg !== "Passwords don't match!"
+                                    }
+                                    helperText={this.state.modalErrorMsg != null
+                                    && !this.state.modalErrorMsg !== "Passwords don't match!"
+                                        ? "Passwords don't match!" : null
+                                    }
+
+                                    onChange={e => {
+                                        this.handleInputChange('tempPwB', e.target.value);
+                                    }}
+                                />
+
+                            </div>
+
+                            <div>
+                                <IconButton aria-label="delete">
+                                    <ArrowBackIcon
+                                        onClick={this.handleCloseModalPassword}
+                                    />
+                                </IconButton>
+
+                                <IconButton
+                                    style={{float: 'right'}}
+                                    disabled={this.state.tempPwA == null || this.state.tempPwB == null || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}
+                                    // disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null
+                                    // || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}
+                                    onClick={this.changePassword}
+                                >
+                                    <CheckCircleOutlineIcon/>
+                                </IconButton>
+                            </div>
+
+                        </form>
+                    </Paper>
+
+                    {/*<CredentialsPopupWrapper>*/}
+                    {/*    <CloseButton onClick={this.handleCloseModalPassword}/>*/}
+                    {/*    <Title>*/}
+                    {/*        <Label>Change Password</Label>*/}
+                    {/*    </Title>*/}
+                    {/*    <InputFieldWrapper>*/}
+                    {/*        <InputField*/}
+                    {/*            placeholder="New Password"*/}
+                    {/*            onChange={e => {*/}
+                    {/*                this.handleInputChange('tempPwA', e.target.value);*/}
+                    {/*            }}/>*/}
+                    {/*    </InputFieldWrapper>*/}
+                    {/*    <InputFieldWrapper>*/}
+                    {/*        <InputField*/}
+                    {/*            placeholder="Repeat Password"*/}
+                    {/*            onChange={e => {*/}
+                    {/*                this.handleInputChange('tempPwB', e.target.value);*/}
+                    {/*            }}/>*/}
+                    {/*    </InputFieldWrapper>*/}
+                    {/*</CredentialsPopupWrapper>*/}
+                    {/*<ButtonContainer>*/}
+                    {/*    <Button*/}
+                    {/*        disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null*/}
+                    {/*        || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}*/}
+                    {/*        variant="dark" size="sm" block onClick={this.changePassword}>*/}
+                    {/*        Save Changes*/}
+                    {/*    </Button>*/}
+                    {/*</ButtonContainer>*/}
 
                 </Modal>
 
