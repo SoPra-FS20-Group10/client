@@ -4,7 +4,6 @@ import {BaseContainer} from '../../helpers/layout';
 
 import {withRouter} from 'react-router-dom';
 import LobbyList from "../overview/Lobbylist";
-import Button from "react-bootstrap/Button";
 import Chart from "./Chart";
 import NavigationBar from "../../views/NavigationBar";
 import {CloseButton} from "react-bootstrap";
@@ -39,15 +38,16 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import DoneIcon from '@material-ui/icons/Done';
 import {TextFields} from "@material-ui/icons";
+import Button from '@material-ui/core/Button';
 
 const NameWrapper = styled.div`
     border-radius: 4pt;
-    margin-top: 5em;
-    margin-bottom: 1em;
-    margin-left: 5%;
-    padding: 2%;
-    float:center;
-    text-align:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15em;
+    flex-flow: column wrap;
+    
 `;
 
 const StatsWrapper = styled.div`
@@ -59,9 +59,8 @@ const StatsWrapper = styled.div`
 
 const GraphWrapper = styled.div`
     border-radius: 4pt;
-    margin-top: 5%;
+    margin-top: 3em;
     width: 60%;
-    // height: 500pt;
     float:left;
     color: white;
      
@@ -69,17 +68,14 @@ const GraphWrapper = styled.div`
 
 const MatchHistoryWrapper = styled.div`
     border-radius: 4pt;
-    margin-top: 5%;
+    margin-top: 3em;
     margin-left: 5%;
     width: 35%;
-    // height: 500pt;
-    background: grey;
     float:left;
 `;
 
 const Container = styled(BaseContainer)`
     color: white;
-    // text-align: center;
     width:100%;
     margin:auto;
     
@@ -91,73 +87,14 @@ const Container = styled(BaseContainer)`
     -moz-user-select: none; 
     -ms-user-select: none;
 `;
-//
-// const ButtonContainer = styled.div`
-//     width: 33.3%;
-// `;
+
 
 const ButtonContainer = styled.div`
-    padding-top: 10pt;
-`;
-
-
-const ButtonContainer3 = styled.div`
-    margin-top: 2%;
+    margin-top: 3em;
     float:left;
     width: 100%;
     align-items:left;
     justify-items: left;
-`;
-
-const CredentialsPopupWrapper = styled.div`
-    background-color: white;
-`;
-
-const Title = styled.div`
-    background-color: grey;
-
-`;
-
-const Label = styled.label`
-  color: black;
-  text-transform: uppercase;
-  font-size:16pt;
-  background-color: grey;
-   margin-left: 5%;
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    color: grey;
-  }
-  height: 35px;
-  padding-left: 15px;
-  border: none;
-  border-radius: 20px;
-  background: rgba(77, 77, 77, 0.2);
-  color: grey;
-
-  margin: 0 auto;
-
-`;
-
-const InputFieldWrapper = styled.div`
-     margin-top: 10pt;
-    margin-bottom: 10pt;
-    text-align: center;
-
-`;
-
-
-const LobbyCreationWrapper = styled.div`
-    background-color: white;
-`;
-
-const MyInputLabel = styled.div`
-
-    margin-top: 10pt;
-    margin-bottom: 10pt;
-    text-align: center;
 `;
 
 const customStyles = {
@@ -170,26 +107,8 @@ const customStyles = {
         transform: 'translate(-50%, -50%)',
         padding: 0,
         border: 'none'
-        // width: "55%"
     }
 };
-
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: 'fit-content',
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: theme.palette.background.paper,
-        color: theme.palette.text.secondary,
-        '& svg': {
-            margin: theme.spacing(1.5),
-        },
-        '& hr': {
-            margin: theme.spacing(0, 0.5),
-        },
-    },
-}));
 
 const useStylesPopup = makeStyles((theme: Theme) =>
     createStyles({
@@ -202,46 +121,33 @@ const useStylesPopup = makeStyles((theme: Theme) =>
     }),
 );
 
-// TODO: Functionality behind changing credentials
-// TODO: Fix scaling of charts (when resizing page)
 class ProfilePage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { // some example data for the profile page
-            // playerId: this.props.location.state.playerId,
+        this.state = {
             userId: parseInt(window.location.href.split('/').pop(), 10),
             userName: null,
-
             overallScore: null,
             playedGames: null,
-            playtime: null,
-            winPercentage: null,
             wonGames: null,
             matchesScore: [],
             matchesTime: [],
             modalErrorMsg: null,
-
-
-            // example data for the stat overview
-            stats: {id: 1, name: 'HOTCHILIEATER', wins: 1000, winPercentage: '59%', timePlayed: '370h'},
-
             tempPwA: null,
             tempPwB: null,
             tempUsername: null,
 
         }
+
         this.handleOpenModalName = this.handleOpenModalName.bind(this);
         this.handleCloseModalName = this.handleCloseModalName.bind(this);
         this.handleOpenModalPassword = this.handleOpenModalPassword.bind(this);
         this.handleCloseModalPassword = this.handleCloseModalPassword.bind(this);
-
         this.changePassword = this.changePassword.bind(this);
         this.changeName = this.changeName.bind(this);
-
     }
 
     componentDidMount() {
-        this.handleOpenModalPassword()
         this.fetchUser();
         try {
             this.timerID = setInterval(() => {
@@ -262,7 +168,6 @@ class ProfilePage extends React.Component {
     async fetchUser() {
         try {
             const response = await api.get("/users/" + this.state.userId);
-            console.log(response)
 
             this.setState({
                 userName: response.data.username,
@@ -326,13 +231,12 @@ class ProfilePage extends React.Component {
         } catch (error) {
             this.setState({modalErrorMsg: error.response.data.message})
             console.log(this.state.modalErrorMsg)
-            // console.log(handleError(error))
         }
     }
 
 
     async changePassword() {
-        if(this.state.tempPwA != this.state.tempPwB){
+        if (this.state.tempPwA != this.state.tempPwB) {
             this.setState({modalErrorMsg: "Passwords don't match!"})
             return
         }
@@ -349,32 +253,32 @@ class ProfilePage extends React.Component {
             this.handleCloseModalPassword();
         } catch (error) {
             this.setState({modalErrorMsg: error.response.data.message})
-            console.log(this.state.modalErrorMsg)
-            // alert(error);
         }
     }
 
     render() {
-
         // boolean that is true if player is on his / her own profile
         const isUser = this.state.userId == localStorage.getItem("current");
+
         return (
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
                 <NavigationBar history={this.props} value={2} playerId={localStorage.getItem("current")}/>
 
-
                 {/*Username*/}
                 <NameWrapper>
-                    <Typography variant="h1" component="h2">
-                        Profile of {NameLengthChecker(this.state.userName)}
+                    <Typography variant="h5" component="h2">
+                        This is the Profile of
+                    </Typography>
+
+                    <Typography variant="h1" component="h3">
+                        {NameLengthChecker(this.state.userName)}
                     </Typography>
                 </NameWrapper>
 
-                {/*TODO: Implement stats overview*/}
+                {/*Stat Overview*/}
                 <StatsWrapper>
-
                     <Paper elevation={3}>
                         <Grid container alignItems="center" style={{justifyContent: 'space-evenly'}}>
                             <div style={{
@@ -386,7 +290,9 @@ class ProfilePage extends React.Component {
                                 <div>Overall Score</div>
                                 <div>{this.state.overallScore}</div>
                             </div>
+
                             <Divider orientation="vertical" flexItem/>
+
                             <div style={{
                                 display: 'flex',
                                 padding: '2em',
@@ -396,7 +302,9 @@ class ProfilePage extends React.Component {
                                 <div>Played Games</div>
                                 <div>{this.state.playedGames}</div>
                             </div>
+
                             <Divider orientation="vertical" flexItem/>
+
                             <div style={{
                                 display: 'flex',
                                 padding: '2em',
@@ -408,9 +316,9 @@ class ProfilePage extends React.Component {
                             </div>
                         </Grid>
                     </Paper>
-
                 </StatsWrapper>
 
+                {/*Graph*/}
                 <GraphWrapper>
                     <Paper elevation={3}>
                         <div>
@@ -419,6 +327,7 @@ class ProfilePage extends React.Component {
                     </Paper>
                 </GraphWrapper>
 
+                {/*Match History*/}
                 <MatchHistoryWrapper>
                     <MatchHistory matches={this.state.matchesScore} times={this.state.matchesTime}/>
                 </MatchHistoryWrapper>
@@ -426,16 +335,16 @@ class ProfilePage extends React.Component {
 
                 {/*Buttons for editing credentials*/}
                 {isUser ?
-                    <ButtonContainer3>
-
-                        <Button variant="dark" size="lg" onClick={this.handleOpenModalName}>
+                    <ButtonContainer>
+                        <Button color="secondary" variant="contained" size="lg" onClick={this.handleOpenModalName}
+                        style={{marginRight: '2em'}}>
                             Change Name
-                        </Button> {' '}
-                        <Button variant="dark" size="lg" onClick={this.handleOpenModalPassword}>
-                            Change Password
                         </Button>
 
-                    </ButtonContainer3>
+                        <Button color="secondary" variant="contained" size="lg" onClick={this.handleOpenModalPassword}>
+                            Change Password
+                        </Button>
+                    </ButtonContainer>
                     : null}
 
                 {/*Modal for Name-Popup*/}
@@ -486,7 +395,6 @@ class ProfilePage extends React.Component {
                                     <CheckCircleOutlineIcon/>
                                 </IconButton>
                             </div>
-
                         </form>
                     </Paper>
                 </Modal>
@@ -504,6 +412,7 @@ class ProfilePage extends React.Component {
                                 <Typography variant="body1" component="h2">
                                     Choose new password
                                 </Typography>
+
                                 <TextField
                                     label="New Password"
                                     type="password"
@@ -520,6 +429,7 @@ class ProfilePage extends React.Component {
                                         this.handleInputChange('tempPwA', e.target.value);
                                     }}
                                 />
+
                                 <TextField
                                     label="Repeat Password"
                                     type="password"
@@ -540,7 +450,6 @@ class ProfilePage extends React.Component {
                                         this.handleInputChange('tempPwB', e.target.value);
                                     }}
                                 />
-
                             </div>
 
                             <div>
@@ -553,48 +462,14 @@ class ProfilePage extends React.Component {
                                 <IconButton
                                     style={{float: 'right'}}
                                     disabled={this.state.tempPwA == null || this.state.tempPwB == null || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}
-                                    // disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null
-                                    // || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}
                                     onClick={this.changePassword}
                                 >
                                     <CheckCircleOutlineIcon/>
                                 </IconButton>
                             </div>
-
                         </form>
                     </Paper>
-
-                    {/*<CredentialsPopupWrapper>*/}
-                    {/*    <CloseButton onClick={this.handleCloseModalPassword}/>*/}
-                    {/*    <Title>*/}
-                    {/*        <Label>Change Password</Label>*/}
-                    {/*    </Title>*/}
-                    {/*    <InputFieldWrapper>*/}
-                    {/*        <InputField*/}
-                    {/*            placeholder="New Password"*/}
-                    {/*            onChange={e => {*/}
-                    {/*                this.handleInputChange('tempPwA', e.target.value);*/}
-                    {/*            }}/>*/}
-                    {/*    </InputFieldWrapper>*/}
-                    {/*    <InputFieldWrapper>*/}
-                    {/*        <InputField*/}
-                    {/*            placeholder="Repeat Password"*/}
-                    {/*            onChange={e => {*/}
-                    {/*                this.handleInputChange('tempPwB', e.target.value);*/}
-                    {/*            }}/>*/}
-                    {/*    </InputFieldWrapper>*/}
-                    {/*</CredentialsPopupWrapper>*/}
-                    {/*<ButtonContainer>*/}
-                    {/*    <Button*/}
-                    {/*        disabled={this.state.tempPwA != this.state.tempPwB || this.state.tempPwA == null*/}
-                    {/*        || !!this.state.tempPwA.match(/^[\s]*$/i) || !!this.state.tempPwB.match(/^[\s]*$/i)}*/}
-                    {/*        variant="dark" size="sm" block onClick={this.changePassword}>*/}
-                    {/*        Save Changes*/}
-                    {/*    </Button>*/}
-                    {/*</ButtonContainer>*/}
-
                 </Modal>
-
             </Container>
         );
     }
