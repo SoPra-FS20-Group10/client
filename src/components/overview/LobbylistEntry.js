@@ -195,7 +195,7 @@ class LobbylistEntry extends React.Component {
             // try joining lobby without pw
             const requestBody = JSON.stringify({
                 id: localStorage.getItem("current"),
-                password: this.state.password
+                password: ""
             });
             try {
 
@@ -225,6 +225,7 @@ class LobbylistEntry extends React.Component {
 
 
     async goToLobby() {
+        this.handleCloseModal()
         this.playSound(new Audio(subtleClick));
 
         // Check if there's space for the player in the lobby
