@@ -243,7 +243,7 @@ class LoginPage extends React.Component {
                 {this.state.fromSignup ? this.showSnackbar() : null}
 
                 <Row>
-                    <Col lg> <GameTitle> SCRABBAR.IO </GameTitle> </Col>
+                    <Col lg> <GameTitle> Scrabbar </GameTitle> </Col>
                 </Row>
                 <Row>
                     <Col lg={4}>

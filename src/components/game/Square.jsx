@@ -6,7 +6,7 @@ import OnBoardLetterBox from "./OnBoardLetterBox";
 import Overlay from "react-bootstrap/Overlay";
 const style = {
     backgroundColor: "grey",
-    fontSize: 7,
+    fontSize: 10,
     borderRadius: '2pt',
     margin: '2pt',
     width: '27pt',
