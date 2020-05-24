@@ -93,6 +93,11 @@ class LobbyPage extends React.Component {
             messages: [],
             message: "",
             lobbyLeaderAbort: false,
+            isOpenLobbyLeaderCantLeaveSnackbar: false,
+            isOpenLobbyLeaderCantStartBecauseMissingPlayers: false,
+            isOpenLobbyLeaderCantStartBecauseNotAllReady: false,
+            isOpenLobbyLeaderCantStartBecauseTooManyPlayers: false,
+            isSnackbarOpen: false,
         };
 
         this.leaveLobby = this.leaveLobby.bind(this);
@@ -108,6 +113,9 @@ class LobbyPage extends React.Component {
         this.handleOpenLobbyCreateSnackBar = this.handleOpenLobbyCreateSnackBar.bind(this);
         this.closeSnackbar = this.closeSnackbar.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
+        this.handleCloseSnackbars = this.handleCloseSnackbars.bind(this);
+        this.showSnackbar = this.showSnackbar.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
 
     }
 
@@ -143,7 +151,7 @@ class LobbyPage extends React.Component {
         try {
 
             const response = await api.get("/games/" + this.state.lobbyId + "/players");
-            this.setState({lobbyPlayers: response.data})
+            this.setState({lobbyPlayers: response.data});
             this.countLobbyPlayers();
         } catch (error) {
             console.log(error);
@@ -159,7 +167,6 @@ class LobbyPage extends React.Component {
     }
 
     checkInLobby() {
-        console.log('check')
         if (this.state.lobbyPlayers) {
 
             let isInLobby = false;
@@ -179,7 +186,6 @@ class LobbyPage extends React.Component {
                             playerName: this.state.playerName
                         }
                     });
-                window.location.reload();
             }
         }
 
@@ -206,60 +212,61 @@ class LobbyPage extends React.Component {
         }
     }
 
-    Sleep(milliseconds) {
-        return new Promise(resolve => setTimeout(resolve, milliseconds));
-    }
-
     async leaveLobby() {
-        console.log(this.state);
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
         });
-        const headers = {
-            'Authorization': null,
-        };
+
+        let audio = new Audio(subtleClick);
+        this.playSound(audio);
 
         // If lobbyleader leaves the game, logout all users and delete the game
         if (this.state.isLobbyLeader && this.state.lobbyPlayerNumber == 1) {
 
-
-            // if (allReady) {
             const requestBody = JSON.stringify({
                 token: localStorage.getItem("token"),
             });
 
-            try {
-                // Start game in backend
-                await api.put("/games/" + this.state.lobbyId, requestBody);
-            } catch (error) {
-                console.log(error);
+            let numTries = 0
+            while (true) {
+                numTries++;
+                try {
+                    // Start game in backend
+                    await api.put("/games/" + this.state.lobbyId, requestBody);
+
+                    break;
+                } catch (error) {
+                    if (--numTries == 0) throw error;
+                }
             }
 
             localStorage.setItem("currentGame", this.state.lobbyId);
 
-            await this.Sleep(2000);
+            numTries = 0
+            while (true) {
+                numTries++;
+                try {
+                    // End game in backend
+                    await api.patch("/games/" + localStorage.getItem("currentGame"), requestBody);
 
-            try {
-                // End game in backend
-                await api.patch("/games/" + localStorage.getItem("currentGame"), requestBody);
-            } catch (error) {
-                console.log(error);
+                    break;
+                } catch (error) {
+                    if (--numTries == 0) throw error;
+                }
             }
 
-            await this.Sleep(2000);
-            try {
-                // Log out user in backend
-                await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
-            } catch (error) {
-                console.log(error);
-            }
+            numTries = 0
+            while (true) {
+                numTries++;
+                try {
+                    // Log out user in backend
+                    // -> Because only one player is in the lobby the backend will also delete the game in this step!
+                    await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
 
-            await this.Sleep(2000);
-            try {
-
-                await api.delete("/games/" + this.state.lobbyId);
-            } catch (error) {
-                console.log(error)
+                    break;
+                } catch (error) {
+                    if (--numTries == 0) throw error;
+                }
             }
 
             localStorage.removeItem("currentGame");
@@ -270,19 +277,18 @@ class LobbyPage extends React.Component {
                     state: {
                         playerId: this.state.playerId,
                         playerName: this.state.playerName,
-                        // deleteGame: deleteGame,
                     }
                 });
+        }
 
-            // }
+        // If lobbyleader but lobby still contains other players, show snackbar
+        else if (this.state.isLobbyLeader) {
+            this.setState({isOpenLobbyLeaderCantLeaveSnackbar: true});
         }
 
         // if not lobbyleader, leave lobby without deletion
         else {
             try {
-                let audio = new Audio(subtleClick);
-                this.playSound(audio);
-
                 // Log out user in backend
                 await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
                 this.props.history.push(
@@ -300,9 +306,7 @@ class LobbyPage extends React.Component {
     }
 
     checkLobbyLeader() {
-
         if (this.state.ownerId) {
-
             this.setState({
                 isLobbyLeader: true
             })
@@ -316,15 +320,12 @@ class LobbyPage extends React.Component {
 
         let allReady = this.allPlayersReady();
         if (this.state.lobbyPlayerNumber > this.state.maxPlayerCounter) {
-            alert("Too many people in lobby");
-        }
-        if (this.state.lobbyPlayerNumber < this.state.minPlayerCounter) {
-            alert("Not enough people in Lobby (at least " + this.state.minPlayerCounter + " required)");
+            this.setState({isOpenLobbyLeaderCantStartBecauseTooManyPlayers: true});
+        } else if (this.state.lobbyPlayerNumber < this.state.minPlayerCounter) {
+            this.setState({isOpenLobbyLeaderCantStartBecauseMissingPlayers: true});
         } else if (!allReady) {
-            alert("Not all players are ready!");
+            this.setState({isOpenLobbyLeaderCantStartBecauseNotAllReady: true});
         }
-
-
 
         // If all conditions to start a game are met, start the game and tell the backend.
         else {
@@ -332,7 +333,6 @@ class LobbyPage extends React.Component {
                 token: localStorage.getItem("token"),
             });
             try {
-                console.log(this.state.lobbyId);
                 // Start game in backend
                 await api.put("/games/" + this.state.lobbyId, requestBody);
 
@@ -345,7 +345,6 @@ class LobbyPage extends React.Component {
     }
 
     allPlayersReady() {
-
         let allReady = true;
         this.state.lobbyPlayers.map((player) => {
 
@@ -359,7 +358,6 @@ class LobbyPage extends React.Component {
     // Redirect player to the board
     async goToBoard() {
         // Redirect to board
-
         localStorage.setItem("currentGame", this.state.lobbyId);
 
         this.props.history.push(
@@ -387,7 +385,6 @@ class LobbyPage extends React.Component {
     }
 
     handleOpenLobbyCreateSnackBar() {
-
         if (this.props.location.state.ownerId != null)
             this.setState({
                 isOpenLobbyCreateSnackbar: true,
@@ -400,12 +397,24 @@ class LobbyPage extends React.Component {
         })
     }
 
-    showSnackbar() {
-        return SnackbarAlert({close: this.closeSnackbar, type: "good", message: "Lobby created!"});
+    showSnackbar(message, type) {
+
+        return SnackbarAlert({close: this.closeSnackbar, type: type, message: message});
     }
 
     closeSnackbar() {
         this.handleCloseLobbyCreateSnackbar();
+        this.handleCloseSnackbars();
+    }
+
+    handleCloseSnackbars() {
+        this.setState({
+            isOpenLobbyLeaderCantLeaveSnackbar: false,
+            isOpenLobbyLeaderCantStartBecauseMissingPlayers: false,
+            isOpenLobbyLeaderCantStartBecauseNotAllReady: false,
+            isOpenLobbyLeaderCantStartBecauseTooManyPlayers: false,
+            isOpenLobbyCreateSnackbar: false,
+        })
     }
 
 
@@ -476,31 +485,19 @@ class LobbyPage extends React.Component {
         };
     }
 
-    handleCloseSnackbars() {
-        this.setState({
-            isOpenGameStartSnackbar: false,
-            isOpenExchangePieceSnackbar: false,
-        })
-    }
-
-
-    showSnackbar(message, type) {
-
-        return SnackbarAlert({close: this.closeSnackbar, type: type, message: message});
-
-    }
-
-    closeSnackbar() {
-        this.handleCloseSnackbars();
-    }
-
     render() {
 
         return (
 
             <Container>
-                {this.state.isOpenGameStartSnackbar ? this.showSnackbar("Game started", "info") : null}
-                {this.state.isOpenExchangePieceSnackbar ? this.showSnackbar("Pieces exchanged - your turn ends", "info") : null}
+                {this.state.isOpenLobbyLeaderCantLeaveSnackbar ? this.showSnackbar("You as lobbyleader can only leave once all other people have left", "error") : null}
+
+
+                {this.state.isOpenLobbyLeaderCantStartBecauseMissingPlayers ? this.showSnackbar("Not enough people in Lobby (at least " + this.state.minPlayerCounter + " required)", "error") : null}
+                {this.state.isOpenLobbyLeaderCantStartBecauseNotAllReady ? this.showSnackbar("You can only start the game once all players are ready!", "error") : null}
+
+                {/*TODO: Write max in snackbar?*/}
+                {this.state.isOpenLobbyLeaderCantStartBecauseTooManyPlayers ? this.showSnackbar("Too many people in lobby!", "error") : null}
 
 
                 {/*TODO: Add real chat*/}
@@ -532,8 +529,9 @@ class LobbyPage extends React.Component {
                     </form>
                 </ChatWrapper>
 
+                {/*return SnackbarAlert({close: this.closeSnackbar, type: "good", message: "Lobby created!"});*/}
 
-                {this.state.isOpenLobbyCreateSnackbar ? this.showSnackbar() : null}
+                {this.state.isOpenLobbyCreateSnackbar ? this.showSnackbar("Lobby created!", "good") : null}
 
                 <LobbyWrapper>
 
