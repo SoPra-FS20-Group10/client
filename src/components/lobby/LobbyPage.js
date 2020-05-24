@@ -16,6 +16,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import {ThemeProvider} from '@livechat/ui-kit'
 import "./styles/chat.css"
 import subtleClick from "../../sounds/subtle_click.wav";
+import endSound from "../../sounds/misc_sound.wav";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -90,7 +91,8 @@ class LobbyPage extends React.Component {
             isLobbyLeader: false,
             isOpenLobbyCreateSnackbar: false,
             messages: [],
-            message: ""
+            message: "",
+            lobbyLeaderAbort: false,
         };
 
         this.leaveLobby = this.leaveLobby.bind(this);
@@ -126,7 +128,7 @@ class LobbyPage extends React.Component {
                 this.checkStartGame();
                 this.checkInLobby();
                 this.getMessages();
-            }, 500);
+            }, 1000);
         } catch (e) {
             console.log(e);
         }
@@ -204,9 +206,11 @@ class LobbyPage extends React.Component {
         }
     }
 
+    Sleep(milliseconds) {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+
     async leaveLobby() {
-
-
         console.log(this.state);
         const requestBody = JSON.stringify({
             token: localStorage.getItem("token"),
@@ -216,36 +220,61 @@ class LobbyPage extends React.Component {
         };
 
         // If lobbyleader leaves the game, logout all users and delete the game
-        if (this.state.isLobbyLeader) {
+        if (this.state.isLobbyLeader && this.state.lobbyPlayerNumber == 1) {
 
 
-            let allReady = this.allPlayersReady();
-            if (allReady) {
-                const requestBody = JSON.stringify({
-                    token: localStorage.getItem("token"),
+            // if (allReady) {
+            const requestBody = JSON.stringify({
+                token: localStorage.getItem("token"),
+            });
+
+            try {
+                // Start game in backend
+                await api.put("/games/" + this.state.lobbyId, requestBody);
+            } catch (error) {
+                console.log(error);
+            }
+
+            localStorage.setItem("currentGame", this.state.lobbyId);
+
+            await this.Sleep(2000);
+
+            try {
+                // End game in backend
+                await api.patch("/games/" + localStorage.getItem("currentGame"), requestBody);
+            } catch (error) {
+                console.log(error);
+            }
+
+            await this.Sleep(2000);
+            try {
+                // Log out user in backend
+                await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
+            } catch (error) {
+                console.log(error);
+            }
+
+            await this.Sleep(2000);
+            try {
+
+                await api.delete("/games/" + this.state.lobbyId);
+            } catch (error) {
+                console.log(error)
+            }
+
+            localStorage.removeItem("currentGame");
+
+            this.props.history.push(
+                {
+                    pathname: `/game/overview/`,
+                    state: {
+                        playerId: this.state.playerId,
+                        playerName: this.state.playerName,
+                        // deleteGame: deleteGame,
+                    }
                 });
 
-                try {
-                    // Start game in backend
-                    await api.put("/games/" + this.state.lobbyId, requestBody);
-                } catch (error) {
-                    console.log(error);
-                }
-
-                try {
-                    // Log out user in backend
-                    await api.delete("/games/" + this.state.lobbyId + "/players/" + localStorage.getItem("current"), {data: requestBody});
-                } catch (error) {
-                    console.log(error);
-                }
-
-                try {
-
-                    await api.delete("/games/" + this.state.lobbyId);
-                } catch (error) {
-                    console.log(error)
-                }
-            }
+            // }
         }
 
         // if not lobbyleader, leave lobby without deletion
@@ -268,7 +297,7 @@ class LobbyPage extends React.Component {
                 console.log(error);
             }
         }
-        }
+    }
 
     checkLobbyLeader() {
 
@@ -290,7 +319,7 @@ class LobbyPage extends React.Component {
             alert("Too many people in lobby");
         }
         if (this.state.lobbyPlayerNumber < this.state.minPlayerCounter) {
-            alert("Not enoguh people in Lobby (at least" + this.state.minPlayerCounter + "required)");
+            alert("Not enough people in Lobby (at least " + this.state.minPlayerCounter + " required)");
         } else if (!allReady) {
             alert("Not all players are ready!");
         }
@@ -343,17 +372,18 @@ class LobbyPage extends React.Component {
     // Check if the game had started, if yes --> redirect the player to the board
 
     async checkStartGame() {
-
-        let response = await api.get("/games");
-        let currentGames = response.data;
-        currentGames.map((game) => {
-                if (game.id === this.state.lobbyId) {
-                    if (game.status === "RUNNING") {
-                        this.goToBoard();
+        if (this.state.lobbyPlayerNumber > 1) {
+            let response = await api.get("/games");
+            let currentGames = response.data;
+            currentGames.map((game) => {
+                    if (game.id === this.state.lobbyId) {
+                        if (game.status === "RUNNING") {
+                            this.goToBoard();
+                        }
                     }
                 }
-            }
-        );
+            );
+        }
     }
 
     handleOpenLobbyCreateSnackBar() {
@@ -446,11 +476,32 @@ class LobbyPage extends React.Component {
         };
     }
 
+    handleCloseSnackbars() {
+        this.setState({
+            isOpenGameStartSnackbar: false,
+            isOpenExchangePieceSnackbar: false,
+        })
+    }
+
+
+    showSnackbar(message, type) {
+
+        return SnackbarAlert({close: this.closeSnackbar, type: type, message: message});
+
+    }
+
+    closeSnackbar() {
+        this.handleCloseSnackbars();
+    }
+
     render() {
 
         return (
 
             <Container>
+                {this.state.isOpenGameStartSnackbar ? this.showSnackbar("Game started", "info") : null}
+                {this.state.isOpenExchangePieceSnackbar ? this.showSnackbar("Pieces exchanged - your turn ends", "info") : null}
+
 
                 {/*TODO: Add real chat*/}
                 <ChatWrapper>
