@@ -45,7 +45,7 @@ const NameWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 15em;
+    height: 10em;
     flex-flow: column wrap;
     
 `;

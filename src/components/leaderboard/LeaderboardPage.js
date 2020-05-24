@@ -46,7 +46,7 @@ const TitleWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 15em;
+    height: 10em;
     flex-flow: column wrap;
     
 `;
@@ -205,7 +205,7 @@ class LeaderboardPage extends React.Component {
 
                 {/*Title*/}
                 <TitleWrapper>
-                    <Typography variant="h1" component="h2" style={{paddingTop:'0.3em'}}>
+                    <Typography variant="h3" component="h2" style={{paddingTop:'0.3em'}}>
                         Leaderboard
                     </Typography>
 
