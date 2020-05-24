@@ -12,6 +12,10 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
 import subtleClick from "../../sounds/subtle_click.wav";
+import Typography from "@material-ui/core/Typography";
+import NameLengthChecker from "../shared/Other/NameLengthChecker";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import LeaderboardTable from "./LeaderboardTable";
 
 const ButtonContainer = styled.div`
   width: 33.3%;
@@ -35,14 +39,30 @@ const Container = styled(BaseContainer)`
 
 
 const LeaderboardWrapper = styled.div`
-    border-radius: 4pt;
-    margin-top: 10%;
-    padding-bottom:4pt;
-    margin: 10%;
-    background: rgba(77, 77, 77, 0.5);
     float:center;
-    padding-bottom:4pt;
 `;
+
+const TitleWrapper = styled.div`
+    border-radius: 4pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15em;
+    flex-flow: column wrap;
+    
+`;
+
+const useStyleDropdown = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            '& .btn-primary:focus': {
+                backgroundColor: '#8064A2',
+                borderColor: '#8064A2'
+            }
+        },
+    }),
+);
+
 
 // TODO: All time, last month, last year....
 // TODO: Make list sortable by enties
@@ -153,21 +173,19 @@ class LeaderboardPage extends React.Component {
         })
     }
 
-    renderTableData = (props = this.props.history) => {
-        return this.state.players.map((data, index) => {
-                function goToProfilePage() {
-                    props.push({
-                        pathname: `/game/profile/${data.id}`,
-                        state: {
-                            playerId: data.id
-                        }
-                    });
-                }
 
-                return (
-                    <LeaderboardEntry data={data} func={goToProfilePage} index={index}></LeaderboardEntry>
-                )
-            }
+    renderTable = (props = this.props.history) => {
+        function goToProfilePage (id){
+            props.push({
+                    pathname: `/game/profile/${id}`,
+                    state: {
+                        playerId: id
+                    }
+            });
+        }
+
+        return(
+            <LeaderboardTable data={this.state.players} func={goToProfilePage}/>
         )
     }
 
@@ -181,42 +199,41 @@ class LeaderboardPage extends React.Component {
     render() {
         return (
             <Container>
+
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
                 <NavigationBar history={this.props} value={1} playerId={localStorage.getItem("current")}/>
 
+                {/*Title*/}
+                <TitleWrapper>
+                    <Typography variant="h1" component="h2" style={{paddingTop:'0.3em'}}>
+                        Leaderboard
+                    </Typography>
+
+                    <Typography variant="subtitle1" component="h3">
+                        You can click on an Entry to go to the Persons Profile Page
+                    </Typography>
+
+                    <DropdownButton className={useStyleDropdown} style={{float: 'left', margin: 'auto'}} id="dropdown-item-button"
+                                    title={this.state.sortBy}>
+                        <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Overall Score')}>
+                            Overall Score
+                        </Dropdown.Item>
+
+                        <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Played Games')}>
+                            Played Games
+                        </Dropdown.Item>
+
+                        <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Won Games')}>
+                            Won Games
+                        </Dropdown.Item>
+                    </DropdownButton>
+                </TitleWrapper>
+
                 {/*leaderboard*/}
-                <div>
-                    <LeaderboardWrapper responsive>
-                        <h1>Leaderboard</h1>
-                        {/*dropdown menu for selecting what stat to sort by*/}
-                        <DropdownButton style={{float: 'left', margin: 'auto'}} id="dropdown-item-button"
-                                        title={this.state.sortBy}>
-                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Overall Score')}>Overall
-                                Score</Dropdown.Item>
-
-                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Played Games')}>Played
-                                Games</Dropdown.Item>
-
-                            <Dropdown.Item as="button"
-                                           onClick={() => this.changeSortingComparator('Won Games')}>Won
-                                Games</Dropdown.Item>
-
-
-                        </DropdownButton>
-
-
-                        {/*rendering users*/}
-                        <table class="table" id='leaderboard'>
-                            <tbody block>
-                            <tr>{this.renderTableHeader()}</tr>
-                            {this.renderTableData()}
-                            </tbody>
-                        </table>
-                    </LeaderboardWrapper>
-                </div>
-
-
+                <LeaderboardWrapper>
+                    {this.renderTable()}
+                </LeaderboardWrapper>
             </Container>
         );
     }
