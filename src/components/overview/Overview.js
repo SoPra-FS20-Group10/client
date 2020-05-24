@@ -21,7 +21,13 @@ import Form from "react-bootstrap/Form";
 import FakePiece from "../game/FakePiece";
 import Modal from "react-modal";
 import ListGroup from "react-bootstrap/ListGroup";
-
+import Typography from "@material-ui/core/Typography";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
+import Paper from '@material-ui/core/Paper';
+import Input from '@material-ui/core/Input';
+import TextField from '@material-ui/core/TextField';
+import Chat from "../game/Chat";
 
 // TODO: WORK IN PROGRESS!
 // Chat title
@@ -36,7 +42,7 @@ const customStyles = {
             left: '50%',
             right: 'auto',
             bottom: 'auto',
-            marginTop:"300pt",
+            marginTop: "300pt",
             transform: 'translate(-50%, -50%)',
             padding: "10pt",
             overflow: "scroll",
@@ -60,16 +66,15 @@ const customStyles = {
 const ChatWrapper = styled.div`
 
  border-radius: 4pt;
-margin-top: 5%;
 width: 25%;
-height: 325pt; 
+height: 32em; 
 float:left;
+    margin-right: 2em;
 `;
 
 
 const LobbyWrapper = styled.div`
   
-    margin-top: 5%;
     margin-left: 25%;
    
     margin-right: 5%;
@@ -86,8 +91,6 @@ const Container = styled(BaseContainer)`
   text-align: center;
   width: 100%
   max-width: none;
-  margin-right: 2%;
-  margin-left: 2%;
   overflow: hidden;
 
     // These style attributes make text unselectable on most browsers & versions
@@ -99,9 +102,19 @@ const Container = styled(BaseContainer)`
     -ms-user-select: none;
 `;
 
+const TitleWrapper = styled.div`
+    border-radius: 4pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15em;
+    flex-flow: column wrap;
+    
+`;
 
 class Overview extends React.Component {
     audio = new Audio(subtleClick)
+
     constructor(props) {
         super(props);
 
@@ -118,8 +131,8 @@ class Overview extends React.Component {
         this.showSnackbar = this.showSnackbar.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
-        this.handleOpenRules=this.handleOpenRules.bind(this);
-        this.handleCloseRules=this.handleCloseRules.bind(this);
+        this.handleOpenRules = this.handleOpenRules.bind(this);
+        this.handleCloseRules = this.handleCloseRules.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getMessages = this.getMessages.bind(this);
@@ -141,6 +154,7 @@ class Overview extends React.Component {
 
     }
 
+
     componentWillUnmount() {
         clearInterval(this.timerID);
     }
@@ -158,10 +172,10 @@ class Overview extends React.Component {
         try {
             console.log(gameId);
             await api.delete("/games/" + gameId);
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
-        }
+    }
 
     fromLogin() {
         if (localStorage.getItem("fromLogin") === "true") {
@@ -171,6 +185,16 @@ class Overview extends React.Component {
             return true;
         }
         return false;
+    }
+
+    formatDate(date) {
+        let hours = date.getHours().toString();
+        let minutes = date.getMinutes().toString();
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        let formatedDate = hours + ":" + minutes;
+        return formatedDate;
     }
 
     async logoutUser() {
@@ -262,18 +286,8 @@ class Overview extends React.Component {
 
     }
 
-    // Helper function to format date for the chat
-    formatDate(date) {
-        let hours = date.getHours().toString();
-        let minutes = date.getMinutes().toString();
-        if (minutes < 10) {
-            minutes = "0" + minutes;
-        }
-        let formatedDate = hours + ":" + minutes;
-        return formatedDate;
-    }
 
-     playSound(sfx) {
+    playSound(sfx) {
         sfx.play();
         sfx.onended = function () {
             sfx.remove() //Remove when played.
@@ -288,44 +302,71 @@ class Overview extends React.Component {
 
                 {this.state.fromLogin ? this.showSnackbar() : null}
 
+                <TitleWrapper>
+                    <Typography variant="h1" component="h2">
+                        Overview
+                    </Typography>
+
+                    <Typography variant="subtitle1" component="h3">
+                        Join an ongoing Lobby or create a new Lobby
+                    </Typography>
+                </TitleWrapper>
 
 
 
                 <ChatWrapper>
-                    <Title/>
-                    <ul className="message-list">
-                        {this.state.messages.map((message, index) => {
-                            let date = new Date(message.time);
-                            let dateFormated = this.formatDate(date);
-                            return (
+                    <Paper style={{height: 'auto', padding: '1em'}}>
+                        <Typography variant="subtitle1" component="h2">
+                            Lobby Chat
+                        </Typography>
+                        <div style={{overflow: 'auto', height: '20em'}}>
+                            <ul className="message-list">
+                                {this.state.messages.map((message, index) => {
+                                    let date = new Date(message.time);
+                                    let dateFormated = this.formatDate(date);
+                                    return (
 
-                                <li className="message">
-                                    <div>{message.username + " - " + dateFormated}</div>
-                                    <div>{message.message}</div>
+                                        <li className="message">
+                                            <div>{message.username + " - " + dateFormated}</div>
+                                            <div>{message.message}</div>
 
 
-                                </li>
-                            )
-                        })}
-                    </ul>
-                    <form
-                        onSubmit={this.handleSubmit}
-                        className="send-message-form">
-                        <input
-                            onChange={this.handleChange}
-                            value={this.state.message}
-                            placeholder="Type your message and hit ENTER"
-                            type="text"/>
-                    </form>
+                                        </li>
+                                    )
+                                })}
+
+                                <div style={{float: "left", clear: "both"}}
+                                     ref={(el) => {
+                                         this.messagesEnd = el;
+                                     }}>
+                                </div>
+                            </ul>
+
+                        </div>
+
+                        <div>
+                            <form
+                                onSubmit={this.handleSubmit}
+                            >
+                                <TextField
+                                    fullWidth
+                                    margin="normal"
+                                    id="standard-basic"
+                                    onChange={this.handleChange}
+                                    value={this.state.message}
+                                    placeholder="Type your message and hit ENTER"
+                                    variant="outlined"
+                                />
+                            </form>
+                        </div>
+                    </Paper>
                 </ChatWrapper>
 
-
                 <LobbyWrapper>
-
                     <LobbyList/>
                 </LobbyWrapper>
 
-                <Button type="button"  variant="danger" size="lg" onClick={ async (e) => {
+                <Button type="button" variant="danger" size="lg" onClick={async (e) => {
                     await this.playSound(this.audio);
                     this.logoutUser();
 
@@ -343,27 +384,52 @@ class Overview extends React.Component {
                     <h1>Scrabble Rules</h1>
 
                     <ListGroup>
-                        <ListGroup.Item variant="primary">The first player combines two or more of his or her letters to form a word and places it on the board to read either across or down with one letter on the center square. Diagonal words are not allowed.</ListGroup.Item>
-                        <ListGroup.Item variant="primary">Complete your turn by counting and announcing your score for that turn. Then draw as many new letters as you played; always keep seven letters on your rack, as long as there are enough tiles left in the bag.</ListGroup.Item>
-                        <ListGroup.Item variant="primary">Play passes to the left. The second player, and then each in turn, adds one or more letters to those already played to form new words. All letters played on a turn must be placed in one row across or down the board, to form at least one complete word. If, at the same time, they touch others letters in adjacent rows, those must also form complete words, crossword fashion, with all such letters. The player gets full credit for all words formed or modified on his or her turn.
+                        <ListGroup.Item variant="primary">The first player combines two or more of his or her letters to
+                            form a word and places it on the board to read either across or down with one letter on the
+                            center square. Diagonal words are not allowed.</ListGroup.Item>
+                        <ListGroup.Item variant="primary">Complete your turn by counting and announcing your score for
+                            that turn. Then draw as many new letters as you played; always keep seven letters on your
+                            rack, as long as there are enough tiles left in the bag.</ListGroup.Item>
+                        <ListGroup.Item variant="primary">Play passes to the left. The second player, and then each in
+                            turn, adds one or more letters to those already played to form new words. All letters played
+                            on a turn must be placed in one row across or down the board, to form at least one complete
+                            word. If, at the same time, they touch others letters in adjacent rows, those must also form
+                            complete words, crossword fashion, with all such letters. The player gets full credit for
+                            all words formed or modified on his or her turn.
                         </ListGroup.Item>
                         <ListGroup.Item variant="primary">New words may be formed by:
                             <ListGroup>
-                                <ListGroup.Item variant="primary">Adding one or more letters to a word or letters already on the board.</ListGroup.Item>
-                                <ListGroup.Item variant="primary">Placing a word at right angles to a word already on the board. The new word must use one of the letters already on the board or must add a letter to it. (See Turns 2, 3 and 4 below.)</ListGroup.Item>
-                                <ListGroup.Item variant="primary">Placing a complete word parallel to a word already played so that adjacent letters also form complete words. (See Turn 5 in the Scoring Examples section below.)</ListGroup.Item>
-                              </ListGroup>
+                                <ListGroup.Item variant="primary">Adding one or more letters to a word or letters
+                                    already on the board.</ListGroup.Item>
+                                <ListGroup.Item variant="primary">Placing a word at right angles to a word already on
+                                    the board. The new word must use one of the letters already on the board or must add
+                                    a letter to it. (See Turns 2, 3 and 4 below.)</ListGroup.Item>
+                                <ListGroup.Item variant="primary">Placing a complete word parallel to a word already
+                                    played so that adjacent letters also form complete words. (See Turn 5 in the Scoring
+                                    Examples section below.)</ListGroup.Item>
+                            </ListGroup>
                         </ListGroup.Item>
-                        <ListGroup.Item variant="primary">No tile may be shifted or replaced after it has been played and scored.
+                        <ListGroup.Item variant="primary">No tile may be shifted or replaced after it has been played
+                            and scored.
                         </ListGroup.Item>
-                        <ListGroup.Item variant="primary">Blanks: The two blank tiles may be used as any letters. When playing a blank, you must state which letter it represents. It remains that letter for the rest of the game.
+                        <ListGroup.Item variant="primary">Blanks: The two blank tiles may be used as any letters. When
+                            playing a blank, you must state which letter it represents. It remains that letter for the
+                            rest of the game.
                         </ListGroup.Item>
-                        <ListGroup.Item variant="primary">You may use a turn to exchange all, some, or none of the letters. To do this, place your discarded letter(s) facedown. Draw the same number of letters from the pool, then mix your discarded letter(s) into the pool. This ends your turn.
+                        <ListGroup.Item variant="primary">You may use a turn to exchange all, some, or none of the
+                            letters. To do this, place your discarded letter(s) facedown. Draw the same number of
+                            letters from the pool, then mix your discarded letter(s) into the pool. This ends your turn.
                         </ListGroup.Item>
                         <ListGroup.Item variant="primary">
-                        Any play may be challenged before the next player starts a turn. If the play challenged is unacceptable, the challenged player takes back his or her tiles and loses that turn. If the play challenged is acceptable, the challenger loses his or her next turn. Consult the dictionary for challenges only. All words made in one play are challenged simultaneously. If any word is unacceptable, then the entire play is unacceptable. Only one turn is lost on any challenge.
-                    </ListGroup.Item>
-                        <ListGroup.Item variant="primary">The game ends when all letters have been drawn and one player uses his or her last letter; or when all possible plays have been made.
+                            Any play may be challenged before the next player starts a turn. If the play challenged is
+                            unacceptable, the challenged player takes back his or her tiles and loses that turn. If the
+                            play challenged is acceptable, the challenger loses his or her next turn. Consult the
+                            dictionary for challenges only. All words made in one play are challenged simultaneously. If
+                            any word is unacceptable, then the entire play is unacceptable. Only one turn is lost on any
+                            challenge.
+                        </ListGroup.Item>
+                        <ListGroup.Item variant="primary">The game ends when all letters have been drawn and one player
+                            uses his or her last letter; or when all possible plays have been made.
                         </ListGroup.Item>
                     </ListGroup>
                     <Button variant="danger" size="sm" onClick={this.handleCloseRules}>

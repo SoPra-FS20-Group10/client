@@ -7,7 +7,6 @@ import Table from 'react-bootstrap/Table'
 import Header from "../../views/Header";
 import NavigationBar from "../../views/NavigationBar";
 import {api} from "../../helpers/api";
-import LeaderboardEntry from "./LeaderboardEntry";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
