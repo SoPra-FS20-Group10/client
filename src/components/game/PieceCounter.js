@@ -4,17 +4,18 @@ import Row from 'react-bootstrap/Row'
 import {Spinner} from '../../views/design/Spinner';
 import Container from 'react-bootstrap/Container'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Paper from "@material-ui/core/Paper";
 
 const Username = styled.label`
     border-radius: 4pt;
     padding-top: 5pt;
     padding-bottom: 5pt;
     margin: 0pt;
-    margin-bottom:1em;
+    // margin-bottom:1em;
     width: 100%;
     font-size: 20px;
-    background: rgba(77, 77, 77, 0.9);
-    color: white;
+    // background: rgba(77, 77, 77, 0.9);
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;

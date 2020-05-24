@@ -11,9 +11,9 @@ const WordsWrapper = styled.div`
     margin: 0pt;
     width: 100%;
     
-    background: rgba(77, 77, 77, 0.9);
+    // background: rgba(77, 77, 77, 0.9);
     
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -37,7 +37,7 @@ const Word = styled.label`
     width: 70%; 
    
     
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;

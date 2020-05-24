@@ -9,8 +9,8 @@ const style = {
     fontSize: 10,
     borderRadius: '2pt',
     margin: '2pt',
-    width: '27pt',
-    height: '27pt',
+    width: '23pt',
+    height: '23pt',
     color: 'white',
     display: 'flex',
     justifyContent:'center',
@@ -20,8 +20,8 @@ const style = {
 
 const PieceWrapper = styled.div`
     margin: 2pt;
-    width: 27pt;
-    height: 27pt;
+    width: 23pt;
+    height: 23pt;
    
     background: white;
     color: black;
@@ -95,8 +95,8 @@ const Square = (props) => {
                         backgroundColor: 'transparent',
                         fontSize: 10,
                         borderRadius: '2pt',
-                        width: '20pt',
-                        height: '20pt',
+                        width: '21pt',
+                        height: '21pt',
                         color: 'black',
                         display: 'flex',
                         justifyContent:'center',

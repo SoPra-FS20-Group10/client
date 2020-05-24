@@ -545,8 +545,6 @@ class LobbyPage extends React.Component {
                             {/*<Typography variant="subtitle1" component="h2">*/}
                             {/*    Lobby Chat*/}
                             {/*</Typography>*/}
-
-
                             <div style={{height: '82%', overflow: "auto", overflowX: "hidden"}}>
                                 <ul className="message-list" style={{}}>
                                     {this.state.messages.map((message, index) => {
@@ -562,14 +560,12 @@ class LobbyPage extends React.Component {
                                             </li>
                                         )
                                     })}
-
                                     <div style={{float: "left", clear: "both"}}
                                          ref={(el) => {
                                              this.messagesEnd = el;
                                          }}>
                                     </div>
                                 </ul>
-
                             </div>
 
                             <div>

@@ -30,7 +30,10 @@ import 'react-spring';
 import {Transition, animated} from 'react-spring/renderprops'
 import "./styles/turn.css"
 import {BaseContainer} from "../../helpers/layout";
-
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import "../overview/styles/chat.css"
 
 import subtleClick from '../../sounds/subtle_click.wav'
 import positiveSound from '../../sounds/positive.wav'
@@ -52,32 +55,47 @@ const Container = styled(BaseContainer)`
 
 const ChatWrapper = styled.div`
 
-margin-top: 10%;
-height: 150pt;
-float:left;
-width: 100%;
+border-radius: 4pt;
+    width: 100%;
+    height: 20em; 
+    float:left;
+     // These style attributes make text unselectable on most browsers & versions
+                    userSelect: 'none',
+                    webkitTouchCallout: 'none',
+                    webkitUserSelect: 'none',
+                    khtmlUserSelect: 'none',
+                    mozUserSelect: 'none',
+                    msUserSelect: 'none'
+
 `;
 
 const GameWrapper = styled.div`
 
-margin-top: 5%;
+margin-top: 1em;
 width: 100%;
 
 float:left;
 `;
+
 
 
 const BoardWrapper = styled.div`
     border-radius: 4pt;
     margin: 0pt;
+    
     padding: 1em;
-    width: 500pt;
-    height: 550pt;
-    background: rgba(77, 77, 77, 0.5);
+    padding-bottom: 0;
+    // padding-top: 0;
+    width: 450pt;
+    // height: 450pt;
+    
+    height: 100%;
+    // background: rgba(255, 255, 255, 0.2);
     color: white;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: space-between;
+    // justify-content: center;
 `;
 
 const SideWrapper = styled.div`
@@ -87,7 +105,7 @@ const SideWrapper = styled.div`
     width: 150pt;
     height: 100%;
 
-    background: rgba(77, 77, 77, 0.5);
+    background: rgba(255, 255, 255, 0.2);
     position:relative;
 
     color: white;
@@ -112,11 +130,11 @@ const SideWrapperRight = styled.div`
 
 const DeckWrapper = styled.div`
     border-radius: 4pt;
-    margin-top:8pt;
+    margin-top:10pt;
     padding: 1em;
     height: 52pt;
 
-    background: rgba(77, 77, 77, 0.5);
+    // background: rgba(77, 77, 77, 0.5);
 
     color: white;
     display: flex;
@@ -468,6 +486,7 @@ class GamePage extends React.Component {
         this.sendMessage = this.sendMessage.bind(this);
         this.handleChangeChat = this.handleChangeChat.bind(this);
         this.resetPlacedPieces = this.resetPlacedPieces.bind(this);
+        this.chatWindow = this.chatWindow.bind(this);
     }
 
 
@@ -1031,7 +1050,7 @@ class GamePage extends React.Component {
             if (stoneIds.length > 0) {
                 await api.put("/games/" + this.state.gameId + "/players/" + this.state.playerId + "/exchange", requestBody);
                 this.setState({isOpenExchangePieceSnackbar: true});
-               
+
             } else {
                 alert("You need to at least one piece to exchange!");
             }
@@ -1198,9 +1217,127 @@ class GamePage extends React.Component {
         };
     }
 
-    render() {
+    chatWindow(){
+        return(
+
+            <ChatWrapper>
+                <div style={{
+                    // These style attributes make text unselectable on most browsers & versions
+                    userSelect: 'none',
+                    webkitTouchCallout: 'none',
+                    webkitUserSelect: 'none',
+                    khtmlUserSelect: 'none',
+                    mozUserSelect: 'none',
+                    msUserSelect: 'none'
+                }}>
+                    Chat
+                </div>
+                <Paper style={{height: '100%'}}>
+                    {/*<Typography variant="subtitle1" component="h2">*/}
+                    {/*    Lobby Chat*/}
+                    {/*</Typography>*/}
+                    <div style={{height: '72%', overflow: "auto", overflowX: "hidden"}}>
+                        <ul className="message-list" style={{}}>
+                            {this.state.messages.map((message, index) => {
+                                let date = new Date(message.time);
+                                let dateFormated = this.formatDate(date);
+                                return (
+
+                                    <li className="message">
+                                        <div>{message.username + " - " + dateFormated}</div>
+                                        <div>{message.message}</div>
+
+
+                                    </li>
+                                )
+                            })}
+                            <div style={{float: "left", clear: "both"}}
+                                 ref={(el) => {
+                                     this.messagesEnd = el;
+                                 }}>
+                            </div>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <form
+                            onSubmit={this.handleSubmit}
+                        >
+                            <TextField
+                                style={{padding: '0.6em'}}
+                                fullWidth
+                                margin="normal"
+                                id="standard-basic"
+                                onChange={this.handleChangeChat}
+                                value={this.state.message}
+                                placeholder="Type your message and hit ENTER"
+                                variant="outlined"
+                            />
+                        </form>
+                    </div>
+                </Paper>
+            </ChatWrapper>
+
+
+        );
+    }
+
+    boardWindow(){
 
         const {board} = this.state;
+        return(
+
+            <BoardWrapper style={{
+                // These style attributes make text unselectable on most browsers & versions
+                userSelect: 'none',
+                webkitTouchCallout: 'none',
+                webkitUserSelect: 'none',
+                khtmlUserSelect: 'none',
+                mozUserSelect: 'none',
+                msUserSelect: 'none'
+            }}>
+                <DndProvider backend={Backend}>
+                    <div>
+                        <Grid container className="flex-grow-1" spacing={0}>
+
+                            {board.map((row, i) => (
+                                <Grid item xs={12} key={i} container justify="center" spacing={0}>
+                                    {row.map((col, j) => (
+                                        <Grid key={j} item>
+                                            <Square props={col} row={i} column={j}
+                                                    placedFirstLetter={this.state.placedFirstLetter}
+                                                    onDrop={(item) => this.handleDrop(i, j, item)}/>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            ))}
+                        </Grid>
+
+                        <Paper>
+                            <DeckWrapper>
+
+                                <div style={{overflow: 'hidden', clear: 'both', margin: "auto"}}>
+                                    {this.state.boxes.map(({piece}, index) => (
+                                        <LetterBox
+                                            piece={piece}
+                                            isDropped={this.isDropped(piece, index)}
+                                            key={index}
+                                        />
+                                    ))}
+                                </div>
+                            </DeckWrapper>
+                        </Paper>
+                    </div>
+                </DndProvider>
+            </BoardWrapper>
+
+        );
+
+    }
+
+
+    render() {
+
 
         return (
             <Container>
@@ -1228,9 +1365,14 @@ class GamePage extends React.Component {
                                 </div>
                                 <Row>
                                     <Col>
+                                        <Paper>
                                         <PieceCounter piecesLeft={this.state.stones}/>
+                                        </Paper>
                                     </Col>
                                 </Row>
+
+
+                                {/*{this.showPlayerTurn()}*/}
 
                                 <div style={{
                                     // These style attributes make text unselectable on most browsers & versions
@@ -1241,21 +1383,10 @@ class GamePage extends React.Component {
                                     mozUserSelect: 'none',
                                     msUserSelect: 'none'
                                 }}>
-                                    Played Words
+                                    Scoreboard
                                 </div>
-
-                                <Scrollbars
-                                    // This will activate auto-height
-                                    autoHeight
-                                    autoHeightMin={410}
-                                    autoHeightMax={450}
-                                    renderTrackVertical={this.renderTrackVertical}
-
-                                    renderThumbVertical={this.renderThumbVertical}
-                                    style={{overflow: 'hidden'}}
-                                >
-                                    {/*<CompletedWords gameId={this.state.gameId}/>*/}
-                                    <CompletedWords style={{
+                                <Paper>
+                                    <ScoreBoard style={{
                                         // These style attributes make text unselectable on most browsers & versions
                                         userSelect: 'none',
                                         webkitTouchCallout: 'none',
@@ -1263,56 +1394,17 @@ class GamePage extends React.Component {
                                         khtmlUserSelect: 'none',
                                         mozUserSelect: 'none',
                                         msUserSelect: 'none'
-                                    }} words={this.state.words}/>
-                                </Scrollbars>
-                                {this.showPlayerTurn()}
+                                    }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
+                                </Paper>
+
+                                {this.chatWindow()}
                             </SideWrapper>
                         </Col>
 
                         <Col className="p-2" md="auto">
-                            <BoardWrapper style={{
-                                // These style attributes make text unselectable on most browsers & versions
-                                userSelect: 'none',
-                                webkitTouchCallout: 'none',
-                                webkitUserSelect: 'none',
-                                khtmlUserSelect: 'none',
-                                mozUserSelect: 'none',
-                                msUserSelect: 'none'
-                            }}>
-                                <DndProvider backend={Backend}>
-                                    <div>
-                                        <Grid container className="flex-grow-1" spacing={0}>
-
-                                            {board.map((row, i) => (
-                                                <Grid item xs={12} key={i} container justify="center" spacing={0}>
-                                                    {row.map((col, j) => (
-                                                        <Grid key={j} item>
-                                                            <Square props={col} row={i} column={j}
-                                                                    placedFirstLetter={this.state.placedFirstLetter}
-                                                                    onDrop={(item) => this.handleDrop(i, j, item)}/>
-                                                        </Grid>
-                                                    ))}
-                                                </Grid>
-                                            ))}
-                                        </Grid>
-
-
-                                        <DeckWrapper>
-
-                                            <div style={{overflow: 'hidden', clear: 'both', margin: "auto"}}>
-                                                {this.state.boxes.map(({piece}, index) => (
-                                                    <LetterBox
-                                                        piece={piece}
-                                                        isDropped={this.isDropped(piece, index)}
-                                                        key={index}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </DeckWrapper>
-                                    </div>
-                                </DndProvider>
-                            </BoardWrapper>
-
+                            {/*<Paper>*/}
+                            {this.boardWindow()}
+                            {/*</Paper>*/}
                         </Col>
 
                         <Col className="py-2 px-0" md="auto">
@@ -1326,17 +1418,33 @@ class GamePage extends React.Component {
                                     mozUserSelect: 'none',
                                     msUserSelect: 'none'
                                 }}>
-                                    Scoreboard
+                                    Played Words
                                 </div>
-                                <ScoreBoard style={{
-                                    // These style attributes make text unselectable on most browsers & versions
-                                    userSelect: 'none',
-                                    webkitTouchCallout: 'none',
-                                    webkitUserSelect: 'none',
-                                    khtmlUserSelect: 'none',
-                                    mozUserSelect: 'none',
-                                    msUserSelect: 'none'
-                                }} currentPlayerId={this.state.currentPlayer} players={this.state.players}/>
+                                <Paper>
+                                    <Scrollbars
+                                        // This will activate auto-height
+                                        autoHeight
+                                        autoHeightMin={410}
+                                        autoHeightMax={450}
+                                        renderTrackVertical={this.renderTrackVertical}
+
+                                        renderThumbVertical={this.renderThumbVertical}
+                                        style={{overflow: 'hidden'}}
+                                    >
+                                        {/*<CompletedWords gameId={this.state.gameId}/>*/}
+                                        <CompletedWords style={{
+                                            // These style attributes make text unselectable on most browsers & versions
+                                            userSelect: 'none',
+                                            webkitTouchCallout: 'none',
+                                            webkitUserSelect: 'none',
+                                            khtmlUserSelect: 'none',
+                                            mozUserSelect: 'none',
+                                            msUserSelect: 'none'
+                                        }} words={this.state.words}/>
+                                    </Scrollbars>
+                                </Paper>
+
+
 
                                 {/*TODO: Remove shortcut after presentation*/}
                                 <Tooltip title="End Game prematurely">
@@ -1377,41 +1485,6 @@ class GamePage extends React.Component {
                                         End Turn
                                     </Button>
                                 </Tooltip>
-                                <ChatWrapper style={{
-                                    // These style attributes make text unselectable on most browsers & versions
-                                    userSelect: 'none',
-                                    webkitTouchCallout: 'none',
-                                    webkitUserSelect: 'none',
-                                    khtmlUserSelect: 'none',
-                                    mozUserSelect: 'none',
-                                    msUserSelect: 'none'
-                                }}>
-                                    <Title/>
-                                    <ul className="message-list">
-                                        {this.state.messages.map((message, index) => {
-                                            let date = new Date(message.time);
-                                            let dateFormated = this.formatDate(date);
-                                            return (
-
-                                                <li className="message">
-                                                    <div>{message.username + " - " + dateFormated}</div>
-                                                    <div>{message.message}</div>
-
-
-                                                </li>
-                                            )
-                                        })}
-                                    </ul>
-                                    <form
-                                        onSubmit={this.handleSubmit}
-                                        className="send-message-form">
-                                        <input
-                                            onChange={this.handleChangeChat}
-                                            value={this.state.message}
-                                            placeholder="Type your message and hit ENTER"
-                                            type="text"/>
-                                    </form>
-                                </ChatWrapper>
 
                             </SideWrapper>
                         </Col>

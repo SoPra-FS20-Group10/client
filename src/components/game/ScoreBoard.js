@@ -21,9 +21,9 @@ const ScoreBoardWrapper = styled.div`
     margin: 0pt;
     width: 100%;
     
-    background: rgba(77, 77, 77, 0.9);
+    // background: rgba(77, 77, 77, 0.9);
     
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,7 +34,7 @@ const Score = styled.label`
     margin: 0pt;
     width: 100%;
     font-size: 10px;
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,7 +46,7 @@ const Username = styled.label`
     margin: 0pt;
     width: 100%;
     font-size: 20px;
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,7 +56,7 @@ const HighlightWrapper = styled.div`
     border-radius: 4pt;
     padding-left: 1.5em;
     padding-right: 1.5em;
-    border: 1px solid white;
+    border: 1px solid black;
    
 `;
 
@@ -70,7 +70,7 @@ const UsernameHighlighted = styled.label`
     
     // background: rgba(150, 150, 150, 0.9);
     
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -85,7 +85,7 @@ const ScoreHighlighted = styled.label`
     
     // background: rgba(150, 150, 150, 0.9);
     
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: center;

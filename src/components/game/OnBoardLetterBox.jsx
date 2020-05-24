@@ -7,8 +7,8 @@ const style = {
     padding: "3pt",
     cursor: 'move',
     float: 'left',
-    width: "27pt",
-    height:"27pt",
+    width: "23pt",
+    height:"23pt",
     textAlign:"center",
     fontSize:"11pt",
 
