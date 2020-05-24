@@ -13,32 +13,37 @@ import deactivateSFX from "../../sounds/deactivate.wav";
 import subtleClick from "../../sounds/subtle_click.wav";
 
 import NameLengthChecker from "../shared/Other/NameLengthChecker";
+import Grid from "@material-ui/core/Grid";
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
 /**
  * LobbylistEntry Model
  */
 
 
 const ButtonContainer = styled.div`
-
+    width: 15em;
     margin-bottom: 10pt;
 `;
 
 const PlayerBarContainer = styled.div`
 
-float:left;
 width: 100%;
-background-color: rgb(90, 93, 99);
-height:78pt;
+    // background-color: rgb(90, 93, 99);
+    // height:78pt;
+  text-align: center;
+    padding: 1em;
 `;
 
 
 const Label = styled.label`
-  color: white;
+    width: 15em;
+  color: black;
   margin-bottom: 10px;
   text-transform: uppercase;
   font-size:12pt;
-  float: left;
-  margin-left: 20%;
+  text-align: center;
+  
 `;
 
 
@@ -152,7 +157,7 @@ class PlayerBar extends React.Component {
             }
         } else {
 
-            button = <div></div>
+            button = null
         }
         return (button);
 
@@ -187,23 +192,27 @@ class PlayerBar extends React.Component {
 
     render() {
         return (
-            <BaseContainer>
-
+            <div>
                 <PlayerBarContainer>
+                    <Grid container alignItems="center" style={{justifyContent: 'space-between'}}>
+                        <Label>{NameLengthChecker(this.state.playerName)}</Label>
+                        <ButtonContainer>
+                            {this.readyButton()}
+                        </ButtonContainer>
 
-                    <Label>Player Name: {NameLengthChecker(this.state.playerName)}</Label>
-                    <Label>Player ID: {this.state.playerId}</Label>
+                        <ButtonContainer>
+                            {this.kickButton()}
+                        </ButtonContainer>
 
-                    <ButtonContainer>
-                        {this.readyButton()}
-                    </ButtonContainer>
+                    </Grid>
 
-                    <ButtonContainer>
-                        {this.kickButton()}
-                    </ButtonContainer>
+                    <Divider orientation="horizontal" style={{marginTop: "0.5em"}}/>
+
+
+
 
                 </PlayerBarContainer>
-            </BaseContainer>
+            </div>
         );
     }
 

@@ -3,7 +3,7 @@ import React from "react";
 import styled from 'styled-components';
 import {BaseContainer} from '../../helpers/layout';
 import {api, handleError} from '../../helpers/api';
-import {Button} from '../../views/design/Button';
+import Button from '@material-ui/core/Button';
 import {withRouter} from 'react-router-dom';
 import LobbylistEntry from "../overview/LobbylistEntry";
 import Modal from "react-modal";
@@ -14,19 +14,28 @@ import Snackbar from "@material-ui/core/Snackbar";
 import {Alert, SnackbarAlert} from "../shared/Other/SnackbarAlert";
 import MuiAlert from '@material-ui/lab/Alert';
 import {ThemeProvider} from '@livechat/ui-kit'
-import "./styles/chat.css"
+import "../overview/styles/chat.css"
+// import "./styles/chat.css"
 import subtleClick from "../../sounds/subtle_click.wav";
 import endSound from "../../sounds/misc_sound.wav";
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
 const Container = styled(BaseContainer)`
-  color: white;
+  // color: white;
+  // text-align: center;
+  // // margin: 0;
+  // width: 80%
+  // max-width: none;
+  // margin-right: 5%;
+  // margin-left: 5%;
+    align-content: space-between;
+ color: white;
   text-align: center;
-  // margin: 0;
-  width: 80%
-  max-width: none;
-  margin-right: 5%;
-  margin-left: 5%;
- 
+  width:100%;
+  // margin:auto;
 `;
 
 const LobbyContainer = styled.div`
@@ -35,34 +44,52 @@ const LobbyContainer = styled.div`
 
 const ChatWrapper = styled.div`
 
-margin-top: 10%;
-margin-left: 5%;
-width: 25%;
-height: 325pt; 
-float:left;
+border-radius: 4pt;
+    width: 25%;
+    height: 32em; 
+    float:left;
 `;
 
 const LobbyWrapper = styled.div`
-
-margin-top: 10%;
-margin-left: 5%;
-
-margin-right: 5%;
-width: 60%;
-
-height: 400pt; 
-background: rgba(77, 77, 77, 0.5);
-float:left;
+    width: 100%;
+    height: 100%;
+    align-content: space-between;
+    float: left;
+    height: 32em;
+// margin-top: 10%;
+// margin-left: 5%;
+//
+// margin-right: 5%;
+// width: 60%;
+//
+// height: 400pt; 
+// background: rgba(77, 77, 77, 0.5);
+// float:left;
 `;
 
+const TitleWrapper = styled.div`
+    border-radius: 4pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15em;
+    flex-flow: column wrap;
+    
+`;
 
 const ButtonContainer = styled.div`
-    padding-top: 10pt;
+    margin-top: 3em;
+    float:left;
+    width: 100%;
+    align-items:left;
+    justify-items: left;
 `;
 
 const ButtonContainer2 = styled.div`
-    width: 50%;
-    margin:auto;
+    width: 100%;
+    // margin:auto;
+    justify-content: space-between;
+    float: left;
 `;
 
 // Chat title
@@ -500,63 +527,99 @@ class LobbyPage extends React.Component {
                 {this.state.isOpenLobbyLeaderCantStartBecauseTooManyPlayers ? this.showSnackbar("Too many people in lobby!", "error") : null}
 
 
-                {/*TODO: Add real chat*/}
-                <ChatWrapper>
-                    <Title/>
-                    <ul className="message-list">
-                        {this.state.messages.map((message, index) => {
-                            let date = new Date(message.time);
-                            let dateFormated = this.formatDate(date);
-                            return (
+                <TitleWrapper>
+                    <Typography variant="h1" component="h2">
+                        Lobby - {this.state.lobbyName}
+                    </Typography>
 
-                                <li className="message">
-                                    <div>{message.username + " - " + dateFormated}</div>
-                                    <div>{message.message}</div>
+                    <Typography variant="subtitle1" component="h3">
+                        The Lobbyleader can start the Game once everyone is ready
+                    </Typography>
+                </TitleWrapper>
 
 
-                                </li>
-                            )
-                        })}
-                    </ul>
-                    <form
-                        onSubmit={this.handleSubmit}
-                        className="send-message-form">
-                        <input
-                            onChange={this.handleChange}
-                            value={this.state.message}
-                            placeholder="Type your message and hit ENTER"
-                            type="text"/>
-                    </form>
-                </ChatWrapper>
+                <Grid container alignItems="center" style={{justifyContent: 'space-between', marginTop: '2em'}}>
+                    {/*TODO: Add real chat*/}
+                    <ChatWrapper>
+                        <Paper style={{height: '100%'}}>
+                            {/*<Typography variant="subtitle1" component="h2">*/}
+                            {/*    Lobby Chat*/}
+                            {/*</Typography>*/}
 
-                {/*return SnackbarAlert({close: this.closeSnackbar, type: "good", message: "Lobby created!"});*/}
 
-                {this.state.isOpenLobbyCreateSnackbar ? this.showSnackbar("Lobby created!", "good") : null}
+                            <div style={{height: '82%', overflow: "auto", overflowX: "hidden"}}>
+                                <ul className="message-list" style={{}}>
+                                    {this.state.messages.map((message, index) => {
+                                        let date = new Date(message.time);
+                                        let dateFormated = this.formatDate(date);
+                                        return (
 
-                <LobbyWrapper>
+                                            <li className="message">
+                                                <div>{message.username + " - " + dateFormated}</div>
+                                                <div>{message.message}</div>
 
-                    <h2> Lobby Name: {this.state.lobbyName}</h2>
 
-                    {this.showPlayers()}
+                                            </li>
+                                        )
+                                    })}
 
-                    <view style={{margin: 40}}/>
+                                    <div style={{float: "left", clear: "both"}}
+                                         ref={(el) => {
+                                             this.messagesEnd = el;
+                                         }}>
+                                    </div>
+                                </ul>
 
-                    <ButtonContainer2>
-                        <Button variant="dark" size="sm" block onClick={this.leaveLobby}>
-                            Leave Lobby
-                        </Button>
-                        {this.state.isLobbyLeader ?
-                            <Button variant="dark" size="sm" block onClick={this.startGame} active>
-                                Start Game
-                            </Button> :
-                            <Button variant="dark" size="sm" block onClick={this.startGame} disabled>
-                                Start Game
-                            </Button>}
+                            </div>
 
-                    </ButtonContainer2>
+                            <div>
+                                <form
+                                    onSubmit={this.handleSubmit}
+                                >
+                                    <TextField
+                                        style={{padding: '0.6em'}}
+                                        fullWidth
+                                        margin="normal"
+                                        id="standard-basic"
+                                        onChange={this.handleChange}
+                                        value={this.state.message}
+                                        placeholder="Type your message and hit ENTER"
+                                        variant="outlined"
+                                    />
+                                </form>
+                            </div>
+                        </Paper>
+                    </ChatWrapper>
 
-                </LobbyWrapper>
+                    {this.state.isOpenLobbyCreateSnackbar ? this.showSnackbar("Lobby created!", "good") : null}
+                    <Paper style={{
+                        height: '100%', width: '70%', color: 'white',
+                        textAlign: 'center',
+                    }}>
+                        <LobbyWrapper>
 
+                            <h2> Lobby Name: {this.state.lobbyName}</h2>
+
+                            {this.showPlayers()}
+
+                            <ButtonContainer>
+                                <Button color="secondary" variant="contained" size="lg" block onClick={this.leaveLobby}
+                                        style={{marginRight: '2em'}}>
+                                    Leave Lobby
+                                </Button>
+                                {this.state.isLobbyLeader ?
+                                    <Button color="primary" variant="contained" size="lg" block onClick={this.startGame}
+                                            active>
+                                        Start Game
+                                    </Button> :
+                                    null}
+
+                            </ButtonContainer>
+
+
+                        </LobbyWrapper>
+                    </Paper>
+                </Grid>
 
             </Container>
         );

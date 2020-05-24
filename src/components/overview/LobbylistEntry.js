@@ -191,6 +191,7 @@ class LobbylistEntry extends React.Component {
     }
 
     async checkForPassword() {
+        this.playSound(new Audio(subtleClick));
         if (!this.state.showModal) {
             // try joining lobby without pw
             const requestBody = JSON.stringify({
