@@ -14,6 +14,7 @@ import Alert from "react-bootstrap/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
 
 import subtleClick from "../../sounds/subtle_click.wav";
+import {logChatPromiseExecution} from "stream-chat";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -172,9 +173,23 @@ class Lobbylist extends React.Component {
         // POST --> Return Free LobbylistEntry ID
         try {
             const response = await api.get("/games/");
+            // All games (waiting, running & ended)
+            let allLobbies = response.data;
 
-            this.setState({allLobbies: response.data})
-            // return response.data;
+            // Initializing list for games that have status 'WAITING' i.e. that are in the lobby phase
+            let waitingLobbies = []
+
+            // Go through all games and only add games with status 'WAITING' to waitingLobbies
+            let index = 0;
+            while(index < allLobbies.length){
+                if(allLobbies[index]["status"] == "WAITING"){
+                    waitingLobbies[waitingLobbies.length] = allLobbies[index]
+                }
+                index++;
+            }
+
+            this.setState({allLobbies: waitingLobbies})
+            return response.data;
         } catch (error) {
             alert(error);
         }
