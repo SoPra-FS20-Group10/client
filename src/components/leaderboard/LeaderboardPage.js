@@ -84,10 +84,10 @@ class LeaderboardPage extends React.Component {
     }
 
     compareWins(a, b) {
-        if (a.wins > b.wins) {
+        if (a.wonGames > b.wonGames) {
             return -1;
         }
-        if (a.wins < b.wins) {
+        if (a.wonGames < b.wonGames) {
             return 1;
         }
         return 0;
@@ -123,31 +123,49 @@ class LeaderboardPage extends React.Component {
         return 0;
     }
 
+    comparePlayedGames(a, b) {
+        if (a.playedGames > b.playedGames) {
+            return -1;
+        }
+        if (a.playedGames < b.playedGames) {
+            return 1;
+        }
+        return 0;
+    }
+
     async getUserData() {
         let response = await api.get("/users");
-        if(this.state.sortBy == 'Wins'){
+        if (this.state.sortBy == 'Won Games') {
             this.setState({players: response.data.sort(this.compareWins)});
-        }else if(this.state.sortBy == 'Win %'){
-            this.setState({players: response.data.sort(this.compareWinPercentage)});
-        }else if(this.state.sortBy == 'Overall Score'){
+        } else if (this.state.sortBy == 'Overall Score') {
             this.setState({players: response.data.sort(this.compareOverallScore)});
-        }else if(this.state.sortBy == 'Time Played'){
-            this.setState({players: response.data.sort(this.compareTimePlayed)});
+        } else if (this.state.sortBy == 'Played Games') {
+            this.setState({players: response.data.sort(this.comparePlayedGames)});
         }
     }
 
     renderTableHeader() {
-        let header = ['#', 'Name', 'Wins', 'Win %', 'Overall Score', 'Time Played']
+        let header = ['Position', 'Name', 'Overall Score', 'Played Games', 'Won Games']
         // let header = Object.keys(this.state.data[0])
+
         return header.map((key, index) => {
             return <th class='text-white' key={index}>{key.toUpperCase()}</th>
         })
     }
 
-    renderTableData() {
+    renderTableData = (props = this.props.history) => {
         return this.state.players.map((data, index) => {
+                function goToProfilePage() {
+                    props.push({
+                        pathname: `/game/profile/${data.id}`,
+                        state: {
+                            playerId: data.id
+                        }
+                    });
+                }
+
                 return (
-                    <LeaderboardEntry data={data} index={index} history={this.props.history}></LeaderboardEntry>
+                    <LeaderboardEntry data={data} func={goToProfilePage} index={index}></LeaderboardEntry>
                 )
             }
         )
@@ -165,22 +183,26 @@ class LeaderboardPage extends React.Component {
             <Container>
                 {/*Navigation Bar*/}
                 <div className="bg-image"></div>
-                <NavigationBar  history={this.props} value={1} playerId={localStorage.getItem("current")}/>
+                <NavigationBar history={this.props} value={1} playerId={localStorage.getItem("current")}/>
 
                 {/*leaderboard*/}
                 <div>
                     <LeaderboardWrapper responsive>
-                        <h1 >Leaderboard</h1>
+                        <h1>Leaderboard</h1>
                         {/*dropdown menu for selecting what stat to sort by*/}
-                        <DropdownButton style={{float: 'left', margin: 'auto'}} id="dropdown-item-button" title={this.state.sortBy}>
-                            <Dropdown.Item as="button"
-                                           onClick={() => this.changeSortingComparator('Wins')}>Wins</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Win %')}>Win
-                                %</Dropdown.Item>
+                        <DropdownButton style={{float: 'left', margin: 'auto'}} id="dropdown-item-button"
+                                        title={this.state.sortBy}>
                             <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Overall Score')}>Overall
                                 Score</Dropdown.Item>
-                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Time Played')}>Time
-                                Played</Dropdown.Item>
+
+                            <Dropdown.Item as="button" onClick={() => this.changeSortingComparator('Played Games')}>Played
+                                Games</Dropdown.Item>
+
+                            <Dropdown.Item as="button"
+                                           onClick={() => this.changeSortingComparator('Won Games')}>Won
+                                Games</Dropdown.Item>
+
+
                         </DropdownButton>
 
 
