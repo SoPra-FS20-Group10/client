@@ -10,6 +10,16 @@ import LobbyRoom from "../lobby/LobbyPage";
 import Form from "react-bootstrap/Form";
 
 import subtleClick from "../../sounds/subtle_click.wav";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import Modal from "react-modal";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
 /**
  * LobbylistEntry Model
@@ -22,24 +32,46 @@ const ButtonContainer = styled.div`
 `;
 
 const LobbyContainer = styled.div`
-
 float:left;
 width: 100%;
-background-color: rgb(90, 93, 99, 0.55);
+// background-color: rgb(1, 1, 1, 0.55);
 margin-top: 10pt;
 margin-bottom: 10pt;
 `;
 
 
 const Label = styled.label`
-  color: white;
+    width: 10em;
+  color: black;
   margin-bottom: 10px;
   text-transform: uppercase;
+  text-align: initial;
   font-size:12pt;
   float: left;
-  margin-left: 20%;
 `;
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: "0pt",
+        width: "20%"
+    }
+};
 
+const useStylesPopup = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            '& .MuiTextField-root': {
+                margin: theme.spacing(1),
+                width: 200,
+            },
+        },
+    }),
+);
 
 class LobbylistEntry extends React.Component {
 
@@ -56,6 +88,7 @@ class LobbylistEntry extends React.Component {
             lobbyName: this.props.lobbyName,
             lobbyPassword: "",
             isRunning: false,
+            showModal: false,
         };
 
         // try {
@@ -67,6 +100,10 @@ class LobbylistEntry extends React.Component {
         this.goToLobby = this.goToLobby.bind(this);
         this.getLobbyPlayers = this.getLobbyPlayers.bind(this);
         this.updateRunning = this.updateRunning.bind(this);
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.checkForPassword = this.checkForPassword.bind(this);
+
 
     }
 
@@ -88,6 +125,16 @@ class LobbylistEntry extends React.Component {
         }
     }
 
+    handleOpenModal() {
+        this.setState({showModal: true});
+    }
+
+    handleCloseModal() {
+        this.playSound(new Audio(subtleClick));
+        this.setState({showModal: false});
+    }
+
+
     componentWillUnmount() {
         clearInterval(this.timerID);
     }
@@ -98,7 +145,7 @@ class LobbylistEntry extends React.Component {
             let response = await api.get("/games/" + this.state.lobbyId);
 
             let status = response.data.status;
-            if(status=="ENDED"){
+            if (status == "ENDED") {
                 this.componentWillUnmount()
             }
 
@@ -130,6 +177,53 @@ class LobbylistEntry extends React.Component {
 
     // Join LobbylistEntry
 
+    async checkForPassword() {
+        let requestBody = JSON.stringify({
+            id: localStorage.getItem("current"),
+            password: this.state.lobbyPassword
+        });
+        try {
+            await api.put("/games/" + this.state.lobbyId + "/players", requestBody);
+        } catch (error) {
+            alert("Wrong password, could not join the lobby.");
+        }
+
+    }
+
+    async checkForPassword() {
+        if (!this.state.showModal) {
+            // try joining lobby without pw
+            const requestBody = JSON.stringify({
+                id: localStorage.getItem("current"),
+                password: this.state.password
+            });
+            try {
+
+                await api.put("/games/" + this.state.lobbyId + "/players", requestBody);
+
+                this.props.history.push(
+                    {
+                        pathname: `/game/lobby/${this.state.lobbyId}`,
+                        state: {
+                            lobbyId: this.state.lobbyId,
+                            lobbyPassword: this.state.lobbyPassword,
+                            lobbyName: this.state.lobbyName,
+                            playerId: this.state.playerId,
+                            playerName: this.state.playerName,
+                            ownerId: null,
+                            modalErrorMsg: null,
+                        }
+                    });
+            } catch (error) {
+                this.handleOpenModal()
+            }
+        } else {
+            this.goToLobby()
+        }
+
+    }
+
+
     async goToLobby() {
         this.playSound(new Audio(subtleClick));
 
@@ -141,13 +235,10 @@ class LobbylistEntry extends React.Component {
         // Join - Pass lobbyId
         else {
 
-
             const requestBody = JSON.stringify({
                 id: localStorage.getItem("current"),
-                password: this.state.lobbyPassword
+                password: this.state.password
             });
-
-
             try {
 
                 await api.put("/games/" + this.state.lobbyId + "/players", requestBody);
@@ -165,13 +256,12 @@ class LobbylistEntry extends React.Component {
                         }
                     });
             } catch (error) {
-                alert("Wrong password, could not join the lobby.");
+                // alert("Wrong password, could not join the lobby.");
+                this.setState({modalErrorMsg: "Wrong password, could not join the lobby."})
             }
-
-
         }
-
     }
+
 
     playSound(sfx) {
         sfx.play();
@@ -182,36 +272,93 @@ class LobbylistEntry extends React.Component {
 
     render() {
         return (
-            <BaseContainer>
+            this.state.showModal == false ?
+                <div style={{padding: '1em'}}>
 
-                <LobbyContainer>
+                    <LobbyContainer>
 
-                    <Label> {this.state.lobbyId}</Label>
+                        <Grid container alignItems="center" style={{justifyContent: 'space-between'}}>
+                            <Label> {this.state.lobbyName}</Label>
+                            <Label>Players: {this.state.playerCount}/4</Label>
 
-                    <Label> {this.state.lobbyName}</Label>
+                            <Button variant="success" size="lg" onClick={this.checkForPassword}
+                                    disabled={this.state.isRunning}>
+                                Join
+                            </Button>
 
 
-                    <Label>Players: {this.state.playerCount}/4</Label>
+                        </Grid>
 
-                    <Form>
-                        <Form.Group controlId="formPassword">
-                            <Form.Control
-                                onChange={e => {
-                                    this.handleInputChange('lobbyPassword', e.target.value);
-                                }}
-                                type="email" placeholder="Enter password"/>
-                        </Form.Group>
-                    </Form>
-                    <ButtonContainer>
-                        <Button variant="success" size="sm" block onClick={this.goToLobby}
-                                disabled={this.state.isRunning}>
-                            Join
-                        </Button>
+                        <Divider orientation="horizontal" style={{marginTop: "1em"}}/>
 
-                    </ButtonContainer>
+                    </LobbyContainer>
+                </div> :
+                <div style={{padding: '1em'}}>
+                    <LobbyContainer>
 
-                </LobbyContainer>
-            </BaseContainer>
+                        <Grid container alignItems="center" style={{justifyContent: 'space-between'}}>
+                            <Label> {this.state.lobbyName}</Label>
+                            <Label>Players: {this.state.playerCount}/4</Label>
+
+                            <Button variant="success" size="lg" onClick={this.checkForPassword}
+                                    disabled={this.state.isRunning}>
+                                Join
+                            </Button>
+                        </Grid>
+
+                        <Divider orientation="horizontal" style={{marginTop: "1em"}}/>
+
+                    </LobbyContainer>
+
+                    <Modal
+                        isOpen={this.state.showModal}
+                        contentLabel="Inline Styles Modal GameBoard"
+                        style={customStyles}
+                    >
+                        <Paper elevation={3} style={{padding: '1em'}}>
+                            <form className={useStylesPopup} noValidate autoComplete="off">
+                                <div>
+                                    <Typography variant="body1" component="h2">
+                                        Enter Password
+                                    </Typography>
+
+                                    <TextField
+                                        label="Password"
+                                        type="password"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        value={this.state.password}
+
+                                        error={this.state.modalErrorMsg != null}
+                                        helperText={this.state.modalErrorMsg != null
+                                            ? this.state.modalErrorMsg : null
+                                        }
+                                        onChange={e => {
+                                            this.handleInputChange('password', e.target.value);
+                                        }}
+                                    />
+
+                                </div>
+                                <div>
+                                    <IconButton aria-label="delete">
+                                        <ArrowBackIcon
+                                            onClick={this.handleCloseModal}
+                                        />
+                                    </IconButton>
+
+                                    <IconButton
+                                        style={{float: 'right'}}
+                                        disabled={this.state.password == null || !!this.state.password.match(/^[\s]*$/i)}
+                                        onClick={this.goToLobby}
+                                    >
+                                        <CheckCircleOutlineIcon/>
+                                    </IconButton>
+                                </div>
+                            </form>
+                        </Paper>
+                    </Modal>
+                </div>
         );
     }
 

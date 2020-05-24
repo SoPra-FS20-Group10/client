@@ -28,6 +28,11 @@ import Paper from '@material-ui/core/Paper';
 import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
 import Chat from "../game/Chat";
+import Grid from "@material-ui/core/Grid";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
 // TODO: WORK IN PROGRESS!
 // Chat title
@@ -64,23 +69,20 @@ const customStyles = {
     }
 ;
 const ChatWrapper = styled.div`
-
- border-radius: 4pt;
-width: 25%;
-height: 32em; 
-float:left;
-    margin-right: 2em;
+    border-radius: 4pt;
+    width: 25%;
+    height: 32em; 
+    float:left;
 `;
 
 
 const LobbyWrapper = styled.div`
   
-    margin-left: 25%;
-   
-    margin-right: 5%;
-    width: 70%;
-    height: 400pt; 
-    background: rgba(77, 77, 77, 0.5);
+    width: 100%;
+    height: 100%;
+    align-content: space-between;
+    float: left;
+    height: 32em;
  
 `;
 
@@ -124,6 +126,7 @@ class Overview extends React.Component {
             messages: [],
             message: "",
             showRules: false,
+            showModal: false,
         };
         this.logoutUser = this.logoutUser.bind(this);
         this.handleCloseSnackbar = this.handleCloseSnackbar.bind(this);
@@ -298,7 +301,7 @@ class Overview extends React.Component {
     render() {
 
         return (
-            <Container>
+            <div>
 
                 {this.state.fromLogin ? this.showSnackbar() : null}
 
@@ -313,59 +316,66 @@ class Overview extends React.Component {
                 </TitleWrapper>
 
 
-
-                <ChatWrapper>
-                    <Paper style={{height: 'auto', padding: '1em'}}>
-                        <Typography variant="subtitle1" component="h2">
-                            Lobby Chat
-                        </Typography>
-                        <div style={{overflow: 'auto', height: '20em'}}>
-                            <ul className="message-list">
-                                {this.state.messages.map((message, index) => {
-                                    let date = new Date(message.time);
-                                    let dateFormated = this.formatDate(date);
-                                    return (
-
-                                        <li className="message">
-                                            <div>{message.username + " - " + dateFormated}</div>
-                                            <div>{message.message}</div>
+                <Grid container alignItems="center" style={{justifyContent: 'space-between'}}>
+                    <ChatWrapper>
+                        <Paper style={{height: '100%'}}>
+                            {/*<Typography variant="subtitle1" component="h2">*/}
+                            {/*    Lobby Chat*/}
+                            {/*</Typography>*/}
 
 
-                                        </li>
-                                    )
-                                })}
+                            <div style={{height: '82%', overflow: "auto",overflowX: "hidden"}}>
+                                <ul className="message-list" style={{}}>
+                                    {this.state.messages.map((message, index) => {
+                                        let date = new Date(message.time);
+                                        let dateFormated = this.formatDate(date);
+                                        return (
 
-                                <div style={{float: "left", clear: "both"}}
-                                     ref={(el) => {
-                                         this.messagesEnd = el;
-                                     }}>
-                                </div>
-                            </ul>
+                                            <li className="message">
+                                                <div>{message.username + " - " + dateFormated}</div>
+                                                <div>{message.message}</div>
 
-                        </div>
 
-                        <div>
-                            <form
-                                onSubmit={this.handleSubmit}
-                            >
-                                <TextField
-                                    fullWidth
-                                    margin="normal"
-                                    id="standard-basic"
-                                    onChange={this.handleChange}
-                                    value={this.state.message}
-                                    placeholder="Type your message and hit ENTER"
-                                    variant="outlined"
-                                />
-                            </form>
-                        </div>
+                                            </li>
+                                        )
+                                    })}
+
+                                    <div style={{float: "left", clear: "both"}}
+                                         ref={(el) => {
+                                             this.messagesEnd = el;
+                                         }}>
+                                    </div>
+                                </ul>
+
+                            </div>
+
+                            <div>
+                                <form
+                                    onSubmit={this.handleSubmit}
+                                >
+                                    <TextField
+                                        style={{padding: '0.6em'}}
+                                        fullWidth
+                                        margin="normal"
+                                        id="standard-basic"
+                                        onChange={this.handleChange}
+                                        value={this.state.message}
+                                        placeholder="Type your message and hit ENTER"
+                                        variant="outlined"
+                                    />
+                                </form>
+                            </div>
+                        </Paper>
+                    </ChatWrapper>
+
+
+                    <Paper style={{height: '100%', width: '70%', color: 'white',
+                        textAlign: 'center',}}>
+                        <LobbyWrapper>
+                            <LobbyList/>
+                        </LobbyWrapper>
                     </Paper>
-                </ChatWrapper>
-
-                <LobbyWrapper>
-                    <LobbyList/>
-                </LobbyWrapper>
-
+                </Grid>
                 <Button type="button" variant="danger" size="lg" onClick={async (e) => {
                     await this.playSound(this.audio);
                     this.logoutUser();
@@ -376,6 +386,10 @@ class Overview extends React.Component {
                 <Button variant="outline-light" size="lg" onClick={this.handleOpenRules}>
                     Open Rules
                 </Button>
+
+
+
+
                 <Modal
                     isOpen={this.state.showRules}
                     contentLabel="Inline Styles Modal GameBoard"
@@ -439,7 +453,7 @@ class Overview extends React.Component {
 
                 </Modal>
 
-            </Container>
+            </div>
         );
     }
 }

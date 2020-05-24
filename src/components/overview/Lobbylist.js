@@ -15,92 +15,35 @@ import Snackbar from "@material-ui/core/Snackbar";
 
 import subtleClick from "../../sounds/subtle_click.wav";
 import {logChatPromiseExecution} from "stream-chat";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import Divider from "@material-ui/core/Divider";
+import Grid from "@material-ui/core/Grid";
 
-const Container = styled(BaseContainer)`
-  color: white;
-  text-align: center;
-
-
-`;
 
 const LobbyContainer = styled.div`
 
 `;
 
 
-const MyInputLabel = styled.div`
-
-    margin-top: 10pt;
-    margin-bottom: 10pt;
-    text-align: center;
-`;
-
-
-const ButtonContainer = styled.div`
-    padding-top: 10pt;
-`;
-
 const ButtonContainer2 = styled.div`
-    width: 50%;
+    // width: 50%;
     margin:auto;
 `;
 
-const ButtonContainer3 = styled.div`
-
-    float:left;
-`;
-
-const LobbyCreationWrapper = styled.div`
-    background-color: white;
-`;
-
-const Title = styled.div`
-    background-color: grey;
-
-`;
-
-const Label = styled.label`
-  color: black;
-  text-transform: uppercase;
-  font-size:16pt;
-  background-color: grey;
-   margin-left: 5%;
-`;
-
-const TopBar = styled.div`
-
-  background-color: grey;
-
-`;
 
 const ListContainer = styled.div`
-
-  overflow-y: scroll;
-  max-height:310pt;
-
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    color: grey;
-  }
-  height: 35px;
-  padding-left: 15px;
-  border: none;
-  border-radius: 20px;
-  background: rgba(77, 77, 77, 0.2);
-  color: grey;
-
-  margin: 0 auto;
+    overflow-y: scroll;
+    padding: 1em;
+    width: 100%;
 
 `;
 
-const InputFieldWrapper = styled.div`
-     margin-top: 10pt;
-    margin-bottom: 10pt;
-    text-align: center;
-
-`;
 
 const customStyles = {
     content: {
@@ -111,9 +54,20 @@ const customStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         padding: "0pt",
-        width: "55%"
+        width: "20%"
     }
 };
+
+const useStylesPopup = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            '& .MuiTextField-root': {
+                margin: theme.spacing(1),
+                width: 200,
+            },
+        },
+    }),
+);
 
 class Lobbylist extends React.Component {
     constructor(props) {
@@ -142,7 +96,7 @@ class Lobbylist extends React.Component {
         this.handleOpenLobbyCreateSnackBar = this.handleOpenLobbyCreateSnackBar.bind(this);
     }
 
-     componentDidMount() {
+    componentDidMount() {
         this.fetchLobbies();
         try {
             this.timerID = setInterval(async () => {
@@ -181,8 +135,8 @@ class Lobbylist extends React.Component {
 
             // Go through all games and only add games with status 'WAITING' to waitingLobbies
             let index = 0;
-            while(index < allLobbies.length){
-                if(allLobbies[index]["status"] == "WAITING"){
+            while (index < allLobbies.length) {
+                if (allLobbies[index]["status"] == "WAITING") {
                     waitingLobbies[waitingLobbies.length] = allLobbies[index]
                 }
                 index++;
@@ -259,7 +213,7 @@ class Lobbylist extends React.Component {
 
             // remove games that are running / ended from list of lobbies which are to be shown
             for (var i = 0; i < lobbies.length; i++) {
-                if(lobbies[0]['status'] == 'ENDED'){
+                if (lobbies[0]['status'] == 'ENDED') {
                     if (i > -1) {
                         lobbies.splice(i, 1);
                     }
@@ -270,6 +224,8 @@ class Lobbylist extends React.Component {
 
                 <LobbylistEntry lobbyName={lobby.name} lobbyId={lobby.id} playerName={this.state.playerName}
                                 playerId={this.state.playerId} history={this.props.history}/>
+
+
             );
 
             return (
@@ -302,86 +258,164 @@ class Lobbylist extends React.Component {
     render() {
         return (
 
-            <Container>
-                <Snackbar open={this.state.isOpenLobbyCreateSnackbar} autoHideDuration={6000}
-                          onClose={this.handleCloseLobbyCreateSnackbar}>
-                    <Alert onClose={this.handleCloseLobbyCreateSnackbar} severity="success">
-                        This is a success message!
-                    </Alert>
-                </Snackbar>
+            <div style={{height: '100%'}}>
+                <Grid container style={{height: '100%'}}>
+                    <Snackbar open={this.state.isOpenLobbyCreateSnackbar} autoHideDuration={6000}
+                              onClose={this.handleCloseLobbyCreateSnackbar}>
+                        <Alert onClose={this.handleCloseLobbyCreateSnackbar} severity="success">
+                            This is a success message!
+                        </Alert>
+                    </Snackbar>
 
-                <h2> LOBBY LIST </h2>
-                <ListContainer>
-                    {this.showLobbies()}
-                </ListContainer>
-                <view style={{margin: 40}}/>
+                    {/*<h2> LOBBY LIST </h2>*/}
+                    <ListContainer style={{height: '90%'}}>
+                        {this.showLobbies()}
+                    </ListContainer>
 
-                <ButtonContainer2>
-                    <Button variant="dark" size="sm" block
-                            onClick={() => {
-                                this.playSound(new Audio(subtleClick));
-                                this.handleOpenModal();
-                            }}
-                    >
-                        Create new Lobby
-                    </Button>
+                    <ButtonContainer2>
+                        <Button variant="dark" size="sm" block
+                                onClick={() => {
+                                    this.playSound(new Audio(subtleClick));
+                                    this.handleOpenModal();
+                                }}
+                        >
+                            Create new Lobby
+                        </Button>
 
-                </ButtonContainer2>
-
+                    </ButtonContainer2>
+                </Grid>
 
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="Inline Styles Modal GameBoard"
                     style={customStyles}
                 >
+                    <Paper elevation={3} style={{padding: '1em'}}>
+                        <form className={useStylesPopup} noValidate autoComplete="off">
+                            <div>
+                                <Typography variant="body1" component="h2">
+                                    Create Lobby
+                                </Typography>
 
-                    <LobbyCreationWrapper>
+                                <Divider orientation="horizontal"/>
+                                <Typography variant="body1" component="h2" style={{marginTop: '1em'}}>
+                                    Choose a Name for your Lobby
+                                </Typography>
+                                <div>
 
-                        <CloseButton onClick={() => {
-                            this.playSound(new Audio(subtleClick));
-                            this.handleCloseModal();
-                        }}/>
+                                    <TextField
+                                        label="Lobby Name"
+                                        type="name"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        // value={this.state.tempPwA}
 
-                        <Title>
-                            <Label>CREATE LOBBY</Label>
-                        </Title>
+                                        onChange={e => {
+                                            this.handleInputChange('lobbyName', e.target.value);
+                                        }}
+                                    />
+                                </div>
 
-                        <MyInputLabel> LOBBY NAME</MyInputLabel>
+                                <Divider orientation="horizontal"/>
+                                <Typography variant="body1" component="h2" style={{marginTop: '1em'}}>
+                                    (Optional) Choose a Password for your Lobby
+                                </Typography>
+                                <div>
+                                    <TextField
+                                        label="Lobby Password"
+                                        type="password"
+                                        fullWidth
+                                        margin="normal"
+                                        variant="outlined"
+                                        // value={this.state.tempPwB}
 
-                        <InputFieldWrapper>
-                            <InputField
-                                placeholder="Name"
-                                onChange={e => {
-                                    this.handleInputChange('lobbyName', e.target.value);
-                                }}/>
-                        </InputFieldWrapper>
-                        <MyInputLabel>PASSWORD</MyInputLabel>
+                                        onChange={e => {
+                                            this.handleInputChange('lobbyPassword', e.target.value);
+                                        }}
+                                    />
+                                </div>
+                            </div>
 
+                            <div>
+                                <IconButton aria-label="delete">
+                                    <ArrowBackIcon
+                                        onClick={() => {
+                                            this.playSound(new Audio(subtleClick));
+                                            this.handleCloseModal();
+                                        }}
+                                    />
+                                </IconButton>
 
-                        <InputFieldWrapper>
-                            <InputField
-                                placeholder="Password"
-                                onChange={e => {
-                                    this.handleInputChange('lobbyPassword', e.target.value);
-                                }}/>
-                        </InputFieldWrapper>
-
-                    </LobbyCreationWrapper>
-
-
-                    <ButtonContainer>
-
-
-                        <Button variant="dark" size="sm" block onClick={() => {
-                            this.playSound(new Audio(subtleClick));
-                            this.createLobby();
-                        }}>
-                            Create Lobby
-                        </Button>
-                    </ButtonContainer>
+                                <IconButton
+                                    style={{float: 'right'}}
+                                    disabled={this.state.lobbyName == null || !!this.state.lobbyName.match(/^[\s]*$/i)}
+                                    onClick={() => {
+                                        this.playSound(new Audio(subtleClick));
+                                        this.createLobby();
+                                    }}
+                                >
+                                    <CheckCircleOutlineIcon/>
+                                </IconButton>
+                            </div>
+                        </form>
+                    </Paper>
                 </Modal>
 
-            </Container>
+
+                {/*<Modal*/}
+                {/*    isOpen={this.state.showModal}*/}
+                {/*    contentLabel="Inline Styles Modal GameBoard"*/}
+                {/*    style={customStyles}*/}
+                {/*>*/}
+
+                {/*    <LobbyCreationWrapper>*/}
+
+                {/*        <CloseButton onClick={() => {*/}
+                {/*            this.playSound(new Audio(subtleClick));*/}
+                {/*            this.handleCloseModal();*/}
+                {/*        }}/>*/}
+
+                {/*        <Title>*/}
+                {/*            <Label>CREATE LOBBY</Label>*/}
+                {/*        </Title>*/}
+
+                {/*        <MyInputLabel> LOBBY NAME</MyInputLabel>*/}
+
+                {/*        <InputFieldWrapper>*/}
+                {/*            <InputField*/}
+                {/*                placeholder="Name"*/}
+                {/*                onChange={e => {*/}
+                {/*                    this.handleInputChange('lobbyName', e.target.value);*/}
+                {/*                }}/>*/}
+                {/*        </InputFieldWrapper>*/}
+                {/*        <MyInputLabel>PASSWORD</MyInputLabel>*/}
+
+
+                {/*        <InputFieldWrapper>*/}
+                {/*            <InputField*/}
+                {/*                placeholder="Password"*/}
+                {/*                onChange={e => {*/}
+                {/*                    this.handleInputChange('lobbyPassword', e.target.value);*/}
+                {/*                }}/>*/}
+                {/*        </InputFieldWrapper>*/}
+
+                {/*    </LobbyCreationWrapper>*/}
+
+
+                {/*    <ButtonContainer>*/}
+
+
+                {/*        <Button variant="dark" size="sm" block onClick={() => {*/}
+                {/*            this.playSound(new Audio(subtleClick));*/}
+                {/*            this.createLobby();*/}
+                {/*        }}>*/}
+                {/*            Create Lobby*/}
+                {/*        </Button>*/}
+                {/*    </ButtonContainer>*/}
+                {/*</Modal>*/}
+
+            </div>
 
 
         );
