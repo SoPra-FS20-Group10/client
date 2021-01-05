@@ -8,7 +8,7 @@
     "@progress/kendo-react-conversational-ui": "^3.13.0",
     "@yazanaabed/react-tabs": "^2.3.6",
     "autoscroll-react": "^3.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
     "react": "^16.13.1",
